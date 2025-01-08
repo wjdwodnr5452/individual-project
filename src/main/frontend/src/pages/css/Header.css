@@ -1,0 +1,38 @@
+/* Header.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+}
+
+.header .logo-img {
+    width: 50px; /* 로고 이미지 크기 설정 */
+    height: auto;
+    margin-right: 10px; /* 이미지와 문구 사이에 여백 추가 */
+}
+
+.header .logo-text {
+    font-size: 24px; /* 문구 크기 설정 */
+    font-weight: bold;
+}
+
+.header .auth-links a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.header .auth-links a:hover {
+    text-decoration: underline;
+}
+
+.auth-links {
+    margin-top: 10px;
+}

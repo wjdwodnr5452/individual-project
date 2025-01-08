@@ -9,7 +9,7 @@
 ### :heavy_check_mark: 기술 스택
 - Java 17
 - Spring Boot
-- postgresql 
+- mysql
 - redis
 - AWS EC2
 - JPA

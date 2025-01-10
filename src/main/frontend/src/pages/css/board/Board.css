@@ -68,9 +68,23 @@
 /* boardList.css */
 .filters {
     display: flex;
-/*    justify-content: space-between;*/
+    justify-content: space-between; /* 왼쪽과 오른쪽 영역 분리 */
     align-items: center;
     margin-bottom: 20px;
+}
+
+.filters-left {
+    display: flex;
+    gap: 20px; /* 글 상태, 카테고리, 검색어 간 간격 추가 */
+}
+
+.filters-right {
+    margin-left: auto; /* 오른쪽 정렬 */
+}
+
+.boards-btn-div {
+    display: flex;
+    justify-content: flex-end; /* 버튼 오른쪽 정렬 */
 }
 
 .filters-select {
@@ -95,9 +109,9 @@
     font-size: 16px;
 }
 
-.category-div {
+/*.category-div {
     margin-left: 30px;
-}
+}*/
 
 .seach-div{
     margin-left: 30px;

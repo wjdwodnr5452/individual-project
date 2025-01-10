@@ -1,6 +1,7 @@
 // BoardList.js
 import React, { useState } from "react";
 import "../../css/board/Board.css";
+import { useNavigate } from "react-router-dom";
 
 const BoardList = () => {
 
@@ -25,42 +26,64 @@ const BoardList = () => {
         return matchesCategory && matchesSearch;
     });
 
+    const navigate = useNavigate();
+
+    // 글 작성 페이지로 이동
+    const boardWritePage = () => {
+        navigate("/boards/create")
+    }
+
     return (
         <div className="boards-list">
             <h2>게시판 글목록</h2>
 
             {/* 검색 및 카테고리 선택 */}
             <div className="filters">
-                <div className="boards-stat-div">
-                    <span>글 상태 : </span>
-                    <select value={boardStat} onChange={(e) => setBoardStat(e.target.value)}  className="board-stat-select filters-select">
-                        <option value="all">전체</option>
-                        <option value="tech">모집중</option>
-                        <option value="life">모집마감</option>
-                        <option value="news">종료</option>
-                    </select>
+                <div className="filters-left">
+                    <div className="boards-stat-div">
+                        <span>글 상태 : </span>
+                        <select
+                            value={boardStat}
+                            onChange={(e) => setBoardStat(e.target.value)}
+                            className="board-stat-select filters-select"
+                        >
+                            <option value="all">전체</option>
+                            <option value="tech">모집중</option>
+                            <option value="life">모집마감</option>
+                            <option value="news">종료</option>
+                        </select>
+                    </div>
+                    <div className="category-div">
+                        <span>카테고리 : </span>
+                        <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="category-select filters-select"
+                        >
+                            <option value="all">전체</option>
+                            <option value="tech">기술</option>
+                            <option value="life">생활</option>
+                            <option value="news">뉴스</option>
+                        </select>
+                    </div>
+                    <div className="search-div">
+                        <label htmlFor="searchId">검색어 : </label>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="제목 검색"
+                            id="searchId"
+                            className="search-input"
+                        />
+                    </div>
                 </div>
-                <div className="category-div">
-                    <span>카테고리 : </span>
-                    <select value={category} onChange={(e) => setCategory(e.target.value)}
-                            className="category-select filters-select ">
-                        <option value="all">전체</option>
-                        <option value="tech">기술</option>
-                        <option value="life">생활</option>
-                        <option value="news">뉴스</option>
-                    </select>
-                </div>
-
-                <div className="seach-div">
-                    <label htmlFor="searchId">검색어 : </label>
-                    <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                           placeholder="제목 검색" id="searchId" className="search-input"/>
-                </div>
-
-                <div className="boards-btn-div">
-                    <button type="button" className="board-create-button">
-                        글등록
-                    </button>
+                <div className="filters-right">
+                    <div className="boards-btn-div">
+                        <button type="button" className="board-create-button" onClick={boardWritePage}>
+                            글등록
+                        </button>
+                    </div>
                 </div>
             </div>
 

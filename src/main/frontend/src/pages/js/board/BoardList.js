@@ -26,15 +26,14 @@ const BoardList = () => {
     });
 
     return (
-        <div className="board-list">
+        <div className="boards-list">
             <h2>게시판 글목록</h2>
 
             {/* 검색 및 카테고리 선택 */}
             <div className="filters">
-                <div className="board-stat-div">
+                <div className="boards-stat-div">
                     <span>글 상태 : </span>
-                    <select value={boardStat} onChange={(e) => setBoardStat(e.target.value)}
-                            className="board-stat-select filters-select">
+                    <select value={boardStat} onChange={(e) => setBoardStat(e.target.value)}  className="board-stat-select filters-select">
                         <option value="all">전체</option>
                         <option value="tech">모집중</option>
                         <option value="life">모집마감</option>
@@ -58,7 +57,7 @@ const BoardList = () => {
                            placeholder="제목 검색" id="searchId" className="search-input"/>
                 </div>
 
-                <div className="board-btn-div">
+                <div className="boards-btn-div">
                     <button type="button" className="board-create-button">
                         글등록
                     </button>
@@ -66,20 +65,20 @@ const BoardList = () => {
             </div>
 
             {/* 글 목록 */}
-            <div className="post-cards">
+            <div className="boards-cards">
                 {filteredPosts.map((post) => (
-                    <div key={post.id} className="post-card">
+                    <div key={post.id} className="boards-card">
                         <img
                             src={post.thumbnail}
                             alt={`${post.title} 썸네일`}
-                            className="post-thumbnail"
+                            className="boards-thumbnail"
                         />
-                        <div className="post-info">
-                            <h3 className="post-title">
-                                <a href={`/posts/${post.id}`}>{post.title}</a>
+                        <div className="boards-info">
+                            <h3 className="boards-title">
+                                <a href={`/boards/${post.id}`}>{post.title}</a>
                             </h3>
-                            <p className="post-author">작성자: {post.author}</p>
-                            <p className="post-date">{post.date}</p>
+                            <p className="boards-author">작성자: {post.author}</p>
+                            <p className="boards-date">{post.date}</p>
                         </div>
                     </div>
                 ))}

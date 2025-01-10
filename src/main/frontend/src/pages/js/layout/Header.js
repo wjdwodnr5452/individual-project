@@ -1,10 +1,19 @@
 import React from 'react';
 import '../../css/Header.css';
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+
+    const navigate = useNavigate();
+    
+    const homePageMove = () => {
+        navigate("/"); // 메인페이지로 이동
+    }
+
+
     return (
         <header className="header">
-            <div className="logo">
+            <div className="logo" onClick={homePageMove}>
                 <img src="/imges/eco.png" alt="로고" className="logo-img"/>
                 <span className="logo-text">다같이</span>
             </div>

@@ -30,10 +30,11 @@ const BoardList = () => {
 
     // 글 작성 페이지로 이동
     const boardWritePage = () => {
-        navigate("/boards/create")
+        navigate("/boards/write")
     }
 
     return (
+
         <div className="boards-list">
             <h2>게시판 글목록</h2>
 
@@ -49,7 +50,7 @@ const BoardList = () => {
                         >
                             <option value="all">전체</option>
                             <option value="tech">모집중</option>
-                            <option value="life">모집마감</option>
+                            <option value="life">진행중</option>
                             <option value="news">종료</option>
                         </select>
                     </div>

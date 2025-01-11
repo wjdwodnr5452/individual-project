@@ -1,4 +1,4 @@
-.write-post-container {
+.borad-write-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -8,32 +8,32 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.write-post-container h2 {
+.borad-write-container h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
-.write-post-form {
+.board-write-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.form-group {
+.borad-write-form-group {
     display: flex;
     flex-direction: column;
 }
 
-.form-group label {
+.borad-write-form-group label {
     font-size: 16px;
     color: #555;
     margin-bottom: 5px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.borad-write-form-group input,
+.borad-write-form-group select,
+.borad-write-form-group textarea {
     padding: 10px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -41,9 +41,9 @@
     transition: border-color 0.3s;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.borad-write-form-group input:focus,
+.borad-write-form-group select:focus,
+.borad-write-form-group textarea:focus {
     border-color: #007bff;
     outline: none;
 }
@@ -53,7 +53,7 @@ textarea {
     height: 150px;
 }
 
-.form-actions {
+.board-write-form-actions {
     text-align: center;
 }
 

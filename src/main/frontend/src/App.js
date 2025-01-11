@@ -11,13 +11,11 @@ function App() {
     return (
         <Router>
             <div>
-                
-                
                 <Routes>
                     <Route path="/" element={<HomePage />} />  {/* 메인페이지 */}
                     <Route path="/login" element={<LoginPage />} /> {/* 로그인페이지 */}
                     <Route path="/signup" element={<Signup />} /> {/* 회원가입 */}
-                    <Route path="/boards/create" element={<BoardWrite />} /> {/* 게시판 상세 페이지 */}
+                    <Route path="/boards/write" element={<BoardWrite />} /> {/* 게시판 상세 페이지 */}
                     <Route path="/boards/:id" element={<BoardDetail />} /> {/* 게시판 상세 페이지 */}
                 </Routes>
             </div>

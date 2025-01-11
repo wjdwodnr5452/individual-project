@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../../css/board/BoardWrite.css";
+import Header from "../layout/Header";
+import Footer from "../layout/Footer";
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
@@ -17,15 +19,17 @@ const BoardWrite = () => {
     };
 
     return (
-        <div className="write-post-container">
+        <div>
+            <Header/>
+        <div className="borad-write-container">
             <h2>글 작성하기</h2>
-            <form onSubmit={handleSubmit} className="write-post-form">
+            <form onSubmit={handleSubmit} className="board-write-form">
                 {/* 제목 */}
-                <div className="form-group">
-                    <label htmlFor="title">제목</label>
+                <div className="borad-write-form-group">
+                    <label htmlFor="writeTitle">제목</label>
                     <input
                         type="text"
-                        id="title"
+                        id="writeTitle"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="글 제목을 입력하세요"
@@ -34,10 +38,10 @@ const BoardWrite = () => {
                 </div>
 
                 {/* 카테고리 */}
-                <div className="form-group">
-                    <label htmlFor="category">카테고리</label>
+                <div className="borad-write-form-group">
+                    <label htmlFor="writeCategory">카테고리</label>
                     <select
-                        id="category"
+                        id="writeCategory"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                     >
@@ -48,10 +52,10 @@ const BoardWrite = () => {
                 </div>
 
                 {/* 내용 */}
-                <div className="form-group">
-                    <label htmlFor="content">내용</label>
+                <div className="borad-write-form-group">
+                    <label htmlFor="writeContent">내용</label>
                     <textarea
-                        id="content"
+                        id="writeContent"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         placeholder="글 내용을 입력하세요"
@@ -60,10 +64,12 @@ const BoardWrite = () => {
                 </div>
 
                 {/* 작성 버튼 */}
-                <div className="form-actions">
+                <div className="board-write-form-actions">
                     <button type="submit" className="submit-btn">작성하기</button>
                 </div>
             </form>
+        </div>
+            <Footer/>
         </div>
     );
 };

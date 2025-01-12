@@ -90,7 +90,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.board-apply-button {
+.board-apply-button, .board-editor-button {
     background-color: #28a745; /* 초록색 */
     color: white;
 }
@@ -116,4 +116,34 @@
 .back-button:active {
     transform: scale(0.97);
     background-color: #003d80;
+}
+
+.board-deadline {
+    font-size: 1rem;
+    color: #777777;
+}
+
+.board-status-editor {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.board-status-editor label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333333;
+    margin-right: 10px;
+}
+
+.board-status-editor select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.board-status-editor select:focus {
+    border-color: #007bff;
 }

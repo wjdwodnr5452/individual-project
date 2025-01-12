@@ -14,7 +14,7 @@ function Header() {
     return (
         <header className="header">
             <div className="logo" onClick={homePageMove}>
-                <img src="/imges/eco.png" alt="로고" className="logo-img"/>
+                <img src="/images/eco.png" alt="로고" className="logo-img"/>
                 <span className="logo-text">다같이</span>
             </div>
             <div className="auth-links">

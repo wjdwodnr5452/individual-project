@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import "../../css/board/BoardDetail.css";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 
+
 const BoardDetail = () => {
-    const currentUser = "wjdwodnr1"; // 현재 로그인한 사용자 ID
+    const navigate = useNavigate();
+    const currentUser = "wjdwodnr"; // 현재 로그인한 사용자 ID
     const boards = [
         {
             id: 1,
@@ -35,6 +38,12 @@ const BoardDetail = () => {
         );
         setBoardsState(updatedBoards);
     };
+
+    // 게시글 수정 페이지로 이동
+    const boardDetailEditPage = (id) => {
+        navigate("/boards/"+id+"/edit")
+    }
+
 
     return (
         <div>
@@ -82,7 +91,7 @@ const BoardDetail = () => {
                 <div className="board-footer">
 
                     {board.author === currentUser ? (
-                        <button className="board-editor-button" onClick={() => alert("지원하기 버튼 클릭")}>
+                        <button className="board-editor-button" onClick={() => boardDetailEditPage(id)}>
                             수정하기
                         </button>
                         ) : (

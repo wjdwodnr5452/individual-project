@@ -72,3 +72,15 @@ textarea {
 .submit-btn:hover {
     background-color: #0056b3;
 }
+
+.thumbnail-preview {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.thumbnail-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+

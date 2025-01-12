@@ -12,6 +12,15 @@ const BoardWrite = () => {
     const [numberPeople, setNumberPeople] = useState("");
     const [deadline, setDeadline] = useState(new Date());
     const [serviceDate, setServiceDate] = useState(new Date());
+    const [thumbnail, setThumbnail] = useState(null);  // 썸네일 상태 추가
+
+    const handleThumbnailChange = (e) => {
+        const file = e.target.files[0];  // 선택된 파일
+        if (file) {
+            setThumbnail(URL.createObjectURL(file));  // 파일 URL을 상태에 저장
+        }
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -105,6 +114,22 @@ const BoardWrite = () => {
                         placeholder="글 내용을 입력하세요"
                         required
                     />
+                </div>
+
+                {/* 썸네일 이미지 */}
+                <div className="borad-write-form-group">
+                    <label htmlFor="writeThumbnail">썸네일</label>
+                    <input
+                        type="file"
+                        id="writeThumbnail"
+                        accept="image/*"
+                        onChange={handleThumbnailChange}
+                    />
+                    {thumbnail && (
+                        <div className="thumbnail-preview">
+                            <img src={thumbnail} alt="썸네일 미리보기" />
+                        </div>
+                    )}
                 </div>
 
                 {/* 작성 버튼 */}

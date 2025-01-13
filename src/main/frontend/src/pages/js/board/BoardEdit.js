@@ -112,8 +112,12 @@ const BoardEdit = ({ postId }) => {
                         <DatePicker
                             selected={deadline}
                             onChange={(date) => setDeadline(date)}
-                            dateFormat="yyyy-MM-dd"
-                            placeholderText="마감일을 선택하세요"
+                            dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
+                            showTimeSelect // 시간 선택 활성화
+                            timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
+                            timeIntervals={15} // 시간 간격 (15분 단위)
+                            timeCaption="시간" // 시간 섹션의 캡션
+                            placeholderText="마감일과 시간을 선택하세요"
                             id="writeDeadline"
                             required
                         />
@@ -124,9 +128,12 @@ const BoardEdit = ({ postId }) => {
                         <label htmlFor="writeServiceDate">봉사일</label>
                         <DatePicker
                             selected={serviceDate}
-                            onChange={(date) => setServiceDate(date)}
-                            dateFormat="yyyy-MM-dd"
-                            placeholderText="봉사일을 선택하세요"
+                            dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
+                            showTimeSelect // 시간 선택 활성화
+                            timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
+                            timeIntervals={15} // 시간 간격 (15분 단위)
+                            timeCaption="시간" // 시간 섹션의 캡션
+                            placeholderText="봉사일과 시간을 선택하세요"
                             id="writeServiceDate"
                             required
                         />

@@ -29,3 +29,6 @@
 - **PUT**  &nbsp;&nbsp; /boards/environment/{id} : 환경 게시글 상세 수정
 
 
+### 🔧 ERD 설계
+![image](https://github.com/user-attachments/assets/0481ed1d-a8ea-4df7-a330-f58bc24f25da)
+

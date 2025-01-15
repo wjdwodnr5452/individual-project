@@ -24,13 +24,14 @@ const BoardDetail = () => {
             author: "wjdwodnr",
             serviceStat: "시작전",
             serviceDate: "2025-01-11",
+            serviceTime: "6",
             category: "환경보호",
             date: "2025-01-11",
             deadlineStat:"모집중",
             deadlineDate: "2025-01-20",
             content: "내용1",
             numberPeople: "5",
-            thumbnail: "/images/thumbnail.png",
+            thumbnail: "/images/thumbnail.png"
         }
     ];
 
@@ -87,6 +88,10 @@ const BoardDetail = () => {
                         <div className="board-item">
                             <span className="board-label">모집인원</span>
                             <span className="board-value">{board.numberPeople}</span>
+                        </div>
+                        <div className="board-item">
+                            <span className="board-label">봉사시간</span>
+                            <span className="board-value">{board.serviceTime}</span>
                         </div>
                         <div className="board-item">
                             <span className="board-label">카테고리</span>

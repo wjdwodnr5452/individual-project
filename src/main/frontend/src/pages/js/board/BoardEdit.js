@@ -13,6 +13,7 @@ const BoardEdit = ({ postId }) => {
     const [deadline, setDeadline] = useState(new Date());
     const [serviceDate, setServiceDate] = useState(new Date());
     const [thumbnail, setThumbnail] = useState(null);
+    const [serviceTime, setServiceTime] = useState("");
 
     // 게시글 데이터를 가져오는 함수 (예시: API 호출)
     useEffect(() => {
@@ -105,6 +106,20 @@ const BoardEdit = ({ postId }) => {
                             required
                         />
                     </div>
+
+                    {/* 봉사시간 */}
+                    <div className="borad-write-form-group">
+                        <label htmlFor="writeServiceTime">봉사시간</label>
+                        <input
+                            type="number"
+                            id="writeServiceTime"
+                            value={serviceTime}
+                            onChange={(e) => setServiceTime(e.target.value)}
+                            placeholder="봉사 시간을 입력하세요"
+                            required
+                        />
+                    </div>
+
 
                     {/* 마감일 */}
                     <div className="borad-write-form-group">

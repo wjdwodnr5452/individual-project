@@ -13,6 +13,7 @@ const BoardWrite = () => {
     const [deadline, setDeadline] = useState(new Date());
     const [serviceDate, setServiceDate] = useState(new Date());
     const [thumbnail, setThumbnail] = useState(null);  // 썸네일 상태 추가
+    const [serviceTime, setServiceTime] = useState("");
 
     const handleThumbnailChange = (e) => {
         const file = e.target.files[0];  // 선택된 파일
@@ -74,6 +75,19 @@ const BoardWrite = () => {
                         value={numberPeople}
                         onChange={(e) => setNumberPeople(e.target.value)}
                         placeholder="글 제목을 입력하세요"
+                        required
+                    />
+                </div>
+
+                {/* 봉사시간 */}
+                <div className="borad-write-form-group">
+                    <label htmlFor="writeServiceTime">봉사시간</label>
+                    <input
+                        type="number"
+                        id="writeServiceTime"
+                        value={serviceTime}
+                        onChange={(e) => setServiceTime(e.target.value)}
+                        placeholder="봉사 시간을 입력하세요"
                         required
                     />
                 </div>

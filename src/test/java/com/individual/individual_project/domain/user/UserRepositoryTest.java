@@ -28,7 +28,8 @@ class UserRepositoryTest {
     void saveUser() {
         User user = new User("test@test.com", "123456", "홍길동", "01012341234");
         userRepository.saveUser(user);
-
+        User findUser = userRepository.findUserById(user.getId()).get();
+        assertThat(findUser).isEqualTo(user);
     }
 
 

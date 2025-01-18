@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
  * 작성일 : 2025.01.15
  */
 @Slf4j
-@RestController("/api")
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -38,7 +39,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body("정상적으로 회원가입 했습니다.");
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입에 실패 했습니다.");
-
         }
     }
 

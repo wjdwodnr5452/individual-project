@@ -1,16 +1,22 @@
 package com.individual.individual_project.domain.user.controller;
 
+import com.individual.individual_project.domain.response.ApiResponse;
+import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.service.UserService;
+import com.individual.individual_project.domain.validate.SaveCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 작성자 : 정재욱
- * 작성일 : 2025.01.15
+ * url :
+ * 1. GET /users/{id} 회원가져오기
+ * 2. POST /users 회원등록
  */
 @Slf4j
 @RestController
@@ -33,13 +39,9 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<String> createUser(@RequestBody User user){
-        try{
-            User saveUser = userService.saveUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body("정상적으로 회원가입 했습니다.");
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입에 실패 했습니다.");
-        }
+    public ApiResponse<User> createUser(@Validated @RequestBody User user){
+        return ApiResponse.success(userService.saveUser(user), ResponseCode.USER_CREATE_SUCCESS.getMessage());
     }
+
 
 }

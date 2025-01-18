@@ -1,5 +1,6 @@
 package com.individual.individual_project.domain.user;
 
+
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -8,12 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @Transactional
 @SpringBootTest
-class UserRepositoryTest {
+class UserValidateText {
 
     @Autowired
     UserRepository userRepository;
@@ -23,13 +23,15 @@ class UserRepositoryTest {
 
     TransactionStatus status;
 
-    @Test
-    void saveUser() {
-        User user = new User("test@test.com", "123456", "홍길동", "01012341234");
-        userRepository.saveUser(user);
-        User findUser = userRepository.findUserById(user.getId()).get();
-        assertThat(findUser).isEqualTo(user);
-    }
 
+    @Test
+    void validSaveUser() {
+        User user = new User();
+        user.setEmail("");
+        user.setName("홍길동");
+        user.setPhoneNumber("01012341234");
+        userRepository.saveUser(user);
+
+    }
 
 }

@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -30,6 +33,17 @@ class UserRepositoryTest {
         User findUser = userRepository.findUserById(user.getId()).get();
         assertThat(findUser).isEqualTo(user);
     }
+
+  /*  @Test
+    void findUserByEmail() {
+        User user = new User("test@test.com", "Snsteset123!", "홍길동", "01012341234");
+        userRepository.saveUser(user);
+        Optional<String> userByEmail = userRepository.findUserByEmail(user.getEmail());
+        assertThat(userByEmail.isPresent()).isTrue(); // 값이 있는지 존재 확인
+        assertThat(userByEmail.get()).isEqualTo(user.getEmail()); // 값이 동일하는지 비교
+    }*/
+
+
 
 
 }

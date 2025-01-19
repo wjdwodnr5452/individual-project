@@ -35,6 +35,20 @@ public class GlobalExceptionHandler {
         return ApiResponse.fail(responseCode, null);
     }
 
+    @ExceptionHandler(BaseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleBaseException(BaseException ex) {
+
+        ResponseCode responseCode = ex.getResponseCode();
+
+        log.info("message: {}", ex.getMessage());
+        log.info("responseCode: {}", responseCode);
+
+        return ApiResponse.fail(responseCode, null);
+    }
+
+
+
 
     // 메시지를 ResponseCode로 매핑하는 메서드
     private ResponseCode mapErrorMessageToResponseCode(String defaultMessage) {

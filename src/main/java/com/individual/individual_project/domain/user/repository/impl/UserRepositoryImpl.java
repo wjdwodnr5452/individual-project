@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 
 @Slf4j
@@ -24,8 +23,23 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public boolean findUserByEmail(String email) {
+
+        String jpql = "SELECT count(u) FROM User u WHERE u.email = :email";
+        Long cnt  =  (Long) em.createQuery(jpql)
+                .setParameter("email", email)
+                .getSingleResult();
+
+        return cnt > 0 ? true : false;
+    }
+
+
+
+    @Override
     public User saveUser(User user) {
         em.persist(user);
         return user;
     }
+
+
 }

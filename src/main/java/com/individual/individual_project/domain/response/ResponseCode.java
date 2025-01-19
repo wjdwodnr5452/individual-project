@@ -24,6 +24,12 @@ public enum ResponseCode {
     USER_NOT_NAME(HttpStatus.BAD_REQUEST, false, "이름은 필수 입력 항목입니다."),
     USER_NOT_PHONE_NUMBER(HttpStatus.BAD_REQUEST, false, "전화번호는 필수 입력 항목입니다."),
 
+    // 409 중복
+    USER_CONFLICT_EMAIL(HttpStatus.CONFLICT, false, "이미 가입한 이메일입니다."),
+    
+
+
+
 
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),

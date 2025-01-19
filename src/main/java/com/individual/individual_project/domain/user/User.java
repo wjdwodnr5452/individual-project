@@ -27,12 +27,15 @@ public class User {
     private String email;
 
     @NotNull(message ="USER_NOT_PASSWORD")
-    @Size(min = 8, max = 20, message = "USER_SIZE_PASSWORD")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).+$",  message = "USER_PATTERN_PASSWORD")
+    //@Size(min = 8, max = 20, message = "USER_SIZE_PASSWORD")
+    //@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).+$",  message = "USER_PATTERN_PASSWORD")
     private String password;
 
     @NotNull(message = "USER_NOT_NAME")
     private String name;
+
+
+
 
     @NotNull(message = "USER_NOT_PHONE_NUMBER")
     @Column(name = "phone_number")

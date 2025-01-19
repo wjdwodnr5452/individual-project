@@ -46,6 +46,8 @@ dependencies {
 
 	// bean Validation 사용
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
 }
 
 
@@ -54,7 +56,7 @@ tasks.named('test') {
 }
 
 
-def frontendDir = "$projectDir/src/main/frontend"
+/*def frontendDir = "$projectDir/src/main/frontend"
 
 sourceSets {
 	main {
@@ -93,4 +95,4 @@ task copyReactBuildFiles(type: Copy) {
 	dependsOn "buildReact"
 	from "$frontendDir/build"
 	into "$projectDir/src/main/resources/static"
-}
+}*/

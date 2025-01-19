@@ -18,8 +18,13 @@ public enum ResponseCode {
     // 400 에러
     USER_NOT_EMAIL(HttpStatus.BAD_REQUEST, false, "이메일은 필수 입력 항목입니다."),
     USER_REGEX_EMAIL(HttpStatus.BAD_REQUEST, false, "이메일 형식이 아닙니다."),
+    USER_NOT_PASSWORD(HttpStatus.BAD_REQUEST, false, "비밀번호는 필수 입력 항목입니다."),
+    USER_SIZE_PASSWORD(HttpStatus.BAD_REQUEST, false, "비밀번호 크기는 8~20자 입니다."),
+    USER_PATTERN_PASSWORD(HttpStatus.BAD_REQUEST, false, "비밀번호는 대문자, 소문자, 숫자, 특수문자(!@#$%^&*)를 모두 포함해야 합니다."),
+    USER_NOT_NAME(HttpStatus.BAD_REQUEST, false, "이름은 필수 입력 항목입니다."),
+    USER_NOT_PHONE_NUMBER(HttpStatus.BAD_REQUEST, false, "전화번호는 필수 입력 항목입니다."),
 
-    
+
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),
 

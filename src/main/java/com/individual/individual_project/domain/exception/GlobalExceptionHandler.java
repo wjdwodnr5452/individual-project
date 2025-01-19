@@ -4,31 +4,32 @@ import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ApiResponse<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         // 유효성 검사를 실패한 필드와 메시지를 추출
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         FieldError fieldError = fieldErrors.get(fieldErrors.size()-1);  // 가장 첫 번째 에러 필드
 
         // DefaultMessage를 기반으로 ResponseCode를 매핑
         ResponseCode responseCode = mapErrorMessageToResponseCode(fieldError.getDefaultMessage());
+
+        log.info("response code: {}", responseCode);
+        log.info("response message: {}", responseCode.getMessage());
 
         // 에러 메시지 반환
         return ApiResponse.fail(responseCode, null);

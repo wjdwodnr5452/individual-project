@@ -1,7 +1,5 @@
 package com.individual.individual_project.domain.user;
 
-import com.individual.individual_project.domain.validate.SaveCheck;
-import com.individual.individual_project.domain.validate.UpdateCheck;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -30,13 +28,13 @@ public class User {
 
     @NotNull(message ="USER_NOT_PASSWORD")
     @Size(min = 8, max = 20, message = "USER_SIZE_PASSWORD")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).+$",  message = "비밀번호는 대문자, 소문자, 숫자, 특수문자(!@#$%^&*)를 모두 포함해야 합니다.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).+$",  message = "USER_PATTERN_PASSWORD")
     private String password;
 
-    @NotNull(message = "이름은 필수 입력 항목입니다.")
+    @NotNull(message = "USER_NOT_NAME")
     private String name;
 
-    @NotNull(message = "전화번호는 필수 입력 항목입니다.")
+    @NotNull(message = "USER_NOT_PHONE_NUMBER")
     @Column(name = "phone_number")
     private String phoneNumber;
 

@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.user.repository.impl;
 
 import com.individual.individual_project.domain.user.User;
+import com.individual.individual_project.domain.user.repository.SpringDataUserRepository;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final EntityManager em;
-
+    private final SpringDataUserRepository repository;
 
     @Override
     public Optional<User> findUserById(Long id) {
@@ -23,23 +24,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean findUserByEmail(String email) {
-
-        String jpql = "SELECT count(u) FROM User u WHERE u.email = :email";
-        Long cnt  =  (Long) em.createQuery(jpql)
-                .setParameter("email", email)
-                .getSingleResult();
-
-        return cnt > 0 ? true : false;
+    public Optional<User> findUserByEmail(String email) {
+        return repository.findByEmail(email);
     }
-
-
 
     @Override
     public User saveUser(User user) {
-        em.persist(user);
-        return user;
+        return repository.save(user);
     }
-
 
 }

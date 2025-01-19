@@ -21,10 +21,10 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final Encrypt encrypt;
 
     @Value("${encryption.key}")
     private String encryptionKey;
-
 
     @Override
     public Optional<User> findUserById(Long id) {
@@ -34,9 +34,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(User user) {
 
-        Encrypt encrypt = new Encrypt();
 
-        //userRepository.findUserByEmail(user.getEmail());
+        Optional<User> userByEmail = userRepository.findUserByEmail(user.getEmail());
+        if(userByEmail.isPresent()){
+            throw new BaseException(ResponseCode.USER_CONFLICT_EMAIL);
+        }
 
         // 비밀번호 암호화 단방향
         user.setPassword(encrypt.encryptSha256(user.getPassword()));

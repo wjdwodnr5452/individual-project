@@ -4,10 +4,8 @@ import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.service.UserService;
-import com.individual.individual_project.domain.validate.SaveCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUsers(@PathVariable Long id) {

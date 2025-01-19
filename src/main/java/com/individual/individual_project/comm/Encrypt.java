@@ -1,5 +1,7 @@
 package com.individual.individual_project.comm;
 
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
@@ -9,6 +11,7 @@ import java.util.Base64;
 /**
  * 단방향, 양방향 암호화 진행
  */
+@Component
 public class Encrypt {
 
 

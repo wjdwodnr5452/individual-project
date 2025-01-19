@@ -7,15 +7,33 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        try{
+            // 서버요청
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`,{
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({
+                    email : email,
+                    password : password
+                })
+            });
+
+        }catch (err){
+
+        }
+
+
         // 간단한 로그인 검증 예제
-        if (email === "test@example.com" && password === "password") {
+     /*   if (email === "test@example.com" && password === "password") {
             alert("로그인 성공!");
         } else {
             setError("이메일 또는 비밀번호가 올바르지 않습니다.");
-        }
+        }*/
     };
 
     return (

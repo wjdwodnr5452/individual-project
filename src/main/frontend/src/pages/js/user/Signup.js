@@ -1,7 +1,9 @@
 import React, {useEffect,useState } from 'react';
-import '../../css/user/Signup.css'; // 스타일 파일
+import '../../css/user/Signup.css';
+import {useNavigate} from "react-router-dom"; // 스타일 파일
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -61,19 +63,24 @@ const Signup = () => {
                 })
             });
 
-            if(response.ok){
+            if (response.ok) {
+                // 서버 응답 데이터를 JSON으로 변환
                 const data = await response.json();
-                setSuccess("회원가입이 완료되었습니다.");
-                setError("");
+                setSuccess(data.msg);
+                alert(data.msg);
+
+                navigate("/login"); // 회원가입 완료 후 로그인 페이지로 이동
+            } else {
+                // 서버 응답이 실패한 경우 에러 처리
+                const errorData = await response.json();
+                setError(errorData.msg || "회원가입에 실패했습니다.");
+                alert(setError);
             }
 
         }catch (err){
             setError("서버와 통신하는 중 오류가 발생했습니다.")
         }
 
-
-        // 유효성 검사 및 회원가입 처리
-        console.log(formData);
     };
 
     return (

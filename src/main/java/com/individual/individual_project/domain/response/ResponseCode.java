@@ -26,12 +26,12 @@ public enum ResponseCode {
 
     // 404 찾을 수 없음
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, false, "사용자를 찾을 수 없습니다."),
-    USER_NOT_FOUND_EMAIL(HttpStatus.BAD_REQUEST, false, "회원 가입 한 이메일이 아닙니다."),
+    USER_NOT_FOUND_EMAIL(HttpStatus.BAD_REQUEST, false, "회원가입 한 이메일이 아닙니다."),
     USER_NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, false, "비밀번호가 틀립니다."),
 
 
     // 409 중복
-    USER_CONFLICT_EMAIL(HttpStatus.CONFLICT, false, "이미 가입한 이메일입니다."),
+    USER_CONFLICT_EMAIL(HttpStatus.CONFLICT, false, "이미 가입 한 이메일입니다."),
     
 
 
@@ -57,6 +57,8 @@ public enum ResponseCode {
     USER_READ_SUCCESS(HttpStatus.OK, true, "사용자 정보 조회 성공"),
     USER_UPDATE_SUCCESS(HttpStatus.OK, true, "사용자 정보 수정 성공"),
     USER_LOGIN_SUCCESS(HttpStatus.OK, true, "사용자 로그인 성공"),
+    USER_LOGOUT_SUCCESS(HttpStatus.OK, true, "사용자 로그아웃 성공"),
+
     // 201 Created
     USER_CREATE_SUCCESS(HttpStatus.CREATED, true, "사용자 생성 성공");
 

@@ -1,9 +1,13 @@
 package com.individual.individual_project.domain.login.controller;
 
+import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.domain.login.dto.LoginDto;
 import com.individual.individual_project.domain.login.service.LoginService;
 import com.individual.individual_project.domain.response.ApiResponse;
+import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,12 +29,27 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ApiResponse<User> login(@RequestBody LoginDto loginDto) {
+    public ApiResponse<User> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         log.info("loginDto: {}", loginDto);
         User user = loginService.login(loginDto);
         log.info("user: {}", user);
 
-        return null;
+        // 세션 생성
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionConst.LOGIN_MEMBER, user);
+
+        return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS.getMessage());
+    }
+
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return ApiResponse.success(null, ResponseCode.USER_LOGOUT_SUCCESS.getMessage());
     }
 
 

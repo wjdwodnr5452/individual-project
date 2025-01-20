@@ -22,29 +22,18 @@ public class LoginServiceImpl implements LoginService {
     private final LoginRepository loginRepository;
     private final Encrypt encrypt;
 
-    @Value("${encryption.key}")
-    private String encryptionKey;
-
     @Override
     public User login(LoginDto loginDto) {
 
-        Optional<User> byLoginId = loginRepository.findByLoginId(loginDto);
+        User user = loginRepository.findByLoginId(loginDto)
+                .orElseThrow(() -> new BaseException(ResponseCode.USER_NOT_FOUND_EMAIL));
 
-        if(byLoginId.isPresent()){
+        String encryptedPassword = encrypt.encryptSha256(loginDto.getPassword());
 
-            String encryptedPassword = encrypt.encryptSha256(loginDto.getPassword());
-
-            log.info("encryptedPassword: {}", encryptedPassword);
-
-            if(byLoginId.get().getPassword().equals(encryptedPassword)){ // 비밀번호 일치
-                return byLoginId.get();
-            }else{ // 비밀번호 비일치
-                throw new BaseException(ResponseCode.USER_NOT_FOUND_PASSWORD);
-            }
-
-        }else{
-            throw new BaseException(ResponseCode.USER_NOT_FOUND_EMAIL);
+        if(!user.getPassword().equals(encryptedPassword)){ // 비밀번호 일치
+            throw new BaseException(ResponseCode.USER_NOT_FOUND_PASSWORD);
         }
 
+        return user;
     }
 }

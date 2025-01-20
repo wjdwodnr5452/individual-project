@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,12 +22,12 @@ public class LoginRepositoryImpl implements LoginRepository {
     @Override
     public Optional<User> findByLoginId(LoginDto loginDto) {
         String jpql = "SELECT u FROM User u WHERE u.email = :email";
-        User user = em.createQuery(jpql, User.class)
+        List<User> users = em.createQuery(jpql, User.class)
                 .setParameter("email", loginDto.getEmail())
-                .getSingleResult();
+                .getResultList();
 
-        return Optional.ofNullable(user);
+        // 첫 번째 결과를 반환하거나 Optional.empty() 반환
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
-
 
 }

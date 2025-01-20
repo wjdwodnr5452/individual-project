@@ -1,8 +1,10 @@
 // LoginPage.js
 import React, { useState } from "react";
 import "../../css/user/Login.css";
+import {useNavigate} from "react-router-dom";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -20,8 +22,21 @@ const LoginPage = () => {
                 body : JSON.stringify({
                     email : email,
                     password : password
-                })
+                }),
+                credentials: 'include' // 요청한 쿠키 값 저장하기
             });
+
+            if(response.ok){
+                const responseData = await response.json();
+                console.log("data : " , responseData.data);
+
+                // 로그인 성공 시, 사용자 정보를 localStorage에 저장
+                localStorage.setItem("user", JSON.stringify(responseData.data));
+
+                // 로그인 성공 후, 메인 페이지로 이동
+                navigate("/");
+
+            }
 
         }catch (err){
 

@@ -1,6 +1,6 @@
 import React, {useEffect,useState } from 'react';
 import '../../css/user/Signup.css';
-import {useNavigate} from "react-router-dom"; // 스타일 파일
+import {useNavigate} from "react-router-dom";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -78,7 +78,8 @@ const Signup = () => {
             }
 
         }catch (err){
-            setError("서버와 통신하는 중 오류가 발생했습니다.")
+            setError("서버와 통신하는 중 오류가 발생했습니다.");
+            alert("서버와 통신하는 중 오류가 발생했습니다.");
         }
 
     };

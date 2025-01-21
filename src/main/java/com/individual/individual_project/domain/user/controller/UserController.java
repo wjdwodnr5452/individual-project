@@ -39,7 +39,8 @@ public class UserController {
 
     @PostMapping("/users")
     public ApiResponse<User> createUser(@Validated @RequestBody User user){
-        return ApiResponse.success(userService.saveUser(user), ResponseCode.USER_CREATE_SUCCESS.getMessage());
+      //  return ApiResponse.success(userService.saveUser(user), ResponseCode.USER_CREATE_SUCCESS.getMessage());
+        return ApiResponse.success(userService.saveUser(user), ResponseCode.USER_CREATE_SUCCESS);
     }
 
 

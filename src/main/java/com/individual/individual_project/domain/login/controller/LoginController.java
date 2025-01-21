@@ -35,7 +35,8 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, user);
 
-        return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS.getMessage());
+        //return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS.getMessage());
+        return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS);
     }
 
     @PostMapping("/logout")
@@ -46,7 +47,8 @@ public class LoginController {
             session.invalidate();
         }
 
-        return ApiResponse.success(null, ResponseCode.USER_LOGOUT_SUCCESS.getMessage());
+       // return ApiResponse.success(null, ResponseCode.USER_LOGOUT_SUCCESS.getMessage());
+        return ApiResponse.success(null, ResponseCode.USER_LOGOUT_SUCCESS);
     }
 
 
@@ -59,7 +61,8 @@ public class LoginController {
         }
 
         User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
-        return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS.getMessage());
+       //return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS.getMessage());
+       return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS);
     }
 
 

@@ -22,8 +22,12 @@ public class ApiResponse<T> {
         this.msg = msg;
     }
 
-    public static <T> ApiResponse<T> success(T data, String message) {
+ /*   public static <T> ApiResponse<T> success(T data, String message) {
         return new ApiResponse<T>(new ApiHeader(SUCCESS, "SUCCESS"), data, message);
+    }*/
+
+    public static <T> ApiResponse<T> success(T data, ResponseCode responseCode) {
+        return new ApiResponse<T>(new ApiHeader(responseCode.getHttpStatusCode(), responseCode.getMessage()), data, responseCode.getMessage());
     }
 
     public static <T> ApiResponse<T> fail(ResponseCode responseCode, T data) {

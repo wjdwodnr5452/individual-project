@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 const BoardList = () => {
 
     const posts = [
-        { id: 1, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/imges/thumbnail.png"},
-        { id: 2, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/imges/thumbnail.png"},
-        { id: 3, title: "JavaScript 상태 관리 비교", author: "Jane Smith", category:"환경보호",serviceStat:"시작전",serveiceDate:"2025-01-01",serveiceTime:"6", recruitStat:"모집중", recruitDeadline:"2025-01-03",   date: "2025-01-02", thumbnail: "/imges/thumbnail.png"},
-        { id: 4, title: "Next.js의 장점과 활용", author: "Alice Brown", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01",serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03", date: "2025-01-03", thumbnail: "/imges/thumbnail.png"}
+        { id: 1, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/images/thumbnail.png"},
+        { id: 2, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/images/thumbnail.png"},
+        { id: 3, title: "JavaScript 상태 관리 비교", author: "Jane Smith", category:"환경보호",serviceStat:"시작전",serveiceDate:"2025-01-01",serveiceTime:"6", recruitStat:"모집중", recruitDeadline:"2025-01-03",   date: "2025-01-02", thumbnail: "/images/thumbnail.png"},
+        { id: 4, title: "Next.js의 장점과 활용", author: "Alice Brown", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01",serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03", date: "2025-01-03", thumbnail: "/images/thumbnail.png"}
     ];
 
     const [category, setCategory] = useState("all");

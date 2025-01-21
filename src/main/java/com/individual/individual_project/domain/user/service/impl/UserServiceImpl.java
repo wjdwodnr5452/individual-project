@@ -1,7 +1,7 @@
 package com.individual.individual_project.domain.user.service.impl;
 
 import com.individual.individual_project.comm.Encrypt;
-import com.individual.individual_project.domain.exception.BaseException;
+import com.individual.individual_project.web.exception.BaseException;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepository;

@@ -41,14 +41,6 @@ const LoginPage = () => {
         }catch (err){
 
         }
-
-
-        // 간단한 로그인 검증 예제
-     /*   if (email === "test@example.com" && password === "password") {
-            alert("로그인 성공!");
-        } else {
-            setError("이메일 또는 비밀번호가 올바르지 않습니다.");
-        }*/
     };
 
     return (

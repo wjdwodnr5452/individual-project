@@ -1,4 +1,4 @@
-package com.individual.individual_project.domain.exception;
+package com.individual.individual_project.web.exception;
 
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
@@ -45,9 +45,6 @@ public class GlobalExceptionHandler {
 
         return ApiResponse.fail(responseCode, null);
     }
-
-
-
 
     // 메시지를 ResponseCode로 매핑하는 메서드
     private ResponseCode mapErrorMessageToResponseCode(String defaultMessage) {

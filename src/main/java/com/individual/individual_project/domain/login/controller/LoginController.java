@@ -10,10 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Login(로그인, 로그아웃)
@@ -50,6 +47,19 @@ public class LoginController {
         }
 
         return ApiResponse.success(null, ResponseCode.USER_LOGOUT_SUCCESS.getMessage());
+    }
+
+
+   @GetMapping("/login/status")
+    public ApiResponse<User> getLoginStatus(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
+            return ApiResponse.fail(ResponseCode.USER_LOGOUT_STATUS, null);
+        }
+
+        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS.getMessage());
     }
 
 

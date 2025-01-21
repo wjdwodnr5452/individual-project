@@ -1,4 +1,4 @@
-package com.individual.individual_project.domain.exception;
+package com.individual.individual_project.web.exception;
 
 import com.individual.individual_project.domain.response.ResponseCode;
 import lombok.AllArgsConstructor;

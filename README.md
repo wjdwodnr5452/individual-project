@@ -17,16 +17,25 @@
 - Querydsl
 
 
-### :memo: url 정보
-- **GET** &nbsp; &nbsp;/login : 로그인 페이지 이동
-- **POST** &nbsp;&nbsp; /login : 유저 로그인
-- **GET** &nbsp;&nbsp;  /users : 회원가입 페이지 이동
-- **POST** &nbsp;&nbsp;  /users : 회원 가입
-- **GET**  &nbsp;&nbsp;  /users/{id} : 유저 상세보기
-- **GET**  &nbsp;&nbsp; /boards/environment : 환경 게시글 목록 조회
-- **POST** &nbsp;&nbsp; /boards/environment : 환경 게시글 작성
-- **GET**  &nbsp;&nbsp; /boards/environment/{id} : 환경 게시글 상세 조회
-- **PUT**  &nbsp;&nbsp; /boards/environment/{id} : 환경 게시글 상세 수정
+### :memo: 페이지 url 정보
+- /      : 메인 페이지
+- /login : 로그인 페이지
+- /signup : 회원가입 페이지
+- /boards/write : 게시판 작성페이지
+- /boards/:id : 게시판 상세 페이지
+- /boards/:id/edit : 게시판 상세 수정 페이지
+- /users/:id : 회원정보 페이지 
+
+
+### :memo: API url 정보
+- **POST** &nbsp;&nbsp; /api/login : 유저 로그인
+- **POST** &nbsp;&nbsp; /api/logout : 유저 로그아웃
+- **POST** &nbsp;&nbsp; /api/users : 회원 가입
+- **GET**  &nbsp;&nbsp; /api/users/{id} : 유저 상세보기
+- **GET**  &nbsp;&nbsp; /api/boards/environment : 환경 게시글 목록 조회
+- **POST** &nbsp;&nbsp; /api/boards/environment : 환경 게시글 작성
+- **GET**  &nbsp;&nbsp; /api/boards/environment/{id} : 환경 게시글 상세 조회
+- **PUT**  &nbsp;&nbsp; /api/boards/environment/{id} : 환경 게시글 상세 수정
 
 
 ### 🔧 ERD 설계

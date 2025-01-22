@@ -1,24 +1,43 @@
-// BoardList.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/board/Board.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../components/AuthProvider";
 
 const BoardList = () => {
-
     const { isLoggedIn, user } = useAuth();
 
-    const posts = [
-        { id: 1, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/images/thumbnail.png"},
-        { id: 2, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/images/thumbnail.png"},
-        { id: 3, title: "JavaScript 상태 관리 비교", author: "Jane Smith", category:"환경보호",serviceStat:"시작전",serveiceDate:"2025-01-01",serveiceTime:"6", recruitStat:"모집중", recruitDeadline:"2025-01-03",   date: "2025-01-02", thumbnail: "/images/thumbnail.png"},
-        { id: 4, title: "Next.js의 장점과 활용", author: "Alice Brown", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01",serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03", date: "2025-01-03", thumbnail: "/images/thumbnail.png"}
-    ];
-
+    const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("all");
-    const [boardStat , setBoardStat] =  useState("all");
+    const [boardStat, setBoardStat] = useState("all");
     const [searchQuery, setSearchQuery] = useState("");
     const [boardReruit, setBoardRecruitStat] = useState("all");
+
+    useEffect(() => {
+        // 카테고리 데이터를 API로부터 받아오는 요청
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch("/api/categorys"); // API 요청 URL
+                if (!response.ok) {
+                    throw new Error("카테고리 데이터를 가져오는데 실패했습니다.");
+                }
+                const responseData = await response.json();
+                console.log("data : " , responseData.data);
+                setCategories( responseData.data);  // 받아온 데이터로 카테고리 상태 설정
+                console.log("categories : ", categories)
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    const posts = [
+        { id: 1, title: "React로 게시판 만들기", author: "John Doe", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-01", thumbnail: "/images/thumbnail.png" },
+        { id: 2, title: "React로 게시판 만들기", author: "John Doe", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-01", thumbnail: "/images/thumbnail.png" },
+        { id: 3, title: "JavaScript 상태 관리 비교", author: "Jane Smith", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-02", thumbnail: "/images/thumbnail.png" },
+        { id: 4, title: "Next.js의 장점과 활용", author: "Alice Brown", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-03", thumbnail: "/images/thumbnail.png" }
+    ];
 
     // 글 목록 필터링 로직
     const filteredPosts = posts.filter((post) => {
@@ -59,7 +78,11 @@ const BoardList = () => {
                     </div>
                     <div className="boards-recruit-stat-div">
                         <span>모집 상태 : </span>
-                        <select value={boardReruit}   onChange={(e) => setBoardRecruitStat(e.target.value)}  className="board-recruit-stat-select filters-select">
+                        <select
+                            value={boardReruit}
+                            onChange={(e) => setBoardRecruitStat(e.target.value)}
+                            className="board-recruit-stat-select filters-select"
+                        >
                             <option value="all">전체</option>
                             <option value="recruiting">모집중</option>
                             <option value="recruiting_deadline">모집마감</option>
@@ -73,11 +96,12 @@ const BoardList = () => {
                             className="category-select filters-select"
                         >
                             <option value="all">전체</option>
-                            <option value="environmental">환경보호</option>
-                            <option value="social_welfare">사회복지</option>
-                            <option value="education">교육</option>
-                            <option value="culture_and_art">문화및예술</option>
-                            <option value="animal_protection">동물보호</option>
+                            {/* API로 받아온 카테고리 목록을 select에 추가 */}
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.categoryName}>
+                                    {cat.categoryName}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className="search-div">
@@ -92,23 +116,23 @@ const BoardList = () => {
                         />
                     </div>
                 </div>
-                    {isLoggedIn && (
-                        <div className="filters-right">
-                            <div className="boards-btn-div">
-                                <button type="button" className="board-create-button" onClick={boardWritePage}>
-                                    글등록
-                                </button>
-                            </div>
+                {isLoggedIn && (
+                    <div className="filters-right">
+                        <div className="boards-btn-div">
+                            <button type="button" className="board-create-button" onClick={boardWritePage}>
+                                글등록
+                            </button>
                         </div>
-                    )}
-             < /div>
+                    </div>
+                )}
+            </div>
 
-                    {/* 글 목록 */}
-                    <div className="boards-cards">
+            {/* 글 목록 */}
+            <div className="boards-cards">
                 {filteredPosts.map((post) => (
                     <div key={post.id} className="boards-card">
-                <img
-                    src={post.thumbnail}
+                        <img
+                            src={post.thumbnail}
                             alt={`${post.title} 썸네일`}
                             className="boards-thumbnail"
                         />
@@ -128,7 +152,6 @@ const BoardList = () => {
                                 <div className="details-row">
                                     <p className="boards-service-date"><strong>봉사일:</strong> {post.serveiceDate}</p>
                                     <p className="boards-recruit-deadline"><strong>모집마감:</strong> {post.recruitDeadline}</p>
-
                                 </div>
                                 <div className="details-row">
                                     <p className="boards-service-time"><strong>봉사시간:</strong> {post.serveiceTime}시간</p>
@@ -137,10 +160,8 @@ const BoardList = () => {
                             </div>
                         </div>
                     </div>
-
                 ))}
             </div>
-
 
             {/* 검색 결과 없을 때 메시지 */}
             {filteredPosts.length === 0 && (

@@ -7,28 +7,26 @@ import lombok.Data;
 /**
  * 작성자 : 정재욱
  * 생성일 : 2025.01.22
- * 엔티티 : categorys
- * 카테고리
+ * 엔티티 : recruit_stat
+ * 모집상태
  */
 @Data
 @Entity
-@Table(name = "categorys")
-public class Category {
+@Table(name = "recruit_stat")
+public class RecruitStat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(name = "category_name")
-    private String categoryName;
+    @Column(name = "recruit_stat_name")
+    private String recruitStatName;
 
+    public RecruitStat() {}
 
-    public Category() {
-    }
-
-    public Category(String categoryName) {
-        this.categoryName = categoryName;
+    public RecruitStat(String recruitStatName) {
+        this.recruitStatName = recruitStatName;
     }
 
 }

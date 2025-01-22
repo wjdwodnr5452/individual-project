@@ -9,6 +9,7 @@ import lombok.Data;
  * 작성자 : 정재욱
  * 생성일 : 2025.01.15
  * 엔티티 : users
+ * 유저
  */
 @Data
 @Entity

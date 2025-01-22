@@ -29,7 +29,7 @@ public class BoardController {
 
         return ApiResponse.success(categoryList ,ResponseCode.CATEGORY_READ_SUCCESS);
     }
-
+    
 
 
 

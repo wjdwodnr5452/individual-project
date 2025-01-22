@@ -7,28 +7,26 @@ import lombok.Data;
 /**
  * 작성자 : 정재욱
  * 생성일 : 2025.01.22
- * 엔티티 : categorys
- * 카테고리
+ * 엔티티 : service_stat
+ * 서비스 상태
  */
 @Data
 @Entity
-@Table(name = "categorys")
-public class Category {
+@Table(name = "service_stat")
+public class ServiceStat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(name = "category_name")
-    private String categoryName;
+    @Column(name = "service_stat_name")
+    private String serviceStatName;
 
-
-    public Category() {
+    public ServiceStat() {
     }
 
-    public Category(String categoryName) {
-        this.categoryName = categoryName;
+    public ServiceStat(String serviceStatName) {
+        this.serviceStatName = serviceStatName;
     }
-
 }

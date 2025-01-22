@@ -26,8 +26,10 @@ const LoginPage = () => {
                 credentials: 'include' // 요청한 쿠키 값 저장하기
             });
 
+            const responseData = await response.json();
+
             if(response.ok){
-                const responseData = await response.json();
+
                 console.log("data : " , responseData.data);
 
                 // 로그인 성공 시, 사용자 정보를 localStorage에 저장
@@ -35,7 +37,8 @@ const LoginPage = () => {
 
                 // 로그인 성공 후, 메인 페이지로 이동
                 navigate("/");
-
+            }else{
+                alert(responseData.msg)
             }
 
         }catch (err){

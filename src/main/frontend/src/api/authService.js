@@ -10,7 +10,12 @@ export const checkLoginStatus = async () => {
 
         if (response.ok) {
             const data = await response.json();
-            return { isLoggedIn: true, user: data.user };
+
+            if(data.header.code == 200){
+                return { isLoggedIn: true, user: data.data };
+            }else{
+                return { isLoggedIn: false, user: null };
+            }
         } else {
             return { isLoggedIn: false, user: null };
         }

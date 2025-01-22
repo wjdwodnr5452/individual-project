@@ -2,8 +2,11 @@
 import React, { useState } from "react";
 import "../../css/board/Board.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../components/AuthProvider";
 
 const BoardList = () => {
+
+    const { isLoggedIn, user } = useAuth();
 
     const posts = [
         { id: 1, title: "React로 게시판 만들기", author: "John Doe", category:"환경보호", serviceStat:"시작전", serveiceDate:"2025-01-01", serveiceTime:"6",  recruitStat:"모집중", recruitDeadline:"2025-01-03",  date: "2025-01-01", thumbnail: "/images/thumbnail.png"},
@@ -89,21 +92,23 @@ const BoardList = () => {
                         />
                     </div>
                 </div>
-                <div className="filters-right">
-                    <div className="boards-btn-div">
-                        <button type="button" className="board-create-button" onClick={boardWritePage}>
-                            글등록
-                        </button>
-                    </div>
-                </div>
-            </div>
+                    {isLoggedIn && (
+                        <div className="filters-right">
+                            <div className="boards-btn-div">
+                                <button type="button" className="board-create-button" onClick={boardWritePage}>
+                                    글등록
+                                </button>
+                            </div>
+                        </div>
+                    )}
+             < /div>
 
-            {/* 글 목록 */}
-            <div className="boards-cards">
+                    {/* 글 목록 */}
+                    <div className="boards-cards">
                 {filteredPosts.map((post) => (
                     <div key={post.id} className="boards-card">
-                        <img
-                            src={post.thumbnail}
+                <img
+                    src={post.thumbnail}
                             alt={`${post.title} 썸네일`}
                             className="boards-thumbnail"
                         />

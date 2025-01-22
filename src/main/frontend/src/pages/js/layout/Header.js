@@ -1,10 +1,10 @@
 import React from "react";
 import "../../css/Header.css";
 import { useNavigate } from "react-router-dom";
-//import { useAuth } from "../../../components/AuthProvider"; // AuthContext 사용
+import { useAuth } from "../../../components/AuthProvider"; // AuthContext 사용
 
 function Header() {
-    //const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn, user } = useAuth();
     const navigate = useNavigate();
 
     const homePageMove = () => {
@@ -39,9 +39,7 @@ function Header() {
                 <span className="logo-text">다같이</span>
             </div>
             <div className="auth-links">
-                <a href="/login">로그인</a>
-                <a href="/signup">회원가입</a>
-                {/*          {isLoggedIn ? (
+                {isLoggedIn ? (
                     <>
                         <span>{user?.name}님</span>
                         <a href="#" onClick={myPageMove}>마이페이지</a>
@@ -52,7 +50,7 @@ function Header() {
                         <a href="/login">로그인</a>
                         <a href="/signup">회원가입</a>
                     </>
-                )}*/}
+                )}
             </div>
         </header>
     );

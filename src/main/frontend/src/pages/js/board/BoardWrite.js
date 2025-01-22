@@ -35,7 +35,7 @@ const BoardWrite = () => {
 
     return (
         <div>
-            <Header/>
+         {/*   <Header/>*/}
         <div className="borad-write-container">
             <h2>글 작성하기</h2>
             <form onSubmit={handleSubmit} className="board-write-form">
@@ -160,7 +160,7 @@ const BoardWrite = () => {
                 </div>
             </form>
         </div>
-            <Footer/>
+          {/*  <Footer/>*/}
         </div>
     );
 };

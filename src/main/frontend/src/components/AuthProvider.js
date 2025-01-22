@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
             setIsLoggedIn(status.isLoggedIn);
             setUser(status.user || null);
         };
-
         fetchLoginStatus();
     }, []);
 

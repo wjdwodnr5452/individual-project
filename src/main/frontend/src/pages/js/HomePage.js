@@ -7,10 +7,10 @@ import BoardList from "./board/BoardList";
 function HomePage() {
     return (
         <div>
-            <Header/>
+
             {/*카테고리 및 검색*/}
             <BoardList/>
-            <Footer/>
+
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         </div>
     );

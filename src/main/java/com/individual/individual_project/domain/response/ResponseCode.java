@@ -41,9 +41,15 @@ public enum ResponseCode {
     USER_UPDATE_SUCCESS(HttpStatus.OK, true, "사용자 정보 수정 성공"),
     USER_LOGIN_SUCCESS(HttpStatus.OK, true, "사용자 로그인 성공"),
     USER_LOGOUT_SUCCESS(HttpStatus.OK, true, "사용자 로그아웃 성공"),
-
     USER_LOGIN_STATUS(HttpStatus.OK, true, "로그인 상태 입니다."),
 
+
+    /* 게시판 */
+
+    // 200 OK
+    CATEGORY_READ_SUCCESS(HttpStatus.OK, true, "카테고리 조회 성공"),
+    
+    
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),
 

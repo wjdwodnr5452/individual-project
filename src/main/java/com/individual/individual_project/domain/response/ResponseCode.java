@@ -47,7 +47,8 @@ public enum ResponseCode {
     /* 게시판 */
 
     // 200 OK
-    CATEGORY_READ_SUCCESS(HttpStatus.OK, true, "카테고리 조회 성공"),
+    CATEGORY_READ_SUCCESS(HttpStatus.OK, true, "카테고리 리스트 조회 성공"),
+    STATUS_READ_SUCCESS(HttpStatus.OK, true, "상태 리스트 조회 성공"),
     
     
     // 403 Forbidden

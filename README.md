@@ -39,6 +39,7 @@
 
 
 ### 🔧 ERD 설계
-![image](https://github.com/user-attachments/assets/2a3bc8b2-ebe3-4f77-8c4a-5e156553090b)
+![image](https://github.com/user-attachments/assets/28795093-6408-42a4-9ea4-40dd9f5eb66a)
+
 
 

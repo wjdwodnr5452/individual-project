@@ -8,9 +8,17 @@ const BoardList = () => {
 
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("all");
-    const [boardStat, setBoardStat] = useState("all");
+
+    const [statServices, setStatServices] = useState([]);
+    const [statService, setStatService] = useState("all");
+
+    const [statRecruitments, setStatRecruitments] = useState([]);
+    const [statRecruitment, setStatRecruitment] = useState("all");
+
+
+
     const [searchQuery, setSearchQuery] = useState("");
-    const [boardReruit, setBoardRecruitStat] = useState("all");
+
 
     useEffect(() => {
         // 카테고리 데이터를 API로부터 받아오는 요청
@@ -21,15 +29,44 @@ const BoardList = () => {
                     throw new Error("카테고리 데이터를 가져오는데 실패했습니다.");
                 }
                 const responseData = await response.json();
-                console.log("data : " , responseData.data);
                 setCategories( responseData.data);  // 받아온 데이터로 카테고리 상태 설정
-                console.log("categories : ", categories)
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
         };
 
+        // 서비스상태 데이터 가져오기
+        const fetchStatService = async () => {
+            try {
+                const response = await fetch("/api/status/service"); // API 요청 URL
+                if (!response.ok) {
+                    throw new Error("서비스 상태 데이터를 가져오는데 실패했습니다.");
+                }
+                const responseData = await response.json();
+                console.log("data : " , responseData.data);
+                setStatServices( responseData.data);  //
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const fetchStatRecruitment = async () => {
+            try {
+                const response = await fetch("/api/status/recruitment"); // API 요청 URL
+                if (!response.ok) {
+                    throw new Error("모집 상태 데이터를 가져오는데 실패했습니다.");
+                }
+                const responseData = await response.json();
+                console.log("data : " , responseData.data);
+                setStatRecruitments( responseData.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
         fetchCategories();
+        fetchStatService();
+        fetchStatRecruitment();
     }, []);
 
     const posts = [
@@ -66,26 +103,31 @@ const BoardList = () => {
                     <div className="boards-stat-div">
                         <span>진행 상태 : </span>
                         <select
-                            value={boardStat}
-                            onChange={(e) => setBoardStat(e.target.value)}
+                            value={statService}
+                            onChange={(e) => setStatService(e.target.value)}
                             className="board-stat-select filters-select"
                         >
                             <option value="all">전체</option>
-                            <option value="before_starting">시작전</option>
-                            <option value="starting">진행중</option>
-                            <option value="finish">종료</option>
+                            {statServices.map((statService) => (
+                                <option key={statService.id} value={statService.statusName}>
+                                    {statService.statusName}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className="boards-recruit-stat-div">
                         <span>모집 상태 : </span>
                         <select
-                            value={boardReruit}
-                            onChange={(e) => setBoardRecruitStat(e.target.value)}
+                            value={statRecruitment}
+                            onChange={(e) => setStatRecruitment(e.target.value)}
                             className="board-recruit-stat-select filters-select"
                         >
                             <option value="all">전체</option>
-                            <option value="recruiting">모집중</option>
-                            <option value="recruiting_deadline">모집마감</option>
+                            {statRecruitments.map((statRe) => (
+                                <option key={statRe.id} value={statRe.statusName}>
+                                    {statRe.statusName}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className="category-div">

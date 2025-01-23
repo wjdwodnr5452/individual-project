@@ -63,7 +63,6 @@ const BoardEdit = ({ postId }) => {
 
     return (
         <div>
-            <Header />
             <div className="borad-write-container">
                 <h2>게시글 수정하기</h2>
                 <form onSubmit={handleSubmit} className="board-write-form">
@@ -188,7 +187,6 @@ const BoardEdit = ({ postId }) => {
                     </div>
                 </form>
             </div>
-            <Footer />
         </div>
     );
 };

@@ -3,6 +3,8 @@ package com.individual.individual_project.domain.board.service.impl;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 import com.individual.individual_project.domain.board.service.CategoryService;
+import com.individual.individual_project.domain.response.ResponseCode;
+import com.individual.individual_project.web.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<Category> cateGroyList = categoryRepository.findAll();
 
-        log.info("cateGroyList: {}", cateGroyList);
+        if(cateGroyList.isEmpty()){
+            throw new BaseException(ResponseCode.CATEGORY_NOT_FOUND);
+        }
+
 
         return cateGroyList;
     }

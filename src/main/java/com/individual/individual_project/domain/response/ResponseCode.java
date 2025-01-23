@@ -50,7 +50,11 @@ public enum ResponseCode {
     CATEGORY_READ_SUCCESS(HttpStatus.OK, true, "카테고리 리스트 조회 성공"),
     STATUS_READ_SUCCESS(HttpStatus.OK, true, "상태 리스트 조회 성공"),
     
-    
+
+    // 404 찾을 수 없음
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, false, "카테고리를 찾을 수 없습니다."),
+    STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, false, "상태를 찾을 수 없습니다."),
+
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),
 

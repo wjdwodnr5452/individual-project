@@ -73,7 +73,6 @@ const BoardDetail = () => {
 
     return (
         <div>
-            <Header />
             <div className="board-detail-page">
                 <div className="board-header">
                     <h1 className="board-title">{board.title}</h1>
@@ -179,9 +178,7 @@ const BoardDetail = () => {
                         </div>
                     </div>
                 )}
-
             </div>
-            <Footer/>
         </div>
     );
 };

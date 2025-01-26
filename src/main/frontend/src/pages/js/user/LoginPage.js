@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 import "../../css/user/Login.css";
 import {useNavigate} from "react-router-dom";
+import { useAuth } from "../../../components/AuthProvider";
+
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const { setIsLoggedIn, setUser } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,11 +32,8 @@ const LoginPage = () => {
             const responseData = await response.json();
 
             if(response.ok){
-
-                console.log("data : " , responseData.data);
-
-                // 로그인 성공 시, 사용자 정보를 localStorage에 저장
-                localStorage.setItem("user", JSON.stringify(responseData.data));
+                setIsLoggedIn(true);
+                setUser(responseData.data);
 
                 // 로그인 성공 후, 메인 페이지로 이동
                 navigate("/");

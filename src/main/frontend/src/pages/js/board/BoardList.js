@@ -6,7 +6,7 @@ import { useAuth } from "../../../components/AuthProvider";
 const BoardList = () => {
     const { isLoggedIn, user } = useAuth();
 
-    const [categories, setCategories] = useState([]);
+    const [categorys, setCategorys] = useState([]);
     const [category, setCategory] = useState("all");
 
     const [statServices, setStatServices] = useState([]);
@@ -29,7 +29,7 @@ const BoardList = () => {
                     throw new Error("카테고리 데이터를 가져오는데 실패했습니다.");
                 }
                 const responseData = await response.json();
-                setCategories( responseData.data);  // 받아온 데이터로 카테고리 상태 설정
+                setCategorys( responseData.data);  // 받아온 데이터로 카테고리 상태 설정
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
@@ -139,7 +139,7 @@ const BoardList = () => {
                         >
                             <option value="all">전체</option>
                             {/* API로 받아온 카테고리 목록을 select에 추가 */}
-                            {categories.map((cat) => (
+                            {categorys.map((cat) => (
                                 <option key={cat.id} value={cat.categoryName}>
                                     {cat.categoryName}
                                 </option>

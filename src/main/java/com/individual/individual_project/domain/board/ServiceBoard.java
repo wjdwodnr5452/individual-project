@@ -37,7 +37,7 @@ public class ServiceBoard {
     @Column(name = "thumbnail_image")
     private String thumbnailImage;
 
-    @NotNull(message ="BORD_NOT_USER_ID")
+
     @Column(name = "user_id")
     private Long userId;
 
@@ -45,11 +45,11 @@ public class ServiceBoard {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @NotNull(message ="BORD_NOT_SERVICE_STAT_ID")
+
     @Column(name = "service_stat_id")
     private Long serviceStatId;
 
-    @NotNull(message ="BORD_NOT_RECRUIT_STAT_ID")
+
     @Column(name = "recruit_stat_id")
     private Long recruitStatId;
 

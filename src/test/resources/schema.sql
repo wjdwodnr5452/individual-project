@@ -1,0 +1,6 @@
+CREATE TABLE categorys (
+   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+   category_name VARCHAR(255) NOT NULL,
+   reg_date TIMESTAMP NOT NULL,
+   update_date TIMESTAMP NOT NULL
+);

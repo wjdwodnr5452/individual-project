@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -24,7 +25,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private String fileDir;
 
     @Override
-    public ServiceBoard createServiceBoard(String title, String category, String content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail) {
+    public ServiceBoard createServiceBoard(String title, String category, String content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail, Long userId) {
 
 
         log.info("thumbnail : {}", thumbnail);
@@ -34,13 +35,17 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         ServiceBoard  serviceBoard = new ServiceBoard();
         serviceBoard.setServiceTitle(title);
         serviceBoard.setServiceTime(Integer.valueOf(serviceTime));
-        serviceBoard.setServiceDate(LocalDateTime.parse(serviceDate));
         serviceBoard.setRecruitCount(Integer.valueOf(recruitCount));
-        serviceBoard.setDeadline(LocalDateTime.parse(deadline));
         serviceBoard.setServiceContent(content);
         serviceBoard.setCategoryId(Long.valueOf(category));
         serviceBoard.setRecruitStatId(1L);
         serviceBoard.setServiceStatId(3L);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+        serviceBoard.setServiceDate(LocalDateTime.parse(serviceDate, formatter));
+        serviceBoard.setDeadline(LocalDateTime.parse(deadline, formatter));
+        serviceBoard.setUserId(userId);
 
         return serviceBoard;
     }

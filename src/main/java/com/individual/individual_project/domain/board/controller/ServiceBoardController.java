@@ -1,5 +1,6 @@
 package com.individual.individual_project.domain.board.controller;
 
+import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -8,6 +9,9 @@ import com.individual.individual_project.domain.board.service.ServiceBoardServic
 import com.individual.individual_project.domain.board.service.StatusService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
+import com.individual.individual_project.domain.user.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -71,7 +75,8 @@ public class ServiceBoardController {
             @RequestParam String serviceTime,
             @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
             @RequestParam String deadline,
-            @RequestParam String serviceDate) {
+            @RequestParam String serviceDate,
+            HttpServletRequest request) {
 
         log.info("title: {}", title);
         log.info("category: {}", category);
@@ -82,7 +87,10 @@ public class ServiceBoardController {
         log.info("serviceDate: {}", serviceDate);
         log.info("thumbnail: {}", thumbnail);
 
-        serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnail);
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnail, user.getId());
 
         return null;
     }

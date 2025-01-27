@@ -52,6 +52,7 @@ const BoardWrite = () => {
         formData.append("serviceDate", serviceDate.toISOString()); // ISO 형식으로 변환
         formData.append("serviceTime", serviceTime);
 
+
         if (thumbnail) {
             formData.append("thumbnail", thumbnail); // 파일 추가
         }

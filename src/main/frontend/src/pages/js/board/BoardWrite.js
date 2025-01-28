@@ -64,12 +64,15 @@ const BoardWrite = () => {
                 body: formData,
             });
 
+            const responseData = await response.json();
+
             if (!response.ok) {
-                throw new Error("글 작성에 실패했습니다.");
+                alert(responseData.msg);
+            }else{
+                alert("글이 성공적으로 작성되었습니다!");
             }
 
-            const responseData = await response.json();
-            alert("글이 성공적으로 작성되었습니다!");
+            console.log("responseData : " , responseData);
             console.log("API 응답:", responseData);
         } catch (error) {
             console.error("글 작성 중 에러 발생:", error);
@@ -147,7 +150,7 @@ const BoardWrite = () => {
                             dateFormat="yyyy-MM-dd HH:mm"
                             showTimeSelect
                             timeFormat="HH:mm"
-                            timeIntervals={15}
+                            timeIntervals={30}
                             timeCaption="시간"
                             placeholderText="마감일과 시간을 선택하세요"
                             id="writeDeadline"
@@ -164,7 +167,7 @@ const BoardWrite = () => {
                             dateFormat="yyyy-MM-dd HH:mm"
                             showTimeSelect
                             timeFormat="HH:mm"
-                            timeIntervals={15}
+                            timeIntervals={30}
                             timeCaption="시간"
                             placeholderText="봉사일과 시간을 선택하세요"
                             id="writeServiceDate"

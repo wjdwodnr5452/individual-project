@@ -44,22 +44,30 @@ public enum ResponseCode {
     USER_LOGIN_STATUS(HttpStatus.OK, true, "로그인 상태 입니다."),
 
 
+    // 201 Created
+    USER_CREATE_SUCCESS(HttpStatus.CREATED, true, "사용자 생성 성공"),
+
+
     /* 게시판 */
 
     // 200 OK
     CATEGORY_READ_SUCCESS(HttpStatus.OK, true, "카테고리 리스트 조회 성공"),
     STATUS_READ_SUCCESS(HttpStatus.OK, true, "상태 리스트 조회 성공"),
+
+    // 201
+    BORD_WRITE_SUCCESS(HttpStatus.CREATED, true, "게시판 글 생성 성공"),
     
 
     // 400 에러
-    BORD_NOT_TITLE(HttpStatus.OK, true, "게시글 제목을 필수 입니다."),
-    BORD_NOT_RECRUIT_COUNT(HttpStatus.OK, true, "모집 인원 작성은 필수 입니다."),
-    BORD_NOT_SERVICE_DATE(HttpStatus.OK, true, "봉사 일정 작성은 필수 입니다."),
-    BORD_NOT_SERVICE_TIME(HttpStatus.OK, true, "봉사 시간 작성은 필수 입니다."),
-    BORD_NOT_DEADLINE(HttpStatus.OK, true, "마감 작성은 필수 입니다."),
-    BORD_NOT_USER_ID(HttpStatus.OK, true, "게시글 작성시 로그인이 필수 입니다."),
-    BORD_NOT_CATEGORY_ID(HttpStatus.OK, true, "게시글 작성시 카테고리는 필수 입니다."),
-    BORD_NOT_SERVICE_STAT_ID(HttpStatus.OK, true, "게시글 작성시 서비스 필수 입니다."),
+    BORD_UPROAD_FAILD(HttpStatus.BAD_REQUEST, true, "업로드를 실패 했습니다."),
+    BORD_NOT_TITLE(HttpStatus.BAD_REQUEST, true, "게시글 제목을 필수 입니다."),
+    BORD_NOT_RECRUIT_COUNT(HttpStatus.BAD_REQUEST, true, "모집 인원 작성은 필수 입니다."),
+    BORD_NOT_SERVICE_DATE(HttpStatus.BAD_REQUEST, true, "봉사 일정 작성은 필수 입니다."),
+    BORD_NOT_SERVICE_TIME(HttpStatus.BAD_REQUEST, true, "봉사 시간 작성은 필수 입니다."),
+    BORD_NOT_DEADLINE(HttpStatus.BAD_REQUEST, true, "마감 작성은 필수 입니다."),
+    BORD_NOT_USER_ID(HttpStatus.BAD_REQUEST, true, "게시글 작성시 로그인이 필수 입니다."),
+    BORD_NOT_CATEGORY_ID(HttpStatus.BAD_REQUEST, true, "게시글 작성시 카테고리는 필수 입니다."),
+    BORD_NOT_SERVICE_STAT_ID(HttpStatus.BAD_REQUEST, true, "게시글 작성시 서비스 필수 입니다."),
 
     // 404 찾을 수 없음
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, false, "카테고리를 찾을 수 없습니다."),
@@ -77,13 +85,11 @@ public enum ResponseCode {
     USER_NAME_ALREADY_EXIST(HttpStatus.CONFLICT, false, "이미 존재하는 닉네임입니다."),
 
     // 500 Internal Server Error
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, "서버에 오류가 발생하였습니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, "서버에 오류가 발생하였습니다.");
 
 
 
 
-    // 201 Created
-    USER_CREATE_SUCCESS(HttpStatus.CREATED, true, "사용자 생성 성공");
 
     private final HttpStatus httpStatus;
     private final Boolean success;

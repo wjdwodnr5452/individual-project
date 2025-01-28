@@ -2,6 +2,7 @@ package com.individual.individual_project.config;
 
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 
+import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.board.repository.impl.ServiceBoardRepositoryImpl;
@@ -22,6 +23,7 @@ public class BoardBeanConfig {
 
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
+    private final ServiceBoardDataJpa serviceBoardDataJpa;
 
     private final EntityManager em;
 
@@ -42,7 +44,7 @@ public class BoardBeanConfig {
 
     @Bean
     public ServiceBoardRepository serviceBoardRepository() {
-        return new ServiceBoardRepositoryImpl(em);
+        return new ServiceBoardRepositoryImpl(em, serviceBoardDataJpa);
     }
 
 }

@@ -78,21 +78,17 @@ public class ServiceBoardController {
             @RequestParam String serviceDate,
             HttpServletRequest request) {
 
-        log.info("title: {}", title);
-        log.info("category: {}", category);
-        log.info("content: {}", content);
-        log.info("recruitCount: {}", recruitCount);
-        log.info("serviceTime: {}", serviceTime);
-        log.info("deadline: {}", deadline);
-        log.info("serviceDate: {}", serviceDate);
-        log.info("thumbnail: {}", thumbnail);
-
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnail, user.getId());
 
-        return null;
+        MultipartFile thumbnailToSave = (thumbnail != null && !thumbnail.isEmpty()) ? thumbnail : null;
+
+        ServiceBoard saveBoard = serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());;
+
+        log.info("saveBoard : {}" ,saveBoard);
+
+        return ApiResponse.success(saveBoard ,ResponseCode.BORD_WRITE_SUCCESS);
     }
 
 

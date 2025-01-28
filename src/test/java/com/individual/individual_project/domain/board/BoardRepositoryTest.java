@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +60,20 @@ public class BoardRepositoryTest {
         }else{
             Assertions.assertThat(status).isEmpty();
         }
+
+    }
+
+    @Test
+    void save() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+
+   /*     ServiceBoard serviceBoard = new ServiceBoard("글제목", 3,
+                LocalDateTime.parse(serviceDate, formatter),Integer.valueOf(serviceTime),
+                LocalDateTime.parse(deadline, formatter), "",
+                userId, Long.valueOf(category), 1L, 3L, content);*/
+
 
     }
 

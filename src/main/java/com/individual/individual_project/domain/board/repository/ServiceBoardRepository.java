@@ -9,4 +9,6 @@ public interface ServiceBoardRepository{
     ServiceBoard save(ServiceBoard serviceBoard);
 
     void updateServiceStat(LocalDateTime currentTime);
+
+    void updateRecruitStatId(LocalDateTime currentTime);
 }

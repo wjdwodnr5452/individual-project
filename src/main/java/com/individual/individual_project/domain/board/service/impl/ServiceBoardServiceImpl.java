@@ -70,8 +70,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
 
     @Override
     public void updateServiceBoardStat(LocalDateTime currentTime) {
-
         serviceBoardRepository.updateServiceStat(currentTime);
-
+        serviceBoardRepository.updateRecruitStatId(currentTime);
     }
 }

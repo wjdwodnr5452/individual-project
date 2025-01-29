@@ -13,4 +13,8 @@ public interface ServiceBoardDataJpa extends JpaRepository<ServiceBoard, Long> {
     @Query("update ServiceBoard e set e.serviceStatId = 4 where e.serviceDate <= :currentTime and e.serviceStatId = 3")
     void updateServiceStat(LocalDateTime currentTime);
 
+    @Modifying
+    @Query("update ServiceBoard e set e.recruitStatId = 2 where e.deadline <= :currentTime and e.recruitStatId = 1")
+    void updateRecruitStatId(LocalDateTime currentTime);
+
 }

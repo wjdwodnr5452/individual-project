@@ -8,9 +8,13 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+/**
+ * 게시판 서비스 상태, 마감상태 업데이트
+ */
+
 @Slf4j
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class ServiceBoardScheduler {
 
     private final ServiceBoardService serviceBoardService;

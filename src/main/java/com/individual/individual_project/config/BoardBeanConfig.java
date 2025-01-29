@@ -1,5 +1,6 @@
 package com.individual.individual_project.config;
 
+import com.individual.individual_project.domain.board.comm.ServiceBoardScheduler;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;

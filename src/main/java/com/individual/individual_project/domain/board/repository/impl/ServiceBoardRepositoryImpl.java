@@ -32,5 +32,9 @@ public class ServiceBoardRepositoryImpl implements ServiceBoardRepository {
         serviceBoardDataJpa.updateServiceStat(currentTime);
     }
 
+    @Override
+    public void updateRecruitStatId(LocalDateTime currentTime) {
+        serviceBoardDataJpa.updateRecruitStatId(currentTime);
+    }
 
 }

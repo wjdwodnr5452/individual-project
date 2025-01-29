@@ -34,6 +34,8 @@ public class ServiceBoardController {
     public ApiResponse<List<Category>> getCategory() {
         List<Category> categoryList = categoryService.findAll();
 
+        log.info("categoryList: {}", categoryList);
+
         return ApiResponse.success(categoryList ,ResponseCode.CATEGORY_READ_SUCCESS);
     }
 
@@ -43,6 +45,8 @@ public class ServiceBoardController {
 
         List<Status> statService = statusService.findByStatusTypeId(1L);
 
+        log.info("statService: {}", statService);
+
         return ApiResponse.success(statService ,ResponseCode.STATUS_READ_SUCCESS);
     }
 
@@ -51,6 +55,8 @@ public class ServiceBoardController {
     public ApiResponse<List<Status>> getStatusService() {
 
         List<Status> statService = statusService.findByStatusTypeId(2L);
+
+        log.info("statService: {}", statService);
 
         return ApiResponse.success(statService ,ResponseCode.STATUS_READ_SUCCESS);
     }
@@ -84,11 +90,32 @@ public class ServiceBoardController {
 
         MultipartFile thumbnailToSave = (thumbnail != null && !thumbnail.isEmpty()) ? thumbnail : null;
 
-        ServiceBoard saveBoard = serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());;
+        ServiceBoard saveBoard = serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());
 
         log.info("saveBoard : {}" ,saveBoard);
 
         return ApiResponse.success(saveBoard ,ResponseCode.BORD_WRITE_SUCCESS);
+    }
+
+    // 게시글 조회
+    @GetMapping("/service/boards")
+    public ApiResponse<List<ServiceBoard>> getServiceBoard(
+            @RequestParam(required = false) String serviceStatId,
+            @RequestParam(required = false) String recruitStatId,
+            @RequestParam(required = false) String categoryId,
+            @RequestParam(required = false) String serviceBoardSearchName
+    ) {
+
+        log.info("serviceStatId : {}", serviceStatId);
+        log.info("recruitStatId : {}", recruitStatId);
+        log.info("categoryId : {}", categoryId);
+        log.info("serviceBoardSearchName : {}", serviceBoardSearchName);
+
+
+        List<ServiceBoard> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName);
+
+
+        return null;
     }
 
 

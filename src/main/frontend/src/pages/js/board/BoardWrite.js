@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../../css/board/BoardWrite.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {useNavigate} from "react-router-dom";
 
 const BoardWrite = () => {
+    const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [categorys, setCategorys] = useState([]);
     const [category, setCategory] = useState("");
@@ -70,10 +72,9 @@ const BoardWrite = () => {
                 alert(responseData.msg);
             }else{
                 alert("글이 성공적으로 작성되었습니다!");
+                navigate("/boards/"+responseData.data.id);
             }
 
-            console.log("responseData : " , responseData);
-            console.log("API 응답:", responseData);
         } catch (error) {
             console.error("글 작성 중 에러 발생:", error);
             alert("글 작성 중 에러가 발생했습니다. 다시 시도해주세요.");

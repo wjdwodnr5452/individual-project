@@ -15,10 +15,34 @@ const BoardList = () => {
     const [statRecruitments, setStatRecruitments] = useState([]);
     const [statRecruitment, setStatRecruitment] = useState("all");
 
-
-
     const [searchQuery, setSearchQuery] = useState("");
 
+    // 글 목록 데이터 가져오기
+    const fetchServiceBoardList = async () => {
+        try {
+            const params = new URLSearchParams();
+
+            if (category && category !== "all") {
+                params.append('categoryId', category); // 카테고리 파라미터 추가
+            }
+
+            if (statService && statService !== "all") {
+                params.append('serviceStatId', statService); // 서비스 상태 파라미터 추가
+            }
+
+            if (statRecruitment && statRecruitment !== "all") {
+                params.append('recruitStatId', statRecruitment); // 모집 상태 파라미터 추가
+            }
+
+            const response = await fetch(`/api/service/boards?${params.toString()}`);
+
+            console.log("");
+
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         // 카테고리 데이터를 API로부터 받아오는 요청
@@ -29,7 +53,7 @@ const BoardList = () => {
                     throw new Error("카테고리 데이터를 가져오는데 실패했습니다.");
                 }
                 const responseData = await response.json();
-                setCategorys( responseData.data);  // 받아온 데이터로 카테고리 상태 설정
+                setCategorys(responseData.data); // 받아온 데이터로 카테고리 상태 설정
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
@@ -43,13 +67,13 @@ const BoardList = () => {
                     throw new Error("서비스 상태 데이터를 가져오는데 실패했습니다.");
                 }
                 const responseData = await response.json();
-                console.log("data : " , responseData.data);
-                setStatServices( responseData.data);  //
+                setStatServices(responseData.data);
             } catch (error) {
                 console.error(error);
             }
         };
 
+        // 모집 상태 데이터 가져오기
         const fetchStatRecruitment = async () => {
             try {
                 const response = await fetch("/api/status/recruitment"); // API 요청 URL
@@ -57,17 +81,22 @@ const BoardList = () => {
                     throw new Error("모집 상태 데이터를 가져오는데 실패했습니다.");
                 }
                 const responseData = await response.json();
-                console.log("data : " , responseData.data);
-                setStatRecruitments( responseData.data);
+                setStatRecruitments(responseData.data);
             } catch (error) {
                 console.error(error);
             }
         };
 
+        // 초기 데이터 로딩
         fetchCategories();
         fetchStatService();
         fetchStatRecruitment();
     }, []);
+
+    // 카테고리, 상태 변경 시 글 목록 업데이트
+    useEffect(() => {
+        fetchServiceBoardList(); // 상태값에 맞는 글 목록을 가져옴
+    }, [category, statService, statRecruitment]); // 의존성 배열에 상태값 추가*/
 
     const posts = [
         { id: 1, title: "React로 게시판 만들기", author: "John Doe", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-01", thumbnail: "/images/thumbnail.png" },
@@ -78,11 +107,8 @@ const BoardList = () => {
 
     // 글 목록 필터링 로직
     const filteredPosts = posts.filter((post) => {
-        const matchesCategory =
-            category === "all" || post.category === category;
-        const matchesSearch = post.title
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase());
+        const matchesCategory = category === "all" || post.category === category;
+        const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
     });
 
@@ -90,8 +116,8 @@ const BoardList = () => {
 
     // 글 작성 페이지로 이동
     const boardWritePage = () => {
-        navigate("/boards/write")
-    }
+        navigate("/boards/write");
+    };
 
     return (
         <div className="boards-list">
@@ -109,7 +135,7 @@ const BoardList = () => {
                         >
                             <option value="all">전체</option>
                             {statServices.map((statService) => (
-                                <option key={statService.id} value={statService.statusName}>
+                                <option key={statService.id} value={statService.id}>
                                     {statService.statusName}
                                 </option>
                             ))}
@@ -124,7 +150,7 @@ const BoardList = () => {
                         >
                             <option value="all">전체</option>
                             {statRecruitments.map((statRe) => (
-                                <option key={statRe.id} value={statRe.statusName}>
+                                <option key={statRe.id} value={statRe.id}>
                                     {statRe.statusName}
                                 </option>
                             ))}
@@ -138,9 +164,8 @@ const BoardList = () => {
                             className="category-select filters-select"
                         >
                             <option value="all">전체</option>
-                            {/* API로 받아온 카테고리 목록을 select에 추가 */}
                             {categorys.map((cat) => (
-                                <option key={cat.id} value={cat.categoryName}>
+                                <option key={cat.id} value={cat.id}>
                                     {cat.categoryName}
                                 </option>
                             ))}

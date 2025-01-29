@@ -40,7 +40,6 @@
 - **GET** &nbsp;&nbsp; /api/status/recruitment : 봉사 모집 상태 조회
 - **GET** &nbsp;&nbsp; /api/categorys : 카테고리 조회
 
-
 ### 🔧 ERD 설계
 ![image](https://github.com/user-attachments/assets/28795093-6408-42a4-9ea4-40dd9f5eb66a)
 

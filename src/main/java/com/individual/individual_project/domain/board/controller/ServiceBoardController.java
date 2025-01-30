@@ -4,6 +4,7 @@ import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
+import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
 import com.individual.individual_project.domain.board.service.CategoryService;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.StatusService;
@@ -99,7 +100,7 @@ public class ServiceBoardController {
 
     // 게시글 조회
     @GetMapping("/service/boards")
-    public ApiResponse<List<ServiceBoard>> getServiceBoard(
+    public ApiResponse<List<ServiceBoardResponseDto>> getServiceBoard(
             @RequestParam(required = false) String serviceStatId,
             @RequestParam(required = false) String recruitStatId,
             @RequestParam(required = false) String categoryId,
@@ -111,11 +112,8 @@ public class ServiceBoardController {
         log.info("categoryId : {}", categoryId);
         log.info("serviceBoardSearchName : {}", serviceBoardSearchName);
 
-
-        List<ServiceBoard> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName);
-
-
-        return null;
+        List<ServiceBoardResponseDto> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName);
+        return ApiResponse.success(all, ResponseCode.BORD_READ_SUCCESS);
     }
 
 

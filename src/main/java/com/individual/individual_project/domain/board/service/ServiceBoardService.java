@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.board.service;
 
 import com.individual.individual_project.domain.board.ServiceBoard;
+import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,6 @@ public interface ServiceBoardService {
 
    void updateServiceBoardStat(LocalDateTime currentTime);
 
-   List<ServiceBoard> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName);
+   List<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName);
 
 }

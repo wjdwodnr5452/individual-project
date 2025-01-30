@@ -36,7 +36,7 @@ const BoardList = () => {
 
             const response = await fetch(`/api/service/boards?${params.toString()}`);
 
-            console.log("");
+            console.log("response : " , response);
 
 
         } catch (error) {

@@ -3,12 +3,15 @@ package com.individual.individual_project.domain.board.service.impl;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
+import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.response.ResponseCode;
+import com.individual.individual_project.domain.user.User;
+import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.web.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +25,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,9 +36,13 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
+    private final UserRepositorySpringData userRepository;
 
     @Value("${file.dir}")
     private String fileDir;
+
+
+
 
     @Override
     public ServiceBoard createServiceBoard(String title, String category, String content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail, Long userId) {
@@ -46,12 +52,12 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         Category categoryEntity = categoryRepository.findById(Long.valueOf(category)).orElseThrow(() -> new BaseException(ResponseCode.CATEGORY_NOT_FOUND));
         Status recruitStatEntity = statusRepository.findById(1L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         Status serviceStatEntity = statusRepository.findById(3L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
-
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ResponseCode.USER_NOT_FOUND));
 
         ServiceBoard serviceBoard = new ServiceBoard(title, Integer.valueOf(recruitCount),
                 LocalDateTime.parse(serviceDate, formatter),Integer.valueOf(serviceTime),
                 LocalDateTime.parse(deadline, formatter), "",
-                userId, categoryEntity, recruitStatEntity, serviceStatEntity, content);
+                user, categoryEntity, recruitStatEntity, serviceStatEntity, content);
 
 
         if(thumbnail != null && !thumbnail.isEmpty()){
@@ -72,15 +78,21 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
 
     @Override
     public void updateServiceBoardStat(LocalDateTime currentTime) {
-        serviceBoardDataJpa.updateServiceStat(currentTime);
-        serviceBoardDataJpa.updateRecruitStatId(currentTime);
+
+        Status updateServiceStat = statusRepository.findById(4L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+        serviceBoardDataJpa.updateServiceStat(currentTime, updateServiceStat, 3L);
+
+        Status updateRecruitStat = statusRepository.findById(4L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+        serviceBoardDataJpa.updateRecruitStatId(currentTime, updateRecruitStat, 1L);
     }
 
     @Override
-    public List<ServiceBoard> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName) {
+    public List<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName) {
+
+        List<ServiceBoardResponseDto> serviceBoardList = serviceBoardRepository.findAll();
 
 
 
-        return List.of();
+        return serviceBoardList;
     }
 }

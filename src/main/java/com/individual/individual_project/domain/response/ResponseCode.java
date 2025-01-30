@@ -53,6 +53,7 @@ public enum ResponseCode {
     // 200 OK
     CATEGORY_READ_SUCCESS(HttpStatus.OK, true, "카테고리 리스트 조회 성공"),
     STATUS_READ_SUCCESS(HttpStatus.OK, true, "상태 리스트 조회 성공"),
+    BORD_READ_SUCCESS(HttpStatus.OK, true, "게시글 리스트 조회 성공"),
 
     // 201
     BORD_WRITE_SUCCESS(HttpStatus.CREATED, true, "게시판 글 생성 성공"),

@@ -1,7 +1,7 @@
 package com.individual.individual_project.domain.user.repository.impl;
 
 import com.individual.individual_project.domain.user.User;
-import com.individual.individual_project.domain.user.repository.SpringDataUserRepository;
+import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final EntityManager em;
-    private final SpringDataUserRepository repository;
+    private final UserRepositorySpringData repository;
 
     @Override
     public Optional<User> findUserById(Long id) {

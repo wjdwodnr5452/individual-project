@@ -11,6 +11,7 @@ import com.individual.individual_project.domain.board.service.StatusService;
 import com.individual.individual_project.domain.board.service.impl.CategoryServiceImpl;
 import com.individual.individual_project.domain.board.service.impl.ServiceBoardServiceImpl;
 import com.individual.individual_project.domain.board.service.impl.StatusServiceImpl;
+import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,8 @@ public class BoardBeanConfig {
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
+    private final UserRepositorySpringData userRepository;
+
 
     private final EntityManager em;
 
@@ -38,7 +41,7 @@ public class BoardBeanConfig {
 
     @Bean
     public ServiceBoardService serviceBoardService() {
-        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository);
+        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository);
     }
 
     @Bean

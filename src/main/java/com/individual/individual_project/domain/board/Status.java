@@ -14,14 +14,14 @@ public class Status {
 
     @ManyToOne
     @JoinColumn(name="status_type_id", referencedColumnName = "id")
-    private StatusType statusTypeId;
+    private StatusType statusType;
 
     private String statusName;
 
     public Status() {}
 
     public Status(StatusType statusType, String statusName) {
-        this.statusTypeId = statusType;
+        this.statusType = statusType;
         this.statusName = statusName;
     }
 

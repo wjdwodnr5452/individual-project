@@ -1,7 +1,7 @@
 package com.individual.individual_project.config;
 
 import com.individual.individual_project.comm.Encrypt;
-import com.individual.individual_project.domain.user.repository.SpringDataUserRepository;
+import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import com.individual.individual_project.domain.user.repository.impl.UserRepositoryImpl;
 import com.individual.individual_project.domain.user.service.UserService;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class UserBeanConfig {
 
     private final EntityManager em;
-    private final SpringDataUserRepository userRepository;
+    private final UserRepositorySpringData userRepository;
     private final Encrypt encrypt; // 암호화
 
     @Bean

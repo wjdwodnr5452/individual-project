@@ -5,6 +5,7 @@ import com.individual.individual_project.domain.board.repository.CategoryReposit
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.user.User;
+import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -37,9 +38,10 @@ public class BoardRepositoryTest {
     private ServiceBoardDataJpa serviceBoardDataJpa;
 
     @Autowired
+    private UserRepositorySpringData userRepositorySpringData;
+
+    @Autowired
     private UserRepository userRepository;
-
-
 
     private User testUser;
 
@@ -50,13 +52,14 @@ public class BoardRepositoryTest {
     }
 
     @Sql(scripts = {"/test_sql/board_sql.sql"})
-
     @Test
     void findCategoryId() {
         Optional<Category> category = categoryRepository.findById(1L);
 
         if(category.isPresent()){
-            Assertions.assertThat(category.get().getId()).isEqualTo(1L);
+            Category category1 = category.get();
+            Assertions.assertThat(category1.getId()).isEqualTo(1L);
+            log.info("category1 : {}", category1);
         }else{
             Assertions.assertThat(category).isEmpty();
         }
@@ -85,17 +88,27 @@ public class BoardRepositoryTest {
 
     }
 
+    @Sql(scripts = {"/test_sql/board_sql.sql"})
     @Test
     void save() {
         
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
 
+        User user = userRepositorySpringData.findById(1L).orElseThrow(() -> new RuntimeException("user not found"));
+        Category category = categoryRepository.findById(1L).orElseThrow(() -> new RuntimeException("category not found"));
+        Status recruitStat = statusRepository.findById(1L).orElseThrow(() -> new RuntimeException("status not found"));
+        Status serviceStat = statusRepository.findById(3L).orElseThrow(() -> new RuntimeException("status not found"));
+
+
+
         ServiceBoard serviceBoard = new ServiceBoard("글제목", 3,
                 LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter),Integer.valueOf(3),
                 LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter), "",
-                1L, Long.valueOf(1), 1L, 3L, "글내용");
+                user, category, recruitStat, serviceStat, "글내용");
 
         ServiceBoard saveBoard = serviceBoardDataJpa.save(serviceBoard);
+
+        log.info("saveBoard : {}", saveBoard);
 
         Assertions.assertThat(saveBoard.getId()).isEqualTo(1L);
     }

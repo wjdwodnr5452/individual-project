@@ -17,7 +17,7 @@ import lombok.Data;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @NotNull(message ="USER_NOT_EMAIL")
     @Email(message ="USER_REGEX_EMAIL")

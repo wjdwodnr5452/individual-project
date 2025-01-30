@@ -2,17 +2,14 @@ package com.individual.individual_project.domain.board;
 
 import com.individual.individual_project.domain.board.comm.ServiceBoardScheduler;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
-import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
+import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
-import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -37,7 +34,7 @@ public class BoardRepositoryTest {
     private StatusRepository statusRepository;
 
     @Autowired
-    private ServiceBoardRepository serviceBoardRepository;
+    private ServiceBoardDataJpa serviceBoardDataJpa;
 
     @Autowired
     private UserRepository userRepository;
@@ -98,7 +95,7 @@ public class BoardRepositoryTest {
                 LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter), "",
                 1L, Long.valueOf(1), 1L, 3L, "글내용");
 
-        ServiceBoard saveBoard = serviceBoardRepository.save(serviceBoard);
+        ServiceBoard saveBoard = serviceBoardDataJpa.save(serviceBoard);
 
         Assertions.assertThat(saveBoard.getId()).isEqualTo(1L);
     }

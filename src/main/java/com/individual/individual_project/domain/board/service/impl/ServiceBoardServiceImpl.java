@@ -1,7 +1,12 @@
 package com.individual.individual_project.domain.board.service.impl;
 
+import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
+import com.individual.individual_project.domain.board.Status;
+import com.individual.individual_project.domain.board.repository.CategoryRepository;
+import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
+import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.web.exception.BaseException;
@@ -16,7 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,6 +31,9 @@ import java.util.UUID;
 public class ServiceBoardServiceImpl implements ServiceBoardService {
 
     private final ServiceBoardRepository serviceBoardRepository;
+    private final ServiceBoardDataJpa serviceBoardDataJpa;
+    private final CategoryRepository categoryRepository;
+    private final StatusRepository statusRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -34,10 +43,15 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
 
+        Category categoryEntity = categoryRepository.findById(Long.valueOf(category)).orElseThrow(() -> new BaseException(ResponseCode.CATEGORY_NOT_FOUND));
+        Status recruitStatEntity = statusRepository.findById(1L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+        Status serviceStatEntity = statusRepository.findById(3L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+
+
         ServiceBoard serviceBoard = new ServiceBoard(title, Integer.valueOf(recruitCount),
                 LocalDateTime.parse(serviceDate, formatter),Integer.valueOf(serviceTime),
                 LocalDateTime.parse(deadline, formatter), "",
-                userId, Long.valueOf(category), 1L, 3L, content);
+                userId, categoryEntity, recruitStatEntity, serviceStatEntity, content);
 
 
         if(thumbnail != null && !thumbnail.isEmpty()){
@@ -51,26 +65,22 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
             }
         }
 
-/*        serviceBoard.setServiceTitle(title);
-        serviceBoard.setServiceTime(Integer.valueOf(serviceTime));
-        serviceBoard.setRecruitCount(Integer.valueOf(recruitCount));
-        serviceBoard.setServiceContent(content);
-        serviceBoard.setCategoryId(Long.valueOf(category));
-        serviceBoard.setRecruitStatId(1L);
-        serviceBoard.setServiceStatId(3L);
-        serviceBoard.setServiceDate(LocalDateTime.parse(serviceDate, formatter));
-        serviceBoard.setDeadline(LocalDateTime.parse(deadline, formatter));
-        serviceBoard.setUserId(userId);*/
-
-        ServiceBoard save = serviceBoardRepository.save(serviceBoard);
-
+        ServiceBoard save = serviceBoardDataJpa.save(serviceBoard);
 
         return save;
     }
 
     @Override
     public void updateServiceBoardStat(LocalDateTime currentTime) {
-        serviceBoardRepository.updateServiceStat(currentTime);
-        serviceBoardRepository.updateRecruitStatId(currentTime);
+        serviceBoardDataJpa.updateServiceStat(currentTime);
+        serviceBoardDataJpa.updateRecruitStatId(currentTime);
+    }
+
+    @Override
+    public List<ServiceBoard> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName) {
+
+
+
+        return List.of();
     }
 }

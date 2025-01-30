@@ -1,12 +1,10 @@
 package com.individual.individual_project.config;
 
-import com.individual.individual_project.domain.board.comm.ServiceBoardScheduler;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
-import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
-import com.individual.individual_project.domain.board.repository.impl.ServiceBoardRepositoryImpl;
+import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.service.CategoryService;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.StatusService;
@@ -40,12 +38,12 @@ public class BoardBeanConfig {
 
     @Bean
     public ServiceBoardService serviceBoardService() {
-        return new ServiceBoardServiceImpl(serviceBoardRepository());
+        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository);
     }
 
     @Bean
     public ServiceBoardRepository serviceBoardRepository() {
-        return new ServiceBoardRepositoryImpl(em, serviceBoardDataJpa);
+        return new ServiceBoardRepository(em);
     }
 
 }

@@ -41,17 +41,21 @@ public class ServiceBoard {
     @Column(name = "user_id")
     private Long userId;
 
+    @ManyToOne
+    @JoinColumn(name="category_id", referencedColumnName = "id")
     @NotNull(message ="BORD_NOT_CATEGORY_ID")
-    @Column(name = "category_id")
-    private Long categoryId;
+    private Category categoryId;
+  //  private Long categoryId;
 
+    @ManyToOne
+    @JoinColumn(name="service_stat_id", referencedColumnName = "id")
+    private Status serviceStatId;
+    // private Long serviceStatId;
 
-    @Column(name = "service_stat_id")
-    private Long serviceStatId;
-
-
-    @Column(name = "recruit_stat_id")
-    private Long recruitStatId;
+    @ManyToOne
+    @JoinColumn(name="recruit_stat_id", referencedColumnName = "id")
+    private Status recruitStatId;
+   // private Long recruitStatId;
 
     @NotNull(message ="BORD_NOT_SERVICE_CONTENT")
     @Column(name = "service_content")
@@ -59,7 +63,7 @@ public class ServiceBoard {
     
     public ServiceBoard() {}
 
-    public ServiceBoard(String serviceTitle, Integer recruitCount, LocalDateTime serviceDate, Integer serviceTime, LocalDateTime deadline, String thumbnailImage, Long userId, Long categoryId, Long serviceStatId, Long recruitStatId, String serviceContent) {
+    public ServiceBoard(String serviceTitle, Integer recruitCount, LocalDateTime serviceDate, Integer serviceTime, LocalDateTime deadline, String thumbnailImage, Long userId, Category categoryId, Status serviceStatId, Status recruitStatId, String serviceContent) {
         this.serviceTitle = serviceTitle;
         this.recruitCount = recruitCount;
         this.serviceDate = serviceDate;

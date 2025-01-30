@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.user.service.impl;
 
 import com.individual.individual_project.comm.Encrypt;
+import com.individual.individual_project.comm.EncryptionService;
 import com.individual.individual_project.web.exception.BaseException;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
@@ -21,7 +22,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final Encrypt encrypt;
+
+
+    //private final Encrypt encrypt;
+
+    private final EncryptionService encrypt;
 
     @Value("${encryption.key}")
     private String encryptionKey;
@@ -43,15 +48,18 @@ public class UserServiceImpl implements UserService {
         // 비밀번호 암호화 단방향
         user.setPassword(encrypt.encryptSha256(user.getPassword()));
 
+        // 유저 정보 양방향
+        user.setName(encrypt.encryptAes(user.getName()));
+        user.setPhoneNumber(encrypt.encryptAes(user.getPhoneNumber()));
 
-        try {
+/*        try {
             // 유저 정보 양방향
             user.setName(encrypt.encryptAes(user.getName(), encryptionKey));
             user.setPhoneNumber(encrypt.encryptAes(user.getPhoneNumber(), encryptionKey));
         } catch (Exception e) {
             log.info("exception : {} ", e);
             throw new BaseException(ResponseCode.BAD_REQUEST);
-        }
+        }*/
 
 
         return userRepository.saveUser(user);

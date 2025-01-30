@@ -1,8 +1,7 @@
 package com.individual.individual_project.domain.board.dto;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 

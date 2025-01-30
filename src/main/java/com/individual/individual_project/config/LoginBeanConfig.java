@@ -1,6 +1,6 @@
 package com.individual.individual_project.config;
 
-import com.individual.individual_project.comm.Encrypt;
+import com.individual.individual_project.comm.EncryptionService;
 import com.individual.individual_project.domain.login.repository.LoginRepository;
 import com.individual.individual_project.domain.login.repository.impl.LoginRepositoryImpl;
 import com.individual.individual_project.domain.login.service.LoginService;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class LoginBeanConfig {
 
     private final EntityManager em;
-    private final Encrypt encrypt;
+    private final EncryptionService encrypt;
 
     @Bean
     public LoginService loginService() {

@@ -1,5 +1,6 @@
 package com.individual.individual_project.comm;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -13,7 +14,6 @@ import java.util.Base64;
  */
 @Component
 public class Encrypt {
-
 
     /**
      * 단방향

@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.login.service.impl;
 
 import com.individual.individual_project.comm.Encrypt;
+import com.individual.individual_project.comm.EncryptionService;
 import com.individual.individual_project.web.exception.BaseException;
 import com.individual.individual_project.domain.login.dto.LoginDto;
 import com.individual.individual_project.domain.login.repository.LoginRepository;
@@ -18,10 +19,7 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService {
 
     private final LoginRepository loginRepository;
-    private final Encrypt encrypt;
-
-    @Value("${encryption.key}")
-    private String encryptionKey;
+    private final EncryptionService encrypt;
 
     @Override
     public User login(LoginDto loginDto) {
@@ -35,13 +33,9 @@ public class LoginServiceImpl implements LoginService {
             throw new BaseException(ResponseCode.USER_NOT_FOUND_PASSWORD);
         }
 
-        try {
-            user.setName(encrypt.decryptAes(user.getName(), encryptionKey)); // 디코딩
-            user.setPhoneNumber(encrypt.decryptAes(user.getPhoneNumber(), encryptionKey));
-        } catch (Exception e) {
-            log.info("디코딩 실패 : {} " , e.getMessage());
-            throw new BaseException(ResponseCode.BAD_REQUEST);
-        }
+        user.setName(encrypt.decryptAes(user.getName())); // 디코딩
+        user.setPhoneNumber(encrypt.decryptAes(user.getPhoneNumber()));
+
 
         return user;
     }

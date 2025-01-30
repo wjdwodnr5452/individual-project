@@ -41,9 +41,6 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     @Value("${file.dir}")
     private String fileDir;
 
-
-
-
     @Override
     public ServiceBoard createServiceBoard(String title, String category, String content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail, Long userId) {
 

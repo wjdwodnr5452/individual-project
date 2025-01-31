@@ -5,6 +5,7 @@ package com.individual.individual_project.domain.board.repository;
 import com.individual.individual_project.domain.board.QCategory;
 import com.individual.individual_project.domain.board.QServiceBoard;
 import com.individual.individual_project.domain.board.QStatus;
+import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
 import com.individual.individual_project.domain.user.QUser;
 import com.querydsl.core.types.Projections;
@@ -30,8 +31,8 @@ public class ServiceBoardRepository {
 
 
 
-     public List<ServiceBoardResponseDto> findAll() {
-         QServiceBoard serviceBoard = QServiceBoard.serviceBoard;
+     public List<ServiceBoard> findAll() {
+/*         QServiceBoard serviceBoard = QServiceBoard.serviceBoard;
          QUser user = QUser.user;
          QCategory category = QCategory.category;
          QStatus status = QStatus.status;
@@ -52,7 +53,17 @@ public class ServiceBoardRepository {
                 .from(serviceBoard)
                 .join(user).on(serviceBoard.user.id.eq(user.id))
                 .join(category).on(serviceBoard.category.id.eq(category.id))
-                .fetch();
+                .fetch();*/
+
+         QServiceBoard serviceBoard = QServiceBoard.serviceBoard;
+         QUser user = QUser.user;
+         QCategory category = QCategory.category;
+
+         return jpaQueryFactory
+                 .selectFrom(serviceBoard)
+                 .join(serviceBoard.user, user).fetchJoin()
+                 .join(serviceBoard.category, category).fetchJoin()
+                 .fetch();
     }
 
 

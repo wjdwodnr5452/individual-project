@@ -1,5 +1,6 @@
 package com.individual.individual_project.config;
 
+import com.individual.individual_project.comm.EncryptionService;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
@@ -25,6 +26,7 @@ public class BoardBeanConfig {
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final UserRepositorySpringData userRepository;
+    private final EncryptionService encryptionService;
 
 
     private final EntityManager em;
@@ -41,7 +43,7 @@ public class BoardBeanConfig {
 
     @Bean
     public ServiceBoardService serviceBoardService() {
-        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository);
+        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository, encryptionService);
     }
 
     @Bean

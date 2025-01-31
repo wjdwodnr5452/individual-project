@@ -15,7 +15,7 @@ public class ServiceBoardResponseDto {
     private Integer serviceTime;
     private LocalDateTime deadline;
     private String thumbnailImage;
-    private String name;
+    private String writer;
     private String categoryName;
     private String serviceContent;
 
@@ -23,7 +23,7 @@ public class ServiceBoardResponseDto {
 
     public ServiceBoardResponseDto() {}
 
-    public ServiceBoardResponseDto(Long id, String serviceTitle, Integer recruitCount, LocalDateTime serviceDate, Integer serviceTime, LocalDateTime deadline, String thumbnailImage, String name, String categoryName, String serviceContent) {
+    public ServiceBoardResponseDto(Long id, String serviceTitle, Integer recruitCount, LocalDateTime serviceDate, Integer serviceTime, LocalDateTime deadline, String thumbnailImage, String writer, String categoryName, String serviceContent) {
         this.id = id;
         this.serviceTitle = serviceTitle;
         this.recruitCount = recruitCount;
@@ -31,7 +31,7 @@ public class ServiceBoardResponseDto {
         this.serviceTime = serviceTime;
         this.deadline = deadline;
         this.thumbnailImage = thumbnailImage;
-        this.name = name;
+        this.writer = writer;
         this.categoryName = categoryName;
         this.serviceContent = serviceContent;
     }

@@ -1,5 +1,6 @@
 package com.individual.individual_project.domain.board.service.impl;
 
+import com.individual.individual_project.comm.EncryptionService;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,6 +39,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
     private final UserRepositorySpringData userRepository;
+    private final EncryptionService encryptionService;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -85,11 +88,25 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
 
     @Override
     public List<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName) {
+        List<ServiceBoard> serviceBoards = serviceBoardRepository.findAll();
 
-        List<ServiceBoardResponseDto> serviceBoardList = serviceBoardRepository.findAll();
-
-
-
-        return serviceBoardList;
+        // DTO 변환 및 복호화 처리
+        return serviceBoards.stream()
+                .map(serviceBoard -> {
+                    String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
+                    return new ServiceBoardResponseDto(
+                            serviceBoard.getId(),
+                            serviceBoard.getServiceTitle(),
+                            serviceBoard.getRecruitCount(),
+                            serviceBoard.getServiceDate(),
+                            serviceBoard.getServiceTime(),
+                            serviceBoard.getDeadline(),
+                            serviceBoard.getThumbnailImage(),
+                            decryptedUserName,
+                            serviceBoard.getCategory().getCategoryName(),
+                            serviceBoard.getServiceContent()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }

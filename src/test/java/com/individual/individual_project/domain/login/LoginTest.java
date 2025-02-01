@@ -1,11 +1,10 @@
 package com.individual.individual_project.domain.login;
 
 
-import com.individual.individual_project.comm.Encrypt;
+import com.individual.individual_project.comm.encrypt.Encrypt;
 import com.individual.individual_project.domain.login.dto.LoginDto;
 import com.individual.individual_project.domain.login.repository.LoginRepository;
 import com.individual.individual_project.domain.login.service.LoginService;
-import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;

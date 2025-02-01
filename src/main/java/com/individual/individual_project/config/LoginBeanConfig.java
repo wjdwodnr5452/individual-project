@@ -1,6 +1,6 @@
 package com.individual.individual_project.config;
 
-import com.individual.individual_project.comm.EncryptionService;
+import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.login.repository.LoginRepository;
 import com.individual.individual_project.domain.login.repository.impl.LoginRepositoryImpl;
 import com.individual.individual_project.domain.login.service.LoginService;

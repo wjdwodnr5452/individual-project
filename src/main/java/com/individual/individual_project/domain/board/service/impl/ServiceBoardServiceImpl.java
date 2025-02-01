@@ -1,15 +1,15 @@
 package com.individual.individual_project.domain.board.service.impl;
 
-import com.individual.individual_project.comm.EncryptionService;
+import com.individual.individual_project.comm.encrypt.EncryptionService;
+import com.individual.individual_project.comm.file.FileUploadService;
+import com.individual.individual_project.comm.file.UploadFileDto;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
 import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
-import com.individual.individual_project.domain.board.repository.CategoryRepository;
-import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
-import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
-import com.individual.individual_project.domain.board.repository.StatusRepository;
+import com.individual.individual_project.domain.board.repository.*;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
+import com.individual.individual_project.domain.board.service.ThumbnailImge;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
@@ -39,7 +39,11 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
     private final UserRepositorySpringData userRepository;
+
     private final EncryptionService encryptionService;
+    private final FileUploadService fileUploadService;
+
+    private final ThumbnailImageRepository thumbnailImageRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -54,23 +58,24 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         Status serviceStatEntity = statusRepository.findById(3L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ResponseCode.USER_NOT_FOUND));
 
-        ServiceBoard serviceBoard = new ServiceBoard(title, Integer.valueOf(recruitCount),
-                LocalDateTime.parse(serviceDate, formatter),Integer.valueOf(serviceTime),
-                LocalDateTime.parse(deadline, formatter), "",
-                user, categoryEntity, recruitStatEntity, serviceStatEntity, content);
-
+        ThumbnailImge thumbnailImgeSave = null;
 
         if(thumbnail != null && !thumbnail.isEmpty()){
-            String thumbnailPath = fileDir  + thumbnail.getOriginalFilename();
-            serviceBoard.setThumbnailImage(thumbnailPath);
-            try {
-                thumbnail.transferTo(new File(thumbnailPath));
-            } catch (IOException e) {
-                log.info("업로드에 실패 했습니다.");
-                throw new BaseException(ResponseCode.BORD_UPROAD_FAILD);
-            }
+
+            UploadFileDto uploadFileDto = fileUploadService.storeFile(thumbnail);
+
+            ThumbnailImge thumbnailImge = new ThumbnailImge();
+            thumbnailImge.setStoredFilename(uploadFileDto.getStoreFileName());
+            thumbnailImge.setOriginalFilename(uploadFileDto.getUploadFileName());
+
+            thumbnailImgeSave = thumbnailImageRepository.save(thumbnailImge);
+
         }
 
+        ServiceBoard serviceBoard = new ServiceBoard(title, Integer.valueOf(recruitCount),
+                LocalDateTime.parse(serviceDate, formatter),Integer.valueOf(serviceTime),
+                LocalDateTime.parse(deadline, formatter), thumbnailImgeSave,
+                user, categoryEntity, recruitStatEntity, serviceStatEntity, content);
         ServiceBoard save = serviceBoardDataJpa.save(serviceBoard);
 
         return save;
@@ -79,21 +84,29 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     @Override
     public void updateServiceBoardStat(LocalDateTime currentTime) {
 
+        Status updateRecruitStat = statusRepository.findById(2L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+        serviceBoardDataJpa.updateRecruitStatId(currentTime, updateRecruitStat, 1L);
+
         Status updateServiceStat = statusRepository.findById(4L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         serviceBoardDataJpa.updateServiceStat(currentTime, updateServiceStat, 3L);
 
-        Status updateRecruitStat = statusRepository.findById(4L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
-        serviceBoardDataJpa.updateRecruitStatId(currentTime, updateRecruitStat, 1L);
     }
 
     @Override
     public List<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName) {
-        List<ServiceBoard> serviceBoards = serviceBoardRepository.findAll();
+
+        Long serviceStatIdLong =  (serviceStatId != null) ? Long.valueOf(serviceStatId) : null;
+        Long recruitStatIdLong = (recruitStatId != null) ? Long.valueOf(recruitStatId) : null;
+        Long categoryIdLong = (categoryId != null) ? Long.valueOf(categoryId) : null;
+
+        List<ServiceBoard> serviceBoards = serviceBoardRepository.findAll(serviceStatIdLong,recruitStatIdLong, categoryIdLong, serviceBoardSearchName);
 
         // DTO 변환 및 복호화 처리
         return serviceBoards.stream()
                 .map(serviceBoard -> {
                     String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
+                    String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/"+serviceBoard.getThumbnailImage().getStoredFilename() : null;
+
                     return new ServiceBoardResponseDto(
                             serviceBoard.getId(),
                             serviceBoard.getServiceTitle(),
@@ -101,10 +114,13 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                             serviceBoard.getServiceDate(),
                             serviceBoard.getServiceTime(),
                             serviceBoard.getDeadline(),
-                            serviceBoard.getThumbnailImage(),
+                            thumbnailImgPath,
                             decryptedUserName,
                             serviceBoard.getCategory().getCategoryName(),
-                            serviceBoard.getServiceContent()
+                            serviceBoard.getServiceContent(),
+                            serviceBoard.getServiceStat().getStatusName(),
+                            serviceBoard.getRecruitStat().getStatusName(),
+                            serviceBoard.getRegDate()
                     );
                 })
                 .collect(Collectors.toList());

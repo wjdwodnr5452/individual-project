@@ -17,6 +17,8 @@ const BoardList = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
+    const [posts, setPosts] = useState([]);
+
     // 글 목록 데이터 가져오기
     const fetchServiceBoardList = async () => {
         try {
@@ -36,7 +38,9 @@ const BoardList = () => {
 
             const response = await fetch(`/api/service/boards?${params.toString()}`);
 
-            console.log("response : " , response);
+            const responseData = await response.json();
+            setPosts(responseData.data);
+            console.log("responseData : " , responseData.data);
 
 
         } catch (error) {
@@ -98,19 +102,21 @@ const BoardList = () => {
         fetchServiceBoardList(); // 상태값에 맞는 글 목록을 가져옴
     }, [category, statService, statRecruitment]); // 의존성 배열에 상태값 추가*/
 
-    const posts = [
-        { id: 1, title: "React로 게시판 만들기", author: "John Doe", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-01", thumbnail: "/images/thumbnail.png" },
-        { id: 2, title: "React로 게시판 만들기", author: "John Doe", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-01", thumbnail: "/images/thumbnail.png" },
-        { id: 3, title: "JavaScript 상태 관리 비교", author: "Jane Smith", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-02", thumbnail: "/images/thumbnail.png" },
-        { id: 4, title: "Next.js의 장점과 활용", author: "Alice Brown", category: "환경보호", serviceStat: "시작전", serveiceDate: "2025-01-01", serveiceTime: "6", recruitStat: "모집중", recruitDeadline: "2025-01-03", date: "2025-01-03", thumbnail: "/images/thumbnail.png" }
-    ];
 
-    // 글 목록 필터링 로직
-    const filteredPosts = posts.filter((post) => {
-        const matchesCategory = category === "all" || post.category === category;
-        const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+    const formatDateTime = (dateString) => {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        }).format(date);
+    };
+
+
+
 
     const navigate = useNavigate();
 
@@ -196,44 +202,49 @@ const BoardList = () => {
 
             {/* 글 목록 */}
             <div className="boards-cards">
-                {filteredPosts.map((post) => (
-                    <div key={post.id} className="boards-card">
-                        <img
-                            src={post.thumbnail}
-                            alt={`${post.title} 썸네일`}
-                            className="boards-thumbnail"
-                        />
-                        <div className="boards-info">
-                            <h3 className="boards-title">
-                                <a href={`/boards/${post.id}`}>{post.title}</a>
-                            </h3>
-                            <div className="boards-meta">
-                                <p className="boards-author">작성자: {post.author}</p>
-                                <p className="boards-category">카테고리: {post.category}</p>
-                            </div>
-                            <div className="boards-details">
-                                <div className="details-row">
-                                    <p className="boards-service-stat"><strong>진행상태:</strong> {post.serviceStat}</p>
-                                    <p className="boards-recruit-stat"><strong>모집상태:</strong> {post.recruitStat}</p>
+                {posts.length > 0 ? (
+                    posts.map((post) => (
+                        <div key={post.id} className="boards-card">
+                            <img
+                                src={post.thumbnailImage || '/images/thumbnail.png'}
+                                alt={`${post.title} 썸네일`}
+                                className="boards-thumbnail"
+                            />
+                            <div className="boards-info">
+                                <h3 className="boards-title">
+                                    <a href={`/boards/${post.id}`}>{post.serviceTitle}</a>
+                                </h3>
+                                <div className="boards-meta">
+                                    <p className="boards-author">작성자: {post.writer}</p>
+                                    <p className="boards-category">카테고리: {post.categoryName}</p>
                                 </div>
-                                <div className="details-row">
-                                    <p className="boards-service-date"><strong>봉사일:</strong> {post.serveiceDate}</p>
-                                    <p className="boards-recruit-deadline"><strong>모집마감:</strong> {post.recruitDeadline}</p>
-                                </div>
-                                <div className="details-row">
-                                    <p className="boards-service-time"><strong>봉사시간:</strong> {post.serveiceTime}시간</p>
-                                    <p className="boards-date"><strong>등록일:</strong> {post.date}</p>
+                                <div className="boards-details">
+                                    <div className="details-row">
+                                        <p className="boards-service-stat"><strong>진행상태:</strong> {post.serviceStatName}
+                                        </p>
+                                        <p className="boards-recruit-stat"><strong>모집상태:</strong> {post.recruitStatName}
+                                        </p>
+                                    </div>
+                                    <div className="details-row">
+                                        <p className="boards-service-date"><strong>봉사일:</strong> {formatDateTime(post.serviceDate)}</p>
+                                        <p className="boards-recruit-deadline">
+                                            <strong>모집마감:</strong>  {formatDateTime(post.deadline)}</p>
+                                    </div>
+                                    <div className="details-row">
+                                        <p className="boards-service-time"><strong>봉사시간:</strong> {post.serviceTime}시간
+                                        </p>
+                                        <p className="boards-date"><strong>등록일:</strong> {formatDateTime(post.regDate)}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className="no-data">게시물이 없습니다.</p>
+                )}
             </div>
 
-            {/* 검색 결과 없을 때 메시지 */}
-            {filteredPosts.length === 0 && (
-                <p className="no-results">검색 결과가 없습니다.</p>
-            )}
+
         </div>
     );
 };

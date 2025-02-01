@@ -1,6 +1,5 @@
-package com.individual.individual_project.comm;
+package com.individual.individual_project.comm.encrypt;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;

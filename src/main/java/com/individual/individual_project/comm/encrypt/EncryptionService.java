@@ -1,4 +1,4 @@
-package com.individual.individual_project.comm;
+package com.individual.individual_project.comm.encrypt;
 
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.web.exception.BaseException;

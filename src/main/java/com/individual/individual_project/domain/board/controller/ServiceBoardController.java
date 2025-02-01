@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.board.controller;
 
 import com.individual.individual_project.SessionConst;
+import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -15,9 +16,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +34,7 @@ public class ServiceBoardController {
     private final CategoryService categoryService;
     private final StatusService statusService;
     private final ServiceBoardService serviceBoardService;
+    private final FileUploadService fileUploadService;
 
     // 카테고리
     @GetMapping("/categorys")
@@ -116,5 +122,23 @@ public class ServiceBoardController {
         return ApiResponse.success(all, ResponseCode.BORD_READ_SUCCESS);
     }
 
+
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileUploadService.getFullPath(filename)); // 실제 경로 이미지를 가져옴
+    }
+
+/*    @GetMapping("/images/{filename}")
+    public ResponseEntity<Resource> downloadImage(@PathVariable String filename) throws MalformedURLException {
+
+        UrlResource urlResource = new UrlResource("file:" + fileUploadService.getFullPath(filename));// 실제 경로 이미지를 가져옴
+
+        if (!urlResource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .body(urlResource);
+    }*/
 
 }

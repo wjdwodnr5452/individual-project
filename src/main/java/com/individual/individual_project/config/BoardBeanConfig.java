@@ -1,11 +1,9 @@
 package com.individual.individual_project.config;
 
-import com.individual.individual_project.comm.EncryptionService;
-import com.individual.individual_project.domain.board.repository.CategoryRepository;
+import com.individual.individual_project.comm.encrypt.EncryptionService;
+import com.individual.individual_project.comm.file.FileUploadService;
+import com.individual.individual_project.domain.board.repository.*;
 
-import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
-import com.individual.individual_project.domain.board.repository.StatusRepository;
-import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.service.CategoryService;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.StatusService;
@@ -27,6 +25,8 @@ public class BoardBeanConfig {
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final UserRepositorySpringData userRepository;
     private final EncryptionService encryptionService;
+    private final FileUploadService fileUploadService;
+    private final ThumbnailImageRepository thumbnailImageRepository;
 
 
     private final EntityManager em;
@@ -43,7 +43,7 @@ public class BoardBeanConfig {
 
     @Bean
     public ServiceBoardService serviceBoardService() {
-        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository, encryptionService);
+        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository, encryptionService, fileUploadService, thumbnailImageRepository);
     }
 
     @Bean

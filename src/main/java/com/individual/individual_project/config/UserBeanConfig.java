@@ -1,7 +1,6 @@
 package com.individual.individual_project.config;
 
-import com.individual.individual_project.comm.Encrypt;
-import com.individual.individual_project.comm.EncryptionService;
+import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import com.individual.individual_project.domain.user.repository.impl.UserRepositoryImpl;

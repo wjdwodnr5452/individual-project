@@ -1,7 +1,6 @@
 package com.individual.individual_project.domain.login.service.impl;
 
-import com.individual.individual_project.comm.Encrypt;
-import com.individual.individual_project.comm.EncryptionService;
+import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.web.exception.BaseException;
 import com.individual.individual_project.domain.login.dto.LoginDto;
 import com.individual.individual_project.domain.login.repository.LoginRepository;
@@ -10,7 +9,6 @@ import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service

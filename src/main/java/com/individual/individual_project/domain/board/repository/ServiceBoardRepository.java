@@ -8,9 +8,13 @@ import com.individual.individual_project.domain.board.QStatus;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.user.QUser;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -59,20 +63,38 @@ public class ServiceBoardRepository {
                 .fetch();*/
 
 
-     public List<ServiceBoard> findAll(Long serviceStatId, Long recruitStatId, Long categoryId, String serviceBoardSearchName) {
+     public Page<ServiceBoard> findAll(Long serviceStatId, Long recruitStatId, Long categoryId, String serviceBoardSearchName, Pageable pageable) {
 
 
-         return jpaQueryFactory
+         JPQLQuery<ServiceBoard> query = jpaQueryFactory
                  .selectFrom(serviceBoard)
                  .join(serviceBoard.user, user).fetchJoin()
                  .join(serviceBoard.category, category).fetchJoin()
                  .join(serviceBoard.serviceStat, serviceStatus).fetchJoin()
                  .join(serviceBoard.recruitStat, recruitStatus).fetchJoin()
                  .where(
-                         buildConditions(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName)
-                 )
-                 .fetch();
-    }
+                         buildConditions(serviceStatId,recruitStatId,categoryId,serviceBoardSearchName)
+                 );
+         // 페이징 처리
+         query.offset(pageable.getOffset()) // 페이지의 시작 시점
+                 .limit(pageable.getPageSize());
+
+         List<ServiceBoard> result = query.fetch();
+
+         // 총 데이터 개수 구하기
+         JPQLQuery<Long> countQuery = jpaQueryFactory
+                 .select(serviceBoard.count())
+                 .from(serviceBoard)
+                 .join(serviceBoard.user, user)
+                 .join(serviceBoard.category, category)
+                 .join(serviceBoard.serviceStat, serviceStatus)
+                 .join(serviceBoard.recruitStat, recruitStatus)
+                 .where(buildConditions(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName));
+
+         long totalCount = countQuery.fetchCount();
+
+         return new PageImpl<>(result, pageable, totalCount);
+     }
 
     private BooleanBuilder buildConditions(Long serviceStatId, Long recruitStatId, Long categoryId, String serviceBoardSearchName) {
         BooleanBuilder builder = new BooleanBuilder();

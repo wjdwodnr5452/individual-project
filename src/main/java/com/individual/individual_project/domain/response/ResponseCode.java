@@ -73,6 +73,7 @@ public enum ResponseCode {
     // 404 찾을 수 없음
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, false, "카테고리를 찾을 수 없습니다."),
     STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, false, "상태를 찾을 수 없습니다."),
+    BORD_NOT_DETAIL(HttpStatus.NOT_FOUND, false, "게시글를 찾을 수 없습니다."),
 
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),

@@ -17,10 +17,15 @@ const BoardList = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
+    const [pageSize, setPageSize] = useState("5");
+
     const [posts, setPosts] = useState([]);
 
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+
     // 글 목록 데이터 가져오기
-    const fetchServiceBoardList = async () => {
+    const fetchServiceBoardList = async (page = currentPage) => {
         try {
             const params = new URLSearchParams();
 
@@ -36,12 +41,14 @@ const BoardList = () => {
                 params.append('recruitStatId', statRecruitment); // 모집 상태 파라미터 추가
             }
 
+            params.append("size", pageSize);
+            params.append("page", page); // 페이지 파라미터 추가
+
             const response = await fetch(`/api/service/boards?${params.toString()}`);
 
             const responseData = await response.json();
-            setPosts(responseData.data);
-            console.log("responseData : " , responseData.data);
-
+            setPosts(responseData.data.content);
+            setTotalPages(responseData.data.totalPages); // 전체 페이지 수 설정
 
         } catch (error) {
             console.error(error);
@@ -100,7 +107,7 @@ const BoardList = () => {
     // 카테고리, 상태 변경 시 글 목록 업데이트
     useEffect(() => {
         fetchServiceBoardList(); // 상태값에 맞는 글 목록을 가져옴
-    }, [category, statService, statRecruitment]); // 의존성 배열에 상태값 추가*/
+    }, [category, statService, statRecruitment, pageSize, currentPage]); // 의존성 배열에 상태값 추가*/
 
 
     const formatDateTime = (dateString) => {
@@ -123,6 +130,14 @@ const BoardList = () => {
     // 글 작성 페이지로 이동
     const boardWritePage = () => {
         navigate("/boards/write");
+    };
+
+
+    // 페이지 네비게이션 핸들러
+    const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
     };
 
     return (
@@ -188,6 +203,21 @@ const BoardList = () => {
                             className="search-input"
                         />
                     </div>
+                    <div className="page-size-div">
+                        <span>페이지 갯수 : </span>
+                        <select
+                            value={pageSize}
+                            onChange={(e) => setPageSize(e.target.value)}
+                            className="page-size-select filters-select"
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
                 </div>
                 {isLoggedIn && (
                     <div className="filters-right">
@@ -202,7 +232,7 @@ const BoardList = () => {
 
             {/* 글 목록 */}
             <div className="boards-cards">
-                {posts.length > 0 ? (
+            {posts.length > 0 ? (
                     posts.map((post) => (
                         <div key={post.id} className="boards-card">
                             <img
@@ -242,6 +272,19 @@ const BoardList = () => {
                 ) : (
                     <p className="no-data">게시물이 없습니다.</p>
                 )}
+            </div>
+
+            {/* 페이지 네비게이션 */}
+            <div className="pagination">
+                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                    이전
+                </button>
+                <span>
+                    {currentPage + 1} / {totalPages}
+                </span>
+                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                    다음
+                </button>
             </div>
 
 

@@ -3,6 +3,7 @@ package com.individual.individual_project.domain.board;
 import com.individual.individual_project.domain.board.comm.ServiceBoardScheduler;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
+import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,7 @@ import java.util.Optional;
 @Import(ServiceBoardScheduler.class)
 @SpringBootTest
 @Transactional
-public class BoardRepositoryTest {
+public class ServiceBoardTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -42,6 +44,9 @@ public class BoardRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ServiceBoardRepository serviceBoardRepository;
 
     private User testUser;
 
@@ -103,7 +108,7 @@ public class BoardRepositoryTest {
 
         ServiceBoard serviceBoard = new ServiceBoard("글제목", 3,
                 LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter),Integer.valueOf(3),
-                LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter), "",
+                LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter), null,
                 user, category, recruitStat, serviceStat, "글내용");
 
         ServiceBoard saveBoard = serviceBoardDataJpa.save(serviceBoard);

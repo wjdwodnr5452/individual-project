@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "../../css/board/BoardDetail.css";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Header from "../layout/Header";
-import Footer from "../layout/Footer";
 
 
 const BoardDetail = () => {
+
+    const [boardDetail, setBoardDetail] = useState({});
+
+
     const navigate = useNavigate();
     const currentUser = "wjdwodnr"; // 현재 로그인한 사용자 ID
+
 
 // 가상 지원자 명단 예시
     const applicants = [
@@ -16,6 +19,8 @@ const BoardDetail = () => {
         { id: 2, name: "김철수", phone: "010-2345-6789", date: "2025-01-12" },
         { id: 3, name: "박영희", phone: "010-3456-7890", date: "2025-01-15" },
     ];
+
+
 
     const boards = [
         {
@@ -36,9 +41,25 @@ const BoardDetail = () => {
     ];
 
     const { id } = useParams();
+
+    useEffect(() => {
+        // 서버에서 게시글 데이터 가져오기
+        const fetchBoardDetail = async () => {
+            try {
+                const response = await fetch(`/api/service/boards/${id}`);
+                setBoardDetail(response.data);
+            } catch (err) {
+
+            }
+        };
+
+        fetchBoardDetail();
+    }, [id]); // 게시글 ID가 변경될 때마다 호출
+
+
     const [boardsState, setBoardsState] = useState(boards);
     const board = boardsState.find((b) => b.id === parseInt(id, 10));
-    const [serviceStat, setServiceStat] = useState(board.serviceStat);
+  //  const [serviceStat, setServiceStat] = useState(board.serviceStat);
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     if (!board) {
@@ -59,7 +80,7 @@ const BoardDetail = () => {
 
     // 진행 상태 변경
     const boardStatBtn = (stat) => {
-        setServiceStat(stat);
+       // setServiceStat(stat);
         alert(stat);
     }
 
@@ -71,7 +92,7 @@ const BoardDetail = () => {
         setIsModalOpen(false); // 모달 닫기
     };
 
-    return (
+  /*  return (
         <div>
             <div className="board-detail-page">
                 <div className="board-header">
@@ -160,7 +181,7 @@ const BoardDetail = () => {
                     </button>
                 </div>
 
-                {/* 모달 */}
+                {/!* 모달 *!/}
                 {isModalOpen && (
                     <div className="modal-overlay">
                         <div className="modal-content">
@@ -180,7 +201,7 @@ const BoardDetail = () => {
                 )}
             </div>
         </div>
-    );
+    );*/
 };
 
 export default BoardDetail;

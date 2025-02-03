@@ -172,3 +172,36 @@
     cursor: pointer;
     transition: background 0.3s;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* 버튼들 사이에 간격 */
+    margin: 20px 0; /* 위 아래 여백 */
+}
+
+.pagination-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #0056b3; /* 호버시 색상 변화 */
+}
+
+.pagination-info {
+    font-size: 16px;
+    font-weight: 500;
+}

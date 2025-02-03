@@ -17,6 +17,9 @@ import com.individual.individual_project.web.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,7 +79,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         ServiceBoard serviceBoard = new ServiceBoard(title, Integer.valueOf(recruitCount),
                 LocalDateTime.parse(serviceDate, formatter),Integer.valueOf(serviceTime),
                 LocalDateTime.parse(deadline, formatter), thumbnailImgeSave,
-                user, categoryEntity, recruitStatEntity, serviceStatEntity, content);
+                user, categoryEntity, serviceStatEntity, recruitStatEntity,  content);
         ServiceBoard save = serviceBoardDataJpa.save(serviceBoard);
 
         return save;
@@ -93,36 +97,64 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     }
 
     @Override
-    public List<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName) {
+    public Page<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName, Pageable pageable) {
 
-        Long serviceStatIdLong =  (serviceStatId != null) ? Long.valueOf(serviceStatId) : null;
+        Long serviceStatIdLong = (serviceStatId != null) ? Long.valueOf(serviceStatId) : null;
         Long recruitStatIdLong = (recruitStatId != null) ? Long.valueOf(recruitStatId) : null;
         Long categoryIdLong = (categoryId != null) ? Long.valueOf(categoryId) : null;
 
-        List<ServiceBoard> serviceBoards = serviceBoardRepository.findAll(serviceStatIdLong,recruitStatIdLong, categoryIdLong, serviceBoardSearchName);
+        // Repository 호출 (페이징 쿼리 적용)
+        Page<ServiceBoard> serviceBoardPage = serviceBoardRepository.findAll(
+                serviceStatIdLong, recruitStatIdLong, categoryIdLong, serviceBoardSearchName, pageable
+        );
 
         // DTO 변환 및 복호화 처리
-        return serviceBoards.stream()
-                .map(serviceBoard -> {
-                    String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
-                    String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/"+serviceBoard.getThumbnailImage().getStoredFilename() : null;
+        return serviceBoardPage.map(serviceBoard -> {
+            String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
+            String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
 
-                    return new ServiceBoardResponseDto(
-                            serviceBoard.getId(),
-                            serviceBoard.getServiceTitle(),
-                            serviceBoard.getRecruitCount(),
-                            serviceBoard.getServiceDate(),
-                            serviceBoard.getServiceTime(),
-                            serviceBoard.getDeadline(),
-                            thumbnailImgPath,
-                            decryptedUserName,
-                            serviceBoard.getCategory().getCategoryName(),
-                            serviceBoard.getServiceContent(),
-                            serviceBoard.getServiceStat().getStatusName(),
-                            serviceBoard.getRecruitStat().getStatusName(),
-                            serviceBoard.getRegDate()
-                    );
-                })
-                .collect(Collectors.toList());
+            return new ServiceBoardResponseDto(
+                    serviceBoard.getId(),
+                    serviceBoard.getServiceTitle(),
+                    serviceBoard.getRecruitCount(),
+                    serviceBoard.getServiceDate(),
+                    serviceBoard.getServiceTime(),
+                    serviceBoard.getDeadline(),
+                    thumbnailImgPath,
+                    decryptedUserName,
+                    serviceBoard.getCategory().getCategoryName(),
+                    serviceBoard.getServiceContent(),
+                    serviceBoard.getServiceStat().getStatusName(),
+                    serviceBoard.getRecruitStat().getStatusName(),
+                    serviceBoard.getRegDate()
+            );
+        });
+    }
+
+    @Override
+    public ServiceBoardResponseDto findServiceBoardById(String id) {
+
+        Long longId = (id != null) ? Long.valueOf(id) : null;
+
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(longId).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
+
+        String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
+        String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
+
+        return new ServiceBoardResponseDto(
+                serviceBoard.getId(),
+                serviceBoard.getServiceTitle(),
+                serviceBoard.getRecruitCount(),
+                serviceBoard.getServiceDate(),
+                serviceBoard.getServiceTime(),
+                serviceBoard.getDeadline(),
+                thumbnailImgPath,
+                decryptedUserName,
+                serviceBoard.getCategory().getCategoryName(),
+                serviceBoard.getServiceContent(),
+                serviceBoard.getServiceStat().getStatusName(),
+                serviceBoard.getRecruitStat().getStatusName(),
+                serviceBoard.getRegDate()
+        );
     }
 }

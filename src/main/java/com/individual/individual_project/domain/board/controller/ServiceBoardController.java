@@ -18,9 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -106,19 +108,21 @@ public class ServiceBoardController {
 
     // 게시글 조회
     @GetMapping("/service/boards")
-    public ApiResponse<List<ServiceBoardResponseDto>> getServiceBoard(
+    public ApiResponse<Page<ServiceBoardResponseDto>> getServiceBoard(
             @RequestParam(required = false) String serviceStatId,
             @RequestParam(required = false) String recruitStatId,
             @RequestParam(required = false) String categoryId,
-            @RequestParam(required = false) String serviceBoardSearchName
+            @RequestParam(required = false) String serviceBoardSearchName,
+            Pageable pageable
     ) {
 
         log.info("serviceStatId : {}", serviceStatId);
         log.info("recruitStatId : {}", recruitStatId);
         log.info("categoryId : {}", categoryId);
         log.info("serviceBoardSearchName : {}", serviceBoardSearchName);
+        log.info("pageable : {}", pageable);
 
-        List<ServiceBoardResponseDto> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName);
+        Page<ServiceBoardResponseDto> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName, pageable);
         return ApiResponse.success(all, ResponseCode.BORD_READ_SUCCESS);
     }
 
@@ -126,6 +130,17 @@ public class ServiceBoardController {
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileUploadService.getFullPath(filename)); // 실제 경로 이미지를 가져옴
+    }
+
+
+    @GetMapping("/service/boards/{id}")
+    public ApiResponse<ServiceBoardResponseDto> getServiceBoardById(@PathVariable String id) {
+
+        ServiceBoardResponseDto serviceBoardById = serviceBoardService.findServiceBoardById(id);
+
+        log.info("serviceBoardById : {} ", serviceBoardById);
+
+        return ApiResponse.success(serviceBoardById, ResponseCode.BORD_READ_SUCCESS);
     }
 
 /*    @GetMapping("/images/{filename}")

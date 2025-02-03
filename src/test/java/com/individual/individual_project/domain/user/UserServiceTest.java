@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @Transactional
 @SpringBootTest
-class UserRepositoryTest {
+class UserServiceTest {
 
     @Autowired
     UserRepository userRepository;

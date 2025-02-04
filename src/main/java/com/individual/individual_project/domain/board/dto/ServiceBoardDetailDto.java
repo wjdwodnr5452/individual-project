@@ -22,10 +22,11 @@ public class ServiceBoardDetailDto {
     private LocalDateTime regDate;
     private Long serviceStatId;
     private Long recruitStatId;
+    private boolean isWriterCheck;
 
     public ServiceBoardDetailDto() {}
 
-    public ServiceBoardDetailDto(Long id, String serviceTitle, Integer recruitCount, LocalDateTime serviceDate, Integer serviceTime, LocalDateTime deadline, String thumbnailImage, String writer, String categoryName, String serviceContent, String serviceStatName, String recruitStatName, LocalDateTime regDate, Long serviceStatId, Long recruitStatId) {
+    public ServiceBoardDetailDto(Long id, String serviceTitle, Integer recruitCount, LocalDateTime serviceDate, Integer serviceTime, LocalDateTime deadline, String thumbnailImage, String writer, String categoryName, String serviceContent, String serviceStatName, String recruitStatName, LocalDateTime regDate, Long serviceStatId, Long recruitStatId, boolean isWriterCheck) {
         this.id = id;
         this.serviceTitle = serviceTitle;
         this.recruitCount = recruitCount;
@@ -41,5 +42,6 @@ public class ServiceBoardDetailDto {
         this.regDate = regDate;
         this.serviceStatId = serviceStatId;
         this.recruitStatId = recruitStatId;
+        this.isWriterCheck = isWriterCheck;
     }
 }

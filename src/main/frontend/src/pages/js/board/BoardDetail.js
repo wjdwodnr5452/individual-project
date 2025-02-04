@@ -100,7 +100,7 @@ const BoardDetail = () => {
                     <div className="board-header">
                         <h1 className="board-title">{boardDetail.serviceTitle}</h1>
 
-                        {isLoggedIn && boardDetail.writer === user.name && (
+                        {isLoggedIn && boardDetail.writerCheck && (
                             <div className="board-service-people">
                                 <button className="board-service-people-button" onClick={showServicePeople}>
                                     지원자 명단
@@ -158,7 +158,7 @@ const BoardDetail = () => {
                     </div>
 
                     <div className="board-footer">
-                        {boardDetail.writer === currentUser ? (
+                        {isLoggedIn && boardDetail.writerCheck  ? (
                             <button className="board-editor-button" onClick={() => boardDetailEditPage(id)}>
                                 수정하기
                             </button>
@@ -168,19 +168,21 @@ const BoardDetail = () => {
                             </button>
                         )}
 
-                        {boardDetail.writer === currentUser && (boardDetail.serviceStatId !== 4 ? (
-                            <div className="board-stat-div">
-                                <button className="board-stat-button" onClick={() => boardStatBtn("종료")}>
-                                    종료
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="board-stat-div">
-                                <button className="board-stat-button" onClick={() => boardStatBtn("진행중")}>
-                                    진행
-                                </button>
-                            </div>
-                        ))}
+                        {boardDetail.writerCheck && (
+                            boardDetail.serviceStatId === 4 ? (
+                                <div className="board-stat-div">
+                                    <button className="board-stat-button" onClick={() => boardStatBtn("종료")}>
+                                        종료
+                                    </button>
+                                </div>
+                            ) : boardDetail.serviceStatId === 5 ? (
+                                <div className="board-stat-div">
+                                    <button className="board-stat-button" onClick={() => boardStatBtn("진행중")}>
+                                        진행
+                                    </button>
+                                </div>
+                            ) : null
+                        )}
 
                         <button className="back-button" onClick={() => window.history.back()}>
                             뒤로가기

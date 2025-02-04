@@ -27,7 +27,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ApiResponse<User> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+    public ApiResponse<String> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         log.info("loginDto: {}", loginDto);
         User user = loginService.login(loginDto);
         log.info("user: {}", user);
@@ -37,7 +37,7 @@ public class LoginController {
         session.setAttribute(SessionConst.LOGIN_MEMBER, user);
 
         //return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS.getMessage());
-        return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS);
+        return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_SUCCESS);
     }
 
     @PostMapping("/logout")

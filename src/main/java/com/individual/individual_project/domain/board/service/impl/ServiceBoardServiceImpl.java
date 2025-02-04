@@ -169,7 +169,8 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                 serviceBoard.getRecruitStat().getStatusName(),
                 serviceBoard.getRegDate(),
                 serviceBoard.getServiceStat().getId(),
-                serviceBoard.getRecruitStat().getId()
+                serviceBoard.getRecruitStat().getId(),
+                isWriterCheck
         );
     }
 }

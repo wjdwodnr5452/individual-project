@@ -2,6 +2,7 @@ package com.individual.individual_project.domain.login.controller;
 
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.domain.login.dto.LoginDto;
+import com.individual.individual_project.domain.login.dto.LoginStatusDto;
 import com.individual.individual_project.domain.login.service.LoginService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
@@ -53,16 +54,19 @@ public class LoginController {
 
 
    @GetMapping("/login/status")
-    public ApiResponse<User> getLoginStatus(HttpServletRequest request) {
+    public ApiResponse<String> getLoginStatus(HttpServletRequest request) {
+
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
             return ApiResponse.fail(ResponseCode.USER_LOGOUT_STATUS, null);
         }
+       User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+     //  LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+
        //return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS.getMessage());
-       return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS);
+       return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_STATUS);
     }
 
 

@@ -2,12 +2,14 @@ import React, {useEffect, useState} from "react";
 import "../../css/board/BoardDetail.css";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../../components/AuthProvider"; // AuthContext 사용
 
 const BoardDetail = () => {
-
+    const { isLoggedIn, user } = useAuth();
     const [boardDetail, setBoardDetail] = useState({});
 
+    console.log("isLoggedIn : " , isLoggedIn);
+    console.log("user : " , user);
 
     const navigate = useNavigate();
     const currentUser = "wjdwodnr"; // 현재 로그인한 사용자 ID
@@ -22,24 +24,6 @@ const BoardDetail = () => {
 
 
 
-    const boards = [
-        {
-            id: 1,
-            title: "첫 번째 게시글",
-            author: "wjdwodnr",
-            serviceStat: "시작전",
-            serviceDate: "2025-01-11",
-            serviceTime: "6",
-            category: "환경보호",
-            date: "2025-01-11",
-            deadlineStat:"모집중",
-            deadlineDate: "2025-01-20",
-            content: "내용1",
-            numberPeople: "5",
-            thumbnail: "/images/thumbnail.png"
-        }
-    ];
-
     const { id } = useParams();
 
     useEffect(() => {
@@ -47,9 +31,16 @@ const BoardDetail = () => {
         const fetchBoardDetail = async () => {
             try {
                 const response = await fetch(`/api/service/boards/${id}`);
-                setBoardDetail(response.data);
-            } catch (err) {
+                const responseData = await response.json();
 
+                if(responseData.header.code == 200) {
+                    setBoardDetail(responseData.data);
+                }else{
+                    alert(responseData.msg);
+                }
+
+            } catch (err) {
+                console.log("err : " , err);
             }
         };
 
@@ -57,21 +48,17 @@ const BoardDetail = () => {
     }, [id]); // 게시글 ID가 변경될 때마다 호출
 
 
-    const [boardsState, setBoardsState] = useState(boards);
-    const board = boardsState.find((b) => b.id === parseInt(id, 10));
+
   //  const [serviceStat, setServiceStat] = useState(board.serviceStat);
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
-    if (!board) {
-        return <p>게시글을 찾을 수 없습니다.</p>;
-    }
 
-    const handleStatusChange = (e) => {
+/*    const handleStatusChange = (e) => {
         const updatedBoards = boardsState.map((b) =>
             b.id === board.id ? { ...b, serviceStat: e.target.value } : b
         );
         setBoardsState(updatedBoards);
-    };
+    };*/
 
     // 게시글 수정 페이지로 이동
     const boardDetailEditPage = (id) => {
@@ -92,116 +79,137 @@ const BoardDetail = () => {
         setIsModalOpen(false); // 모달 닫기
     };
 
-  /*  return (
+    const formatDateTime = (dateString) => {
+        const date = new Date(dateString);
+
+        return new Intl.DateTimeFormat("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        }).format(date);
+    };
+
+
+    return (
         <div>
-            <div className="board-detail-page">
-                <div className="board-header">
-                    <h1 className="board-title">{board.title}</h1>
-                    <div className="board-service-people">
-                        <button className="board-service-people-button" onClick={() => showServicePeople()}>지원자 명단</button>
-                    </div>
-                    <div className="board-meta">
-                        <div className="board-item">
-                            <span className="board-label">작성자</span>
-                            <span className="board-value">{board.author}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">모집인원</span>
-                            <span className="board-value">{board.numberPeople}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">봉사시간</span>
-                            <span className="board-value">{board.serviceTime}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">카테고리</span>
-                            <span className="board-value">{board.category}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">진행상태</span>
-                            <span className="board-value">{board.serviceStat}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">봉사일</span>
-                            <span className="board-value">{board.date}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">모집상태</span>
-                            <span className="board-value">{board.deadlineStat}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">마감일</span>
-                            <span className="board-value">{board.deadlineDate}</span>
-                        </div>
-                        <div className="board-item">
-                            <span className="board-label">작성일</span>
-                            <span className="board-value">{board.date}</span>
-                        </div>
-                    </div>
-                </div>
+            {Object.keys(boardDetail).length > 0 ? (
+                <div className="board-detail-page">
+                    <div className="board-header">
+                        <h1 className="board-title">{boardDetail.serviceTitle}</h1>
 
-                <div className="board-thumbnail-container">
-                    <img src={board.thumbnail} alt={`${board.title} 썸네일`} className="board-thumbnail"/>
-                </div>
-
-                <div className="board-content">
-                    <p>{board.content}</p>
-                </div>
-
-
-                <div className="board-footer">
-
-                    {board.author === currentUser ? (
-                        <button className="board-editor-button" onClick={() => boardDetailEditPage(id)}>
-                            수정하기
-                        </button>
-                    ) : (
-                        <button className="board-apply-button" onClick={() => alert("지원하기 버튼 클릭")}>
-                            지원하기
-                        </button>
-                    )}
-
-                    {board.author === currentUser && (serviceStat != "종료" ? (
-                        <div className="board-stat-div">
-                            <button className="board-stat-button" onClick={() => boardStatBtn("종료")}>
-                                종료
-                            </button>
-                        </div>
-
-                    ) : (
-                        <div className="board-stat-div">
-                            <button className="board-stat-button" onClick={() => boardStatBtn("진행중")}>
-                                진행
-                            </button>
-                        </div>
-                    ))}
-
-                    <button className="back-button" onClick={() => window.history.back()}>
-                        뒤로가기
-                    </button>
-                </div>
-
-                {/!* 모달 *!/}
-                {isModalOpen && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                            <h2>지원자 명단</h2>
-                            <div className="applicant-list">
-                                {applicants.map((applicant) => (
-                                    <div key={applicant.id} className="applicant-row">
-                                        <p><strong>이름:</strong> {applicant.name}</p>
-                                        <p><strong>전화번호:</strong> {applicant.phone}</p>
-                                        <p><strong>지원날짜:</strong> {applicant.date}</p>
-                                    </div>
-                                ))}
+                        {isLoggedIn && boardDetail.writer === user.name && (
+                            <div className="board-service-people">
+                                <button className="board-service-people-button" onClick={showServicePeople}>
+                                    지원자 명단
+                                </button>
                             </div>
-                            <button className="close-modal" onClick={closeModal}>닫기</button>
+                        )}
+
+
+                        <div className="board-meta">
+                            <div className="board-item">
+                            <span className="board-label">작성자</span>
+                                <span className="board-value">{boardDetail.writer}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">모집인원</span>
+                                <span className="board-value">{boardDetail.recruitCount}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">봉사시간</span>
+                                <span className="board-value">{boardDetail.serviceTime}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">카테고리</span>
+                                <span className="board-value">{boardDetail.categoryName}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">진행상태</span>
+                                <span className="board-value">{boardDetail.serviceStatName}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">봉사일</span>
+                                <span className="board-value">{formatDateTime(boardDetail.serviceDate)}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">모집상태</span>
+                                <span className="board-value">{boardDetail.recruitStatName}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">마감일</span>
+                                <span className="board-value">{formatDateTime(boardDetail.deadline)}</span>
+                            </div>
+                            <div className="board-item">
+                                <span className="board-label">작성일</span>
+                                <span className="board-value">{formatDateTime(boardDetail.regDate)}</span>
+                            </div>
                         </div>
                     </div>
-                )}
-            </div>
+
+                    <div className="board-thumbnail-container">
+                        <img src={boardDetail.thumbnailImage} alt={`${boardDetail.serviceTitle} 썸네일`} className="board-thumbnail" />
+                    </div>
+
+                    <div className="board-content">
+                        <p>{boardDetail.serviceContent}</p>
+                    </div>
+
+                    <div className="board-footer">
+                        {boardDetail.writer === currentUser ? (
+                            <button className="board-editor-button" onClick={() => boardDetailEditPage(id)}>
+                                수정하기
+                            </button>
+                        ) : (
+                            <button className="board-apply-button" onClick={() => alert("지원하기 버튼 클릭")}>
+                                지원하기
+                            </button>
+                        )}
+
+                        {boardDetail.writer === currentUser && (boardDetail.serviceStatId !== 4 ? (
+                            <div className="board-stat-div">
+                                <button className="board-stat-button" onClick={() => boardStatBtn("종료")}>
+                                    종료
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="board-stat-div">
+                                <button className="board-stat-button" onClick={() => boardStatBtn("진행중")}>
+                                    진행
+                                </button>
+                            </div>
+                        ))}
+
+                        <button className="back-button" onClick={() => window.history.back()}>
+                            뒤로가기
+                        </button>
+                    </div>
+
+                    {isModalOpen && (
+                        <div className="modal-overlay">
+                            <div className="modal-content">
+                                <h2>지원자 명단</h2>
+                                <div className="applicant-list">
+                                    {applicants.map((applicant) => (
+                                        <div key={applicant.id} className="applicant-row">
+                                            <p><strong>이름:</strong> {applicant.name}</p>
+                                            <p><strong>전화번호:</strong> {applicant.phone}</p>
+                                            <p><strong>지원날짜:</strong> {applicant.date}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="close-modal" onClick={closeModal}>닫기</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <p>데이터 로딩 중입니다...</p>
+            )}
         </div>
-    );*/
+    );
 };
 
 export default BoardDetail;

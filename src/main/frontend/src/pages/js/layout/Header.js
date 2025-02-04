@@ -41,7 +41,7 @@ function Header() {
             <div className="auth-links">
                 {isLoggedIn ? (
                     <>
-                        <span>{user?.name}님</span>
+                        <span>{user}님</span>
                         <a href="#" onClick={myPageMove}>마이페이지</a>
                         <a href="#" onClick={logout}>로그아웃</a>
                     </>

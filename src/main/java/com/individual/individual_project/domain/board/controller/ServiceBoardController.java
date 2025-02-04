@@ -5,7 +5,8 @@ import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
-import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
 import com.individual.individual_project.domain.board.service.CategoryService;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.StatusService;
@@ -108,7 +109,7 @@ public class ServiceBoardController {
 
     // 게시글 조회
     @GetMapping("/service/boards")
-    public ApiResponse<Page<ServiceBoardResponseDto>> getServiceBoard(
+    public ApiResponse<Page<ServiceBoardsDto>> getServiceBoard(
             @RequestParam(required = false) String serviceStatId,
             @RequestParam(required = false) String recruitStatId,
             @RequestParam(required = false) String categoryId,
@@ -122,7 +123,7 @@ public class ServiceBoardController {
         log.info("serviceBoardSearchName : {}", serviceBoardSearchName);
         log.info("pageable : {}", pageable);
 
-        Page<ServiceBoardResponseDto> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName, pageable);
+        Page<ServiceBoardsDto> all = serviceBoardService.findAll(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName, pageable);
         return ApiResponse.success(all, ResponseCode.BORD_READ_SUCCESS);
     }
 
@@ -134,9 +135,12 @@ public class ServiceBoardController {
 
 
     @GetMapping("/service/boards/{id}")
-    public ApiResponse<ServiceBoardResponseDto> getServiceBoardById(@PathVariable String id) {
+    public ApiResponse<ServiceBoardDetailDto> getServiceBoardById(@PathVariable String id, HttpServletRequest request) {
 
-        ServiceBoardResponseDto serviceBoardById = serviceBoardService.findServiceBoardById(id);
+
+
+
+        ServiceBoardDetailDto serviceBoardById = serviceBoardService.findServiceBoardById(id, request);
 
         log.info("serviceBoardById : {} ", serviceBoardById);
 

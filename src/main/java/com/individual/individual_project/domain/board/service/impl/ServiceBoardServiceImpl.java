@@ -1,12 +1,14 @@
 package com.individual.individual_project.domain.board.service.impl;
 
+import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.comm.file.UploadFileDto;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
-import com.individual.individual_project.domain.board.dto.ServiceBoardResponseDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
 import com.individual.individual_project.domain.board.repository.*;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.ThumbnailImge;
@@ -14,23 +16,20 @@ import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.web.exception.BaseException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -97,7 +96,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     }
 
     @Override
-    public Page<ServiceBoardResponseDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName, Pageable pageable) {
+    public Page<ServiceBoardsDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName, Pageable pageable) {
 
         Long serviceStatIdLong = (serviceStatId != null) ? Long.valueOf(serviceStatId) : null;
         Long recruitStatIdLong = (recruitStatId != null) ? Long.valueOf(recruitStatId) : null;
@@ -113,7 +112,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
             String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
             String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
 
-            return new ServiceBoardResponseDto(
+            return new ServiceBoardsDto(
                     serviceBoard.getId(),
                     serviceBoard.getServiceTitle(),
                     serviceBoard.getRecruitCount(),
@@ -132,16 +131,30 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     }
 
     @Override
-    public ServiceBoardResponseDto findServiceBoardById(String id) {
+    public ServiceBoardDetailDto findServiceBoardById(String id, HttpServletRequest request) {
+
 
         Long longId = (id != null) ? Long.valueOf(id) : null;
 
         ServiceBoard serviceBoard = serviceBoardDataJpa.findById(longId).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
 
+        HttpSession session = request.getSession(false);
+
+        Boolean isWriterCheck = false;
+
+        if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
+            User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            isWriterCheck = (serviceBoard.getUser().getId().equals(user.getId()) ? true : false);
+
+            log.info("isWriterCheck : {}", isWriterCheck);
+        }
+
+
         String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
         String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
 
-        return new ServiceBoardResponseDto(
+        return new ServiceBoardDetailDto(
                 serviceBoard.getId(),
                 serviceBoard.getServiceTitle(),
                 serviceBoard.getRecruitCount(),
@@ -154,7 +167,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                 serviceBoard.getServiceContent(),
                 serviceBoard.getServiceStat().getStatusName(),
                 serviceBoard.getRecruitStat().getStatusName(),
-                serviceBoard.getRegDate()
+                serviceBoard.getRegDate(),
+                serviceBoard.getServiceStat().getId(),
+                serviceBoard.getRecruitStat().getId()
         );
     }
 }

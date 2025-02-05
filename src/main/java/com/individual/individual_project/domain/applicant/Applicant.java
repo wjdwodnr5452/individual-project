@@ -4,10 +4,11 @@ import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
 import com.individual.individual_project.domain.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NonNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,8 +22,8 @@ public class Applicant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
     @Column(name = "applicant_date")
+    @CreatedDate
     private LocalDate applicantDate;
 
     @ManyToOne
@@ -47,7 +48,7 @@ public class Applicant {
 
     public Applicant() {}
 
-    public Applicant(@NonNull LocalDate applicantDate, User user, ServiceBoard serviceBoard, LocalDateTime regDate, LocalDateTime updateDate, Status applicantStat) {
+    public Applicant(LocalDate applicantDate, User user, ServiceBoard serviceBoard, LocalDateTime regDate, LocalDateTime updateDate, Status applicantStat) {
         this.applicantDate = applicantDate;
         this.user = user;
         this.serviceBoard = serviceBoard;

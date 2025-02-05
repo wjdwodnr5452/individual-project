@@ -28,6 +28,7 @@ import java.util.Optional;
 @Import(ServiceBoardScheduler.class)
 @SpringBootTest
 @Transactional
+@Sql(scripts = {"/test_sql/board_sql.sql"})
 public class ServiceBoardTest {
 
     @Autowired
@@ -56,7 +57,7 @@ public class ServiceBoardTest {
         userRepository.saveUser(testUser);
     }
 
-    @Sql(scripts = {"/test_sql/board_sql.sql"})
+    //@Sql(scripts = {"/test_sql/board_sql.sql"})
     @Test
     void findCategoryId() {
         Optional<Category> category = categoryRepository.findById(1L);
@@ -93,7 +94,7 @@ public class ServiceBoardTest {
 
     }
 
-    @Sql(scripts = {"/test_sql/board_sql.sql"})
+
     @Test
     void save() {
         
@@ -117,6 +118,35 @@ public class ServiceBoardTest {
 
         Assertions.assertThat(saveBoard.getId()).isEqualTo(1L);
     }
+
+    @Test
+    void findServiceBoardId() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+        User user = userRepositorySpringData.findById(1L).orElseThrow(() -> new RuntimeException("user not found"));
+        Category category = categoryRepository.findById(1L).orElseThrow(() -> new RuntimeException("category not found"));
+        Status recruitStat = statusRepository.findById(1L).orElseThrow(() -> new RuntimeException("status not found"));
+        Status serviceStat = statusRepository.findById(3L).orElseThrow(() -> new RuntimeException("status not found"));
+
+
+
+        ServiceBoard serviceBoard = new ServiceBoard("글제목", 3,
+                LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter),Integer.valueOf(3),
+                LocalDateTime.parse("2025-01-28T15:30:45.123Z", formatter), null,
+                user, category, recruitStat, serviceStat, "글내용");
+
+        ServiceBoard saveBoard = serviceBoardDataJpa.save(serviceBoard);
+
+
+        Optional<ServiceBoard> findServiceBoard = serviceBoardDataJpa.findById(serviceBoard.getId());
+
+        if(findServiceBoard.isPresent()){
+            Assertions.assertThat(findServiceBoard.get().getId()).isEqualTo(1L);
+        }
+
+    }
+
 
 
 

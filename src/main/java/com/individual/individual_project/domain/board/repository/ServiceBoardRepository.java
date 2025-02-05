@@ -8,6 +8,10 @@ import com.individual.individual_project.domain.board.QStatus;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.user.QUser;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -75,6 +79,10 @@ public class ServiceBoardRepository {
                  .where(
                          buildConditions(serviceStatId,recruitStatId,categoryId,serviceBoardSearchName)
                  );
+
+         // 등록일 내림차순 정렬 추가
+         query.orderBy(serviceBoard.regDate.desc());
+
          // 페이징 처리
          query.offset(pageable.getOffset()) // 페이지의 시작 시점
                  .limit(pageable.getPageSize());

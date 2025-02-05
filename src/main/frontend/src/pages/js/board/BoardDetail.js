@@ -7,12 +7,7 @@ import { useAuth } from "../../../components/AuthProvider"; // AuthContext 사�
 const BoardDetail = () => {
     const { isLoggedIn, user } = useAuth();
     const [boardDetail, setBoardDetail] = useState({});
-
-    console.log("isLoggedIn : " , isLoggedIn);
-    console.log("user : " , user);
-
     const navigate = useNavigate();
-    const currentUser = "wjdwodnr"; // 현재 로그인한 사용자 ID
 
 
 // 가상 지원자 명단 예시
@@ -21,8 +16,6 @@ const BoardDetail = () => {
         { id: 2, name: "김철수", phone: "010-2345-6789", date: "2025-01-12" },
         { id: 3, name: "박영희", phone: "010-3456-7890", date: "2025-01-15" },
     ];
-
-
 
     const { id } = useParams();
 
@@ -48,17 +41,8 @@ const BoardDetail = () => {
     }, [id]); // 게시글 ID가 변경될 때마다 호출
 
 
-
-  //  const [serviceStat, setServiceStat] = useState(board.serviceStat);
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
-
-/*    const handleStatusChange = (e) => {
-        const updatedBoards = boardsState.map((b) =>
-            b.id === board.id ? { ...b, serviceStat: e.target.value } : b
-        );
-        setBoardsState(updatedBoards);
-    };*/
 
     // 게시글 수정 페이지로 이동
     const boardDetailEditPage = (id) => {
@@ -92,6 +76,26 @@ const BoardDetail = () => {
         }).format(date);
     };
 
+    const  boardApplicantBtn = async (id) => {
+
+        console.log("isLoggedIn : " , isLoggedIn);
+
+        if(!isLoggedIn){
+            alert("로그인이 필요 합니다.")
+            navigate("/login");
+        }
+
+        try {
+            const response = await fetch("/api/service/boards", {
+
+                method: "POST"
+            });
+
+        } catch (error) {
+
+        }
+    };
+
 
     return (
         <div>
@@ -116,7 +120,7 @@ const BoardDetail = () => {
                             </div>
                             <div className="board-item">
                                 <span className="board-label">모집인원</span>
-                                <span className="board-value">{boardDetail.recruitCount}</span>
+                                <span className="board-value">1/{boardDetail.recruitCount}</span>
                             </div>
                             <div className="board-item">
                                 <span className="board-label">봉사시간</span>
@@ -163,7 +167,7 @@ const BoardDetail = () => {
                                 수정하기
                             </button>
                         ) : (
-                            <button className="board-apply-button" onClick={() => alert("지원하기 버튼 클릭")}>
+                            <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
                                 지원하기
                             </button>
                         )}

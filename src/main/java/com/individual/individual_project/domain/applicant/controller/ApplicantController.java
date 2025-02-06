@@ -34,7 +34,6 @@ public class ApplicantController {
     @GetMapping("/applicant/{userId}/{boardId}")
     public ApiResponse<Boolean> getApplicant(@PathVariable Long userId, @PathVariable Long boardId) {
 
-        
 
         return null;
     }

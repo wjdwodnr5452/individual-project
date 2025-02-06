@@ -37,10 +37,8 @@ const BoardDetail = () => {
                 console.log("err : " , err);
             }
         };
-
         fetchBoardDetail();
     }, [id]); // 게시글 ID가 변경될 때마다 호출
-
 
     useEffect(() => {
         const checkApplicationStatus = async () => {

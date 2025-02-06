@@ -35,6 +35,7 @@ public class ApplicantController {
     public ApiResponse<Boolean> getApplicant(@PathVariable Long userId, @PathVariable Long boardId) {
 
 
+
         return null;
     }
 

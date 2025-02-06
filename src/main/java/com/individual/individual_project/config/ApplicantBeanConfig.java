@@ -6,7 +6,6 @@ import com.individual.individual_project.domain.applicant.service.ApplicantServi
 import com.individual.individual_project.domain.applicant.service.serviceImpl.ApplicantServiceImpl;
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
-import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

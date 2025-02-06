@@ -27,7 +27,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ApiResponse<String> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+    public ApiResponse<LoginStatusDto> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         log.info("loginDto: {}", loginDto);
         User user = loginService.login(loginDto);
         log.info("user: {}", user);
@@ -36,8 +36,10 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, user);
 
-        //return ApiResponse.success(user, ResponseCode.USER_LOGIN_SUCCESS.getMessage());
-        return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_SUCCESS);
+        LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+
+        return ApiResponse.success(loginStatusDto, ResponseCode.USER_LOGIN_SUCCESS);
+        //return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_SUCCESS);
     }
 
     @PostMapping("/logout")
@@ -54,19 +56,20 @@ public class LoginController {
 
 
    @GetMapping("/login/status")
-    public ApiResponse<String> getLoginStatus(HttpServletRequest request) {
+    public ApiResponse<LoginStatusDto> getLoginStatus(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
             return ApiResponse.fail(ResponseCode.USER_LOGOUT_STATUS, null);
         }
-       User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-     //  LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-       //return ApiResponse.success(user, ResponseCode.USER_LOGIN_STATUS.getMessage());
-       return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_STATUS);
+        LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+
+       return ApiResponse.success(loginStatusDto, ResponseCode.USER_LOGIN_STATUS);
+       //return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_STATUS);
     }
 
 

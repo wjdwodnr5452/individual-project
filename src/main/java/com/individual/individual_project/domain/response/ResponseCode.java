@@ -56,7 +56,7 @@ public enum ResponseCode {
     BORD_READ_SUCCESS(HttpStatus.OK, true, "게시글 리스트 조회 성공"),
 
     // 201
-    BORD_WRITE_SUCCESS(HttpStatus.CREATED, true, "게시판 글 생성 성공"),
+    BORD_CREATE_SUCCESS(HttpStatus.CREATED, true, "게시판 글 생성 성공"),
     
 
     // 400 에러
@@ -74,6 +74,15 @@ public enum ResponseCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, false, "카테고리를 찾을 수 없습니다."),
     STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, false, "상태를 찾을 수 없습니다."),
     BORD_NOT_DETAIL(HttpStatus.NOT_FOUND, false, "게시글를 찾을 수 없습니다."),
+
+
+    /* 신청자 */
+
+    // 201
+    APPLICANT_CREATE_SUCCESS(HttpStatus.CREATED, true, "게시판 글 생성 성공"),
+
+
+
 
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),

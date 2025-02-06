@@ -104,7 +104,7 @@ public class ServiceBoardController {
 
         log.info("saveBoard : {}" ,saveBoard);
 
-        return ApiResponse.success(saveBoard ,ResponseCode.BORD_WRITE_SUCCESS);
+        return ApiResponse.success(saveBoard ,ResponseCode.BORD_CREATE_SUCCESS);
     }
 
     // 게시글 조회

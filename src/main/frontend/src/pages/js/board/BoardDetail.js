@@ -8,6 +8,7 @@ const BoardDetail = () => {
     const { isLoggedIn, user } = useAuth();
     const [boardDetail, setBoardDetail] = useState({});
     const navigate = useNavigate();
+    const [isApplied, setIsApplied] = useState(false);
 
 
 // 가상 지원자 명단 예시
@@ -40,6 +41,36 @@ const BoardDetail = () => {
         fetchBoardDetail();
     }, [id]); // 게시글 ID가 변경될 때마다 호출
 
+
+    useEffect(() => {
+        const checkApplicationStatus = async () => {
+            try {
+                if (isLoggedIn && user) {
+                    console.log("로그인 상태로 들어옴!");
+                    console.log("user id:", user.id);
+
+                    // 여기서 API 요청하여 지원 상태 확인
+                    const response = await fetch(`/api/applicants/${user.id}/${id}`);
+                    const isApplied = await response.json();
+                    setHasApplied(isApplied); // 지원 상태 업데이트
+                } else {
+                    console.log("로그인 안됨 또는 user 정보 없음");
+                }
+            } catch (error) {
+                console.error("Error checking application status:", error);
+            }
+        };
+
+        if (isLoggedIn && user) {
+            checkApplicationStatus();
+        }
+    }, [id, isLoggedIn, user]); // 로그인 상태 및 사용자 정보가 변경될 때마다 실행
+
+
+
+
+
+    const [hasApplied, setHasApplied] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
@@ -78,23 +109,24 @@ const BoardDetail = () => {
 
     const  boardApplicantBtn = async (id) => {
 
-        console.log("isLoggedIn : " , isLoggedIn);
-
         if(!isLoggedIn){
-            alert("로그인이 필요 합니다.")
             navigate("/login");
         }
 
         try {
-            const response = await fetch("/api/service/boards", {
-
-                method: "POST"
+            const response = await fetch("/api/applicant/"+id, {
+                method: isApplied ? "PUT" : "POST", // 지원 또는 지원 취소 요청
             });
+
+            const responseData = await response.json();
+
+            alert(responseData.msg);
 
         } catch (error) {
 
         }
     };
+
 
 
     return (

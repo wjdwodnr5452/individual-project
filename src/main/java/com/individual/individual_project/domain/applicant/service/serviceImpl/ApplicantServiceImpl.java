@@ -2,6 +2,7 @@ package com.individual.individual_project.domain.applicant.service.serviceImpl;
 
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsFindDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.board.ServiceBoard;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -57,5 +59,22 @@ public class ApplicantServiceImpl implements ApplicantService {
         Applicant save = applicantRepository.save(applicant);
 
         return save;
+    }
+
+
+    @Override
+    public ApplicantServiceBordsFindDto findApplicant(Long userId, Long serviceBoardId) {
+
+        Optional<Applicant> findApplicant = applicantRepository.findByUserIdAndServiceBoardId(userId, serviceBoardId);
+
+        if(findApplicant.isPresent()){
+            Applicant applicant = findApplicant.get();
+
+            ApplicantServiceBordsFindDto serviceBordsFindDto = new ApplicantServiceBordsFindDto(applicant.getId(), applicant.getApplicantStat().getId(), applicant.getApplicantStat().getStatusName());
+
+            return serviceBordsFindDto;
+        }else{
+            return null;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.applicant.controller;
 
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsFindDto;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
@@ -21,7 +22,7 @@ public class ApplicantController {
 
     private final ApplicantService applicantService;
 
-    @PostMapping("/applicant/{id}")
+    @PostMapping("/applicants/{id}")
     public ApiResponse<Applicant> createApplicant(@PathVariable Long id, HttpServletRequest request) {
 
         Applicant applicant = applicantService.save(id, request);
@@ -31,12 +32,12 @@ public class ApplicantController {
         return ApiResponse.success(applicant, ResponseCode.APPLICANT_CREATE_SUCCESS);
     }
 
-    @GetMapping("/applicant/{userId}/{boardId}")
-    public ApiResponse<Boolean> getApplicant(@PathVariable Long userId, @PathVariable Long boardId) {
+    @GetMapping("/applicants/{userId}/{serviceBoardId}")
+    public ApiResponse<ApplicantServiceBordsFindDto> findApplicant(@PathVariable Long userId, @PathVariable Long serviceBoardId) {
 
+        ApplicantServiceBordsFindDto applicant= applicantService.findApplicant(userId, serviceBoardId);
 
-
-        return null;
+        return ApiResponse.success(applicant, ResponseCode.APPLICANT_READ_SUCCESS);
     }
 
 

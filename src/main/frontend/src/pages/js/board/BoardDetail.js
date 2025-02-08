@@ -18,6 +18,10 @@ const BoardDetail = () => {
         { id: 3, name: "박영희", phone: "010-3456-7890", date: "2025-01-15" },
     ];
 
+
+    const [hasApplied, setHasApplied] = useState(false);
+    const [userApplicantStat, setUserApplicantStat] = useState(7);
+
     const { id } = useParams();
 
     useEffect(() => {
@@ -49,8 +53,15 @@ const BoardDetail = () => {
 
                     // 여기서 API 요청하여 지원 상태 확인
                     const response = await fetch(`/api/applicants/${user.id}/${id}`);
-                    const isApplied = await response.json();
-                    setHasApplied(isApplied); // 지원 상태 업데이트
+                    const responseData = await response.json();
+
+                    if(responseData != null){
+                        setHasApplied(true);
+                        setUserApplicantStat(responseData.data.applicantStatId);
+                        /*console.log("hasApplied : " , hasApplied);
+                        console.log("userApplicantStat : " , userApplicantStat);*/
+                    }
+                  //  setHasApplied(isApplied); // 지원 상태 업데이트
                 } else {
                     console.log("로그인 안됨 또는 user 정보 없음");
                 }
@@ -65,10 +76,13 @@ const BoardDetail = () => {
     }, [id, isLoggedIn, user]); // 로그인 상태 및 사용자 정보가 변경될 때마다 실행
 
 
+    useEffect(() => {
+        console.log("hasApplied 상태:", hasApplied);
+        console.log("userApplicantStat 상태:", userApplicantStat);
+    }, [hasApplied, userApplicantStat]);
 
 
 
-    const [hasApplied, setHasApplied] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
@@ -105,7 +119,7 @@ const BoardDetail = () => {
         }).format(date);
     };
 
-    const  boardApplicantBtn = async (id) => {
+/*    const  boardApplicantBtn = async (id) => {
 
         if(!isLoggedIn){
             navigate("/login");
@@ -122,6 +136,41 @@ const BoardDetail = () => {
 
         } catch (error) {
 
+        }
+    };*/
+
+
+    const boardApplicantBtn = async (id) => {
+        if (!isLoggedIn) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const apiUrl = "/api/applicants";
+            const requestUrl = isApplied ? `${apiUrl}/${id}` : apiUrl;
+            const method = isApplied ? "PUT" : "POST";
+
+            const payload = isApplied
+                ? { status: "CANCELED" }  // 취소 요청일 경우
+                : { serviceBoardId: id }; // 지원 요청일 경우
+
+            const response = await fetch(requestUrl, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                alert(responseData.msg);
+                setIsApplied(!isApplied); // 상태 토글
+            } else {
+                alert("요청 처리에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error during application:", error);
+            alert("오류가 발생했습니다.");
         }
     };
 
@@ -192,14 +241,26 @@ const BoardDetail = () => {
                     </div>
 
                     <div className="board-footer">
-                        {isLoggedIn && boardDetail.writerCheck  ? (
+                        {isLoggedIn && boardDetail.writerCheck ? (
                             <button className="board-editor-button" onClick={() => boardDetailEditPage(id)}>
                                 수정하기
                             </button>
                         ) : (
-                            <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
-                                지원하기
-                            </button>
+                            hasApplied ? (
+                                userApplicantStat == 6 ||  userApplicantStat == 7 ? (
+                                    <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
+                                        취소하기
+                                    </button>
+                                ) : (
+                                    <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
+                                        지원하기
+                                    </button>
+                                )
+                            ) : (
+                                <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
+                                    지원하기
+                                </button>
+                            )
                         )}
 
                         {boardDetail.writerCheck && (

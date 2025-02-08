@@ -46,7 +46,7 @@ public enum ResponseCode {
 
     // 201 Created
     USER_CREATE_SUCCESS(HttpStatus.CREATED, true, "사용자 생성 성공"),
-
+    
 
     /* 게시판 */
 
@@ -82,7 +82,8 @@ public enum ResponseCode {
     APPLICANT_CREATE_SUCCESS(HttpStatus.CREATED, true, "게시판 글 생성 성공"),
 
 
-
+    // 200
+    APPLICANT_READ_SUCCESS(HttpStatus.OK, true, "신청자 조회 성공"),
 
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, false, "권한이 없습니다."),

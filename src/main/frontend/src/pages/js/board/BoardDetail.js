@@ -8,7 +8,7 @@ const BoardDetail = () => {
     const { isLoggedIn, user } = useAuth();
     const [boardDetail, setBoardDetail] = useState({});
     const navigate = useNavigate();
-    const [isApplied, setIsApplied] = useState(false);
+
 
 
 // 가상 지원자 명단 예시
@@ -21,6 +21,7 @@ const BoardDetail = () => {
 
     const [hasApplied, setHasApplied] = useState(false);
     const [userApplicantStat, setUserApplicantStat] = useState(7);
+    const [userApplicantId, setUserApplicantId] = useState();
 
     const { id } = useParams();
 
@@ -41,6 +42,25 @@ const BoardDetail = () => {
                 console.log("err : " , err);
             }
         };
+
+
+        // 신청자 수 가져오기
+        const fetchApplicantCount = async () => {
+            try {
+                const response = await fetch(`/api/service/boards/${id}`);
+                const responseData = await response.json();
+
+                if(responseData.header.code == 200) {
+                    setBoardDetail(responseData.data);
+                }else{
+                    alert(responseData.msg);
+                }
+
+            } catch (err) {
+                console.log("err : " , err);
+            }
+        };
+
         fetchBoardDetail();
     }, [id]); // 게시글 ID가 변경될 때마다 호출
 
@@ -48,20 +68,16 @@ const BoardDetail = () => {
         const checkApplicationStatus = async () => {
             try {
                 if (isLoggedIn && user) {
-                    console.log("로그인 상태로 들어옴!");
-                    console.log("user id:", user.id);
 
                     // 여기서 API 요청하여 지원 상태 확인
                     const response = await fetch(`/api/applicants/${user.id}/${id}`);
                     const responseData = await response.json();
 
-                    if(responseData != null){
+                    if(responseData.data != null){
                         setHasApplied(true);
+                        setUserApplicantId(responseData.data.applicantId);
                         setUserApplicantStat(responseData.data.applicantStatId);
-                        /*console.log("hasApplied : " , hasApplied);
-                        console.log("userApplicantStat : " , userApplicantStat);*/
                     }
-                  //  setHasApplied(isApplied); // 지원 상태 업데이트
                 } else {
                     console.log("로그인 안됨 또는 user 정보 없음");
                 }
@@ -74,14 +90,6 @@ const BoardDetail = () => {
             checkApplicationStatus();
         }
     }, [id, isLoggedIn, user]); // 로그인 상태 및 사용자 정보가 변경될 때마다 실행
-
-
-    useEffect(() => {
-        console.log("hasApplied 상태:", hasApplied);
-        console.log("userApplicantStat 상태:", userApplicantStat);
-    }, [hasApplied, userApplicantStat]);
-
-
 
 
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
@@ -140,7 +148,7 @@ const BoardDetail = () => {
     };*/
 
 
-    const boardApplicantBtn = async (id) => {
+    const boardApplicantBtn = async (id,status) => {
         if (!isLoggedIn) {
             navigate("/login");
             return;
@@ -148,23 +156,23 @@ const BoardDetail = () => {
 
         try {
             const apiUrl = "/api/applicants";
-            const requestUrl = isApplied ? `${apiUrl}/${id}` : apiUrl;
-            const method = isApplied ? "PUT" : "POST";
-
-            const payload = isApplied
-                ? { status: "CANCELED" }  // 취소 요청일 경우
-                : { serviceBoardId: id }; // 지원 요청일 경우
+            const requestUrl = hasApplied ? `${apiUrl}/${userApplicantId}`:  `${apiUrl}/${id}` ;
+            const method = hasApplied ? "PUT" : "POST";
 
             const response = await fetch(requestUrl, {
                 method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(status),
             });
 
             if (response.ok) {
                 const responseData = await response.json();
                 alert(responseData.msg);
-                setIsApplied(!isApplied); // 상태 토글
+                if(responseData.data != null){
+                    setHasApplied(true);
+                    setUserApplicantId(responseData.data.applicantId);
+                    setUserApplicantStat(responseData.data.applicantStatId);
+                }
             } else {
                 alert("요청 처리에 실패했습니다.");
             }
@@ -248,11 +256,11 @@ const BoardDetail = () => {
                         ) : (
                             hasApplied ? (
                                 userApplicantStat == 6 ||  userApplicantStat == 7 ? (
-                                    <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
+                                    <button className="board-apply-button" onClick={() => boardApplicantBtn(userApplicantId,8)}>
                                         취소하기
                                     </button>
                                 ) : (
-                                    <button className="board-apply-button" onClick={() => boardApplicantBtn(boardDetail.id)}>
+                                    <button className="board-apply-button" onClick={() => boardApplicantBtn(userApplicantId, 6)}>
                                         지원하기
                                     </button>
                                 )

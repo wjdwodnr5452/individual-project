@@ -1,12 +1,13 @@
 package com.individual.individual_project.domain.applicant.service;
 
-import com.individual.individual_project.domain.applicant.Applicant;
-import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsFindDto;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface ApplicantService {
 
-    Applicant save(Long id, HttpServletRequest request);
+    ApplicantServiceBordsResponseDto save(Long serviceBoardId, HttpServletRequest request);
 
-    ApplicantServiceBordsFindDto findApplicant(Long userId, Long serviceBoardId);
+    ApplicantServiceBordsResponseDto findApplicant(Long userId, Long serviceBoardId);
+
+    ApplicantServiceBordsResponseDto updateApplicantStat(Long id, Long statusId);
 }

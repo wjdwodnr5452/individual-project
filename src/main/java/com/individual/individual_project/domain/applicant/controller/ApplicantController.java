@@ -1,7 +1,7 @@
 package com.individual.individual_project.domain.applicant.controller;
 
 import com.individual.individual_project.domain.applicant.Applicant;
-import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsFindDto;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
@@ -22,23 +22,39 @@ public class ApplicantController {
 
     private final ApplicantService applicantService;
 
-    @PostMapping("/applicants/{id}")
-    public ApiResponse<Applicant> createApplicant(@PathVariable Long id, HttpServletRequest request) {
+    @PostMapping("/applicants/{serviceBoardId}")
+    public ApiResponse<ApplicantServiceBordsResponseDto> createApplicant(@PathVariable Long serviceBoardId, HttpServletRequest request) {
 
-        Applicant applicant = applicantService.save(id, request);
+        ApplicantServiceBordsResponseDto applicant = applicantService.save(serviceBoardId, request);
 
         log.info("봉사 신청 성공 : {} ", applicant);
 
         return ApiResponse.success(applicant, ResponseCode.APPLICANT_CREATE_SUCCESS);
     }
 
-    @GetMapping("/applicants/{userId}/{serviceBoardId}")
-    public ApiResponse<ApplicantServiceBordsFindDto> findApplicant(@PathVariable Long userId, @PathVariable Long serviceBoardId) {
 
-        ApplicantServiceBordsFindDto applicant= applicantService.findApplicant(userId, serviceBoardId);
+    @PutMapping("/applicants/{id}")
+    public ApiResponse<ApplicantServiceBordsResponseDto> updateApplicantStat(@PathVariable Long id, @RequestBody Long statusId){
+
+        ApplicantServiceBordsResponseDto applicant = applicantService.updateApplicantStat(id, statusId);
+
+        return ApiResponse.success(applicant, ResponseCode.APPLICANT_UPDATE_SUCCESS);
+    }
+
+    @GetMapping("/applicants/{userId}/{serviceBoardId}")
+    public ApiResponse<ApplicantServiceBordsResponseDto> findApplicant(@PathVariable Long userId, @PathVariable Long serviceBoardId, HttpServletRequest request) {
+
+        ApplicantServiceBordsResponseDto applicant= applicantService.findApplicant(userId, serviceBoardId);
+
+        log.info("봉사 신청 조회 성공 : {}", applicant);
 
         return ApiResponse.success(applicant, ResponseCode.APPLICANT_READ_SUCCESS);
     }
 
 
+
+
 }
+
+
+

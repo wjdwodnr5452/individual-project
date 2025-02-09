@@ -2,7 +2,7 @@ package com.individual.individual_project.domain.applicant.service.serviceImpl;
 
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.domain.applicant.Applicant;
-import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsFindDto;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.board.ServiceBoard;
@@ -11,7 +11,6 @@ import com.individual.individual_project.domain.board.repository.ServiceBoardDat
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
-import com.individual.individual_project.domain.user.repository.UserRepository;
 import com.individual.individual_project.web.exception.BaseException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -34,7 +33,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final ServiceBoardDataJpa serviceBoardDataJpa;
 
     @Override
-    public Applicant save(Long id, HttpServletRequest request) {
+    public ApplicantServiceBordsResponseDto save(Long serviceBoardId, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
@@ -49,7 +48,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         }else{
             throw new BaseException(ResponseCode.USER_NOT_FOUND);
         }
-        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(id).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(serviceBoardId).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
 
         applicant.setServiceBoard(serviceBoard);
 
@@ -58,23 +57,44 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         Applicant save = applicantRepository.save(applicant);
 
-        return save;
+        if(save != null){
+            ApplicantServiceBordsResponseDto findDto = new ApplicantServiceBordsResponseDto(save.getId(), save.getApplicantStat().getId(), save.getApplicantStat().getStatusName());
+            return findDto;
+        }else{
+            throw new BaseException(ResponseCode.BAD_REQUEST);
+        }
+
     }
 
 
     @Override
-    public ApplicantServiceBordsFindDto findApplicant(Long userId, Long serviceBoardId) {
+    public ApplicantServiceBordsResponseDto findApplicant(Long userId, Long serviceBoardId) {
 
         Optional<Applicant> findApplicant = applicantRepository.findByUserIdAndServiceBoardId(userId, serviceBoardId);
 
         if(findApplicant.isPresent()){
             Applicant applicant = findApplicant.get();
 
-            ApplicantServiceBordsFindDto serviceBordsFindDto = new ApplicantServiceBordsFindDto(applicant.getId(), applicant.getApplicantStat().getId(), applicant.getApplicantStat().getStatusName());
+            ApplicantServiceBordsResponseDto serviceBordsFindDto = new ApplicantServiceBordsResponseDto(applicant.getId(), applicant.getApplicantStat().getId(), applicant.getApplicantStat().getStatusName());
 
             return serviceBordsFindDto;
         }else{
             return null;
         }
+    }
+
+    @Override
+    public ApplicantServiceBordsResponseDto updateApplicantStat(Long id, Long statusId) {
+
+
+        Applicant applicant = applicantRepository.findById(id).orElseThrow(() -> new BaseException(ResponseCode.APPLICANT_NOT_FOUND));
+
+        Status status = statusRepository.findById(statusId).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+
+        applicant.setApplicantStat(status);
+
+        ApplicantServiceBordsResponseDto responseApplicantDto = new ApplicantServiceBordsResponseDto(applicant.getId(), applicant.getApplicantStat().getId(), status.getStatusName());
+
+        return responseApplicantDto;
     }
 }

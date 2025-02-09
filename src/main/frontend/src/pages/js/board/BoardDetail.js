@@ -207,7 +207,7 @@ const BoardDetail = () => {
                             </div>
                             <div className="board-item">
                                 <span className="board-label">모집인원</span>
-                                <span className="board-value">1/{boardDetail.recruitCount}</span>
+                                <span className="board-value">{boardDetail.recruitCount}</span>
                             </div>
                             <div className="board-item">
                                 <span className="board-label">봉사시간</span>

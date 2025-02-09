@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -133,6 +134,40 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     @Override
     public ServiceBoardDetailDto findServiceBoardById(String id, HttpServletRequest request) {
 
+        Long longId = (id != null) ? Long.valueOf(id) : null;
+
+        HttpSession session = request.getSession(false);
+
+
+        ServiceBoardDetailDto serviceBoardDetailDto = serviceBoardRepository.findById(longId);
+
+        if(serviceBoardDetailDto == null){
+            throw new BaseException(ResponseCode.BORD_NOT_DETAIL);
+        }
+
+        boolean isWriterCheck = false;
+
+        if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
+            User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            Long boardWriter = serviceBoardRepository.findBoardWriter(longId);
+
+            boolean equals = boardWriter.equals(user.getId());
+            isWriterCheck = equals;
+        }
+
+        String thumbnailImgPath = (serviceBoardDetailDto.getThumbnailImage() != null) ? "/api/images/" + serviceBoardDetailDto.getThumbnailImage() : null;
+
+        serviceBoardDetailDto.setWriter(encryptionService.decryptAes(serviceBoardDetailDto.getWriter()));
+        serviceBoardDetailDto.setThumbnailImage(thumbnailImgPath);
+        serviceBoardDetailDto.setWriterCheck(isWriterCheck);
+
+        return serviceBoardDetailDto;
+    }
+
+ /*   @Override
+    public ServiceBoardDetailDto findServiceBoardById(String id, HttpServletRequest request) {
+
 
         Long longId = (id != null) ? Long.valueOf(id) : null;
 
@@ -172,5 +207,5 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                 serviceBoard.getRecruitStat().getId(),
                 isWriterCheck
         );
-    }
+    }*/
 }

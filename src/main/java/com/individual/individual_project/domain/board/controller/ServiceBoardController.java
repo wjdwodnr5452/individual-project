@@ -72,14 +72,6 @@ public class ServiceBoardController {
     }
 
 
-    // 글등록
-/*    @PostMapping("/service/boards")
-    public ApiResponse<ServiceBoard> createServiceBoard(@Validated @RequestBody ServiceBoard serviceBoard) {
-
-        log.info("serviceBoard: {}", serviceBoard);
-
-        return null;
-    }*/
 
     // 글등록
     @PostMapping("/service/boards")
@@ -128,17 +120,16 @@ public class ServiceBoardController {
     }
 
 
+    // 이미지 조회
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileUploadService.getFullPath(filename)); // 실제 경로 이미지를 가져옴
     }
 
 
+    // 글 상세 조회
     @GetMapping("/service/boards/{id}")
     public ApiResponse<ServiceBoardDetailDto> getServiceBoardById(@PathVariable String id, HttpServletRequest request) {
-
-
-
 
         ServiceBoardDetailDto serviceBoardById = serviceBoardService.findServiceBoardById(id, request);
 
@@ -147,17 +138,5 @@ public class ServiceBoardController {
         return ApiResponse.success(serviceBoardById, ResponseCode.BORD_READ_SUCCESS);
     }
 
-/*    @GetMapping("/images/{filename}")
-    public ResponseEntity<Resource> downloadImage(@PathVariable String filename) throws MalformedURLException {
-
-        UrlResource urlResource = new UrlResource("file:" + fileUploadService.getFullPath(filename));// 실제 경로 이미지를 가져옴
-
-        if (!urlResource.exists()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-                .body(urlResource);
-    }*/
 
 }

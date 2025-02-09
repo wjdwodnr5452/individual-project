@@ -2,15 +2,18 @@ package com.individual.individual_project.domain.board.repository;
 
 
 
+import com.individual.individual_project.domain.applicant.QApplicant;
 import com.individual.individual_project.domain.board.QCategory;
 import com.individual.individual_project.domain.board.QServiceBoard;
 import com.individual.individual_project.domain.board.QStatus;
 import com.individual.individual_project.domain.board.ServiceBoard;
+import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
 import com.individual.individual_project.domain.user.QUser;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanTemplate;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,6 +40,7 @@ public class ServiceBoardRepository {
     private static final QCategory category = QCategory.category;
     private static final QStatus serviceStatus = new QStatus("serviceStatus");
     private static final QStatus recruitStatus = new QStatus("recruitStatus");
+    private static final QApplicant applicant = QApplicant.applicant;
 
     public ServiceBoardRepository(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
@@ -103,6 +107,55 @@ public class ServiceBoardRepository {
 
          return new PageImpl<>(result, pageable, totalCount);
      }
+
+
+    public ServiceBoardDetailDto findById(Long id) {
+
+        return jpaQueryFactory.select(
+                        Projections.constructor(ServiceBoardDetailDto.class,
+                                serviceBoard.id,
+                                serviceBoard.serviceTitle,
+                                serviceBoard.recruitCount,
+                                serviceBoard.serviceDate,
+                                serviceBoard.serviceTime,
+                                serviceBoard.deadline,
+                                serviceBoard.thumbnailImage.storedFilename,
+                                serviceBoard.user.name,
+                                category.categoryName,
+                                serviceBoard.serviceContent,
+                                serviceStatus.statusName,
+                                recruitStatus.statusName,
+                                serviceBoard.regDate,
+                                serviceBoard.serviceStat.id,
+                                serviceBoard.recruitStat.id,
+                                applicant.count().castToNum(Integer.class).as("userRecruitCount")
+                        ))
+                .from(serviceBoard)
+                .join(serviceBoard.recruitStat, recruitStatus)
+                .join(serviceBoard.serviceStat, serviceStatus)
+                .leftJoin(applicant).on(applicant.serviceBoard.eq(serviceBoard))
+                .where(serviceBoard.id.eq(id))
+                .groupBy(serviceBoard.id)
+                .fetchOne(); // 단일 결과 조회
+    }
+
+
+    public Long findBoardWriter(Long id) {
+
+         return  jpaQueryFactory.select(
+                 serviceBoard.user.id
+         )
+                 .from(serviceBoard)
+                 .where(serviceBoard.id.eq(id))
+                 .fetchOne();
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        if (userId == null) {
+           return null;
+        }
+        return serviceBoard.user.id.eq(userId);
+    }
 
     private BooleanBuilder buildConditions(Long serviceStatId, Long recruitStatId, Long categoryId, String serviceBoardSearchName) {
         BooleanBuilder builder = new BooleanBuilder();

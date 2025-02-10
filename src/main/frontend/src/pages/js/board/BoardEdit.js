@@ -2,42 +2,47 @@ import React, { useState, useEffect } from "react";
 import "../../css/board/BoardWrite.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Header from "../layout/Header";
-import Footer from "../layout/Footer";
+import { useParams } from "react-router-dom";
 
-const BoardEdit = ({ postId }) => {
+
+const BoardEdit = () => {
+
+    const { id } = useParams();
+
+    console.log("id : " , id);
+
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("tech");
     const [content, setContent] = useState("");
-    const [numberPeople, setNumberPeople] = useState("");
+    const [recruitCount, setRecruitCount] = useState("");
     const [deadline, setDeadline] = useState(new Date());
     const [serviceDate, setServiceDate] = useState(new Date());
     const [thumbnail, setThumbnail] = useState(null);
     const [serviceTime, setServiceTime] = useState("");
 
+
     // 게시글 데이터를 가져오는 함수 (예시: API 호출)
     useEffect(() => {
         // 여기에 실제 API 호출 코드 추가 (예시로 static 데이터 사용)
-        const fetchPostData = async () => {
-            const postData = {
-                title: "기존 게시글 제목",
-                category: "tech",
-                content: "기존 게시글 내용",
-                numberPeople: 5,
-                deadline: new Date(),
-                serviceDate: new Date(),
-                thumbnail: null, // 또는 기존 썸네일 URL
-            };
-            setTitle(postData.title);
-            setCategory(postData.category);
-            setContent(postData.content);
-            setNumberPeople(postData.numberPeople);
-            setDeadline(postData.deadline);
-            setServiceDate(postData.serviceDate);
-            setThumbnail(postData.thumbnail);
+        const fetchBoardDetailEdit = async () => {
+            try {
+                const response = await fetch(`/api/service/boards/${id}/edit`);
+                const responseData = await response.json();
+
+                setTitle(responseData.data.serviceTitle);
+                setCategory(responseData.data.cateGoryId);
+                setContent(responseData.data.serviceContent);
+                setRecruitCount(responseData.data.recruitCount);
+                setDeadline(responseData.data.deadline);
+                setServiceDate(responseData.data.serviceDate);
+                setThumbnail(responseData.data.thumbnail);
+                setServiceTime(responseData.data.serviceTime);
+            } catch (err) {
+                console.log("err : " , err);
+            }
         };
-        fetchPostData();
-    }, [postId]);
+        fetchBoardDetailEdit();
+    }, [id]);
 
     const handleThumbnailChange = (e) => {
         const file = e.target.files[0];
@@ -53,7 +58,7 @@ const BoardEdit = ({ postId }) => {
             title,
             category,
             content,
-            numberPeople,
+            recruitCount,
             deadline,
             serviceDate,
             thumbnail,
@@ -99,8 +104,8 @@ const BoardEdit = ({ postId }) => {
                         <input
                             type="number"
                             id="writeNumberPeople"
-                            value={numberPeople}
-                            onChange={(e) => setNumberPeople(e.target.value)}
+                            value={recruitCount}
+                            onChange={(e) => setRecruitCount(e.target.value)}
                             placeholder="모집인원을 입력하세요"
                             required
                         />

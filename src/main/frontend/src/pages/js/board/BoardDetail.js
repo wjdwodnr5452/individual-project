@@ -165,8 +165,9 @@ const BoardDetail = () => {
                 body: JSON.stringify(status),
             });
 
+            const responseData = await response.json();
+
             if (response.ok) {
-                const responseData = await response.json();
                 alert(responseData.msg);
                 if(responseData.data != null){
                     setHasApplied(true);
@@ -174,15 +175,13 @@ const BoardDetail = () => {
                     setUserApplicantStat(responseData.data.applicantStatId);
                 }
             } else {
-                alert("요청 처리에 실패했습니다.");
+                alert(responseData.msg);
             }
         } catch (error) {
             console.error("Error during application:", error);
             alert("오류가 발생했습니다.");
         }
     };
-
-
 
     return (
         <div>

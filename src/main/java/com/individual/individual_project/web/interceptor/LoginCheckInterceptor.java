@@ -22,7 +22,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession();
 
-        if("POST".equalsIgnoreCase(request.getMethod()) || "PUT".equalsIgnoreCase(request.getMethod()) || "DELETE".equalsIgnoreCase(request.getMethod()) ){
+        if("POST".equalsIgnoreCase
+                (request.getMethod()) || "PUT".equalsIgnoreCase(request.getMethod()) || "DELETE".equalsIgnoreCase(request.getMethod()) ){
 
             if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
 

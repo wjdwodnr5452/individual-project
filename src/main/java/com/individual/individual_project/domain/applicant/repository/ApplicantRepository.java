@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     Optional<Applicant> findByUserIdAndServiceBoardId(Long userId, Long serviceBoardId);
+    Long countByServiceBoardIdAndApplicantStatId(Long serviceBoardId, Long applicantStatId);
 }

@@ -8,6 +8,7 @@ import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
 import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardDetailEditDto;
 import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
 import com.individual.individual_project.domain.board.repository.*;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
@@ -163,6 +164,28 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         serviceBoardDetailDto.setWriterCheck(isWriterCheck);
 
         return serviceBoardDetailDto;
+    }
+
+    @Override
+    public ServiceBoardDetailEditDto findServiceBoardEditById(Long id, HttpServletRequest request) {
+
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(id).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
+
+        String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
+
+        ServiceBoardDetailEditDto serviceBoardDetailEditDto = new ServiceBoardDetailEditDto(
+                serviceBoard.getId(),
+                serviceBoard.getServiceTitle(),
+                serviceBoard.getCategory().getId(),
+                serviceBoard.getRecruitCount(),
+                serviceBoard.getServiceTime(),
+                serviceBoard.getDeadline(),
+                serviceBoard.getServiceDate(),
+                serviceBoard.getServiceContent(),
+                thumbnailImgPath
+        );
+
+        return serviceBoardDetailEditDto;
     }
 
  /*   @Override

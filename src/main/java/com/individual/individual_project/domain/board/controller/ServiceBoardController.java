@@ -6,6 +6,7 @@ import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
 import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
+import com.individual.individual_project.domain.board.dto.ServiceBoardDetailEditDto;
 import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
 import com.individual.individual_project.domain.board.service.CategoryService;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
@@ -129,13 +130,25 @@ public class ServiceBoardController {
 
     // 글 상세 조회
     @GetMapping("/service/boards/{id}")
-    public ApiResponse<ServiceBoardDetailDto> getServiceBoardById(@PathVariable String id, HttpServletRequest request) {
+    public ApiResponse<ServiceBoardDetailDto> findServiceBoard(@PathVariable String id, HttpServletRequest request) {
 
         ServiceBoardDetailDto serviceBoardById = serviceBoardService.findServiceBoardById(id, request);
 
         log.info("serviceBoardById : {} ", serviceBoardById);
 
         return ApiResponse.success(serviceBoardById, ResponseCode.BORD_READ_SUCCESS);
+    }
+
+    // 글 상세 수정 조회
+    @GetMapping("/service/boards/{id}/edit")
+    public ApiResponse<ServiceBoardDetailEditDto> findServiceBoardEdit(@PathVariable Long id, HttpServletRequest request) {
+
+        ServiceBoardDetailEditDto serviceBoardById = serviceBoardService.findServiceBoardEditById(id, request);
+
+        log.info("serviceBoardById : {} ", serviceBoardById);
+
+        return ApiResponse.success(serviceBoardById, ResponseCode.BORD_READ_SUCCESS);
+
     }
 
 

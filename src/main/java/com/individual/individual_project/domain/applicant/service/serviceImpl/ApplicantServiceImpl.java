@@ -35,6 +35,15 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     public ApplicantServiceBordsResponseDto save(Long serviceBoardId, HttpServletRequest request) {
 
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(serviceBoardId).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
+
+
+        boolean serviceBoardApplicantChk = countByServiceBoardId(serviceBoardId, serviceBoard.getRecruitCount()); // 모집인원이 다 꽉찼는지 확인
+
+        if(!serviceBoardApplicantChk) {
+            throw new BaseException(ResponseCode.APPLICANT_COUNT_FULL); // 모집인원 꽉참
+        }
+
         HttpSession session = request.getSession(false);
 
         LocalDate localDate = LocalDate.now();
@@ -48,8 +57,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         }else{
             throw new BaseException(ResponseCode.USER_NOT_FOUND);
         }
-        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(serviceBoardId).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
-
+        
         applicant.setServiceBoard(serviceBoard);
 
         Status status = statusRepository.findById(6L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
@@ -89,6 +97,16 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         Applicant applicant = applicantRepository.findById(id).orElseThrow(() -> new BaseException(ResponseCode.APPLICANT_NOT_FOUND));
 
+        if(statusId == 6) {
+
+            boolean serviceBoardApplicantChk = countByServiceBoardId(applicant.getServiceBoard().getId(), applicant.getServiceBoard().getRecruitCount());
+
+            if(!serviceBoardApplicantChk) {
+                throw new BaseException(ResponseCode.APPLICANT_COUNT_FULL); // 모집인원 꽉참
+            }
+
+        }
+
         Status status = statusRepository.findById(statusId).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
 
         applicant.setApplicantStat(status);
@@ -97,4 +115,18 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         return responseApplicantDto;
     }
+
+
+    private boolean countByServiceBoardId(Long serviceBoardId, Integer recuritCount) {
+
+        Long count = applicantRepository.countByServiceBoardIdAndApplicantStatId(serviceBoardId, 6L);
+
+        if(count < recuritCount){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
 }

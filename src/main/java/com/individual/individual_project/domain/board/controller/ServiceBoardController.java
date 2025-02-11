@@ -90,7 +90,6 @@ public class ServiceBoardController {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-
         MultipartFile thumbnailToSave = (thumbnail != null && !thumbnail.isEmpty()) ? thumbnail : null;
 
         ServiceBoard saveBoard = serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());
@@ -149,6 +148,31 @@ public class ServiceBoardController {
 
         return ApiResponse.success(serviceBoardById, ResponseCode.BORD_READ_SUCCESS);
 
+    }
+
+    // 글 상세 수정
+    @PutMapping("/service/boards/{id}/edit")
+    public ApiResponse<ServiceBoardDetailEditDto> serviceBoardEdit(
+            @PathVariable Long id,
+            @RequestParam String title,
+            @RequestParam String category,
+            @RequestParam String content,
+            @RequestParam String recruitCount,
+            @RequestParam String serviceTime,
+            @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
+            @RequestParam String deadline,
+            @RequestParam String serviceDate,
+            HttpServletRequest request
+    ) {
+
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        MultipartFile thumbnailToSave = (thumbnail != null && !thumbnail.isEmpty()) ? thumbnail : null;
+
+        ServiceBoardDetailEditDto serviceBoardDetailEditDto = serviceBoardService.updateServiceBoardEdit(id,title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());
+
+        return ApiResponse.success(serviceBoardDetailEditDto, ResponseCode.BORD_CREATE_SUCCESS);
     }
 
 

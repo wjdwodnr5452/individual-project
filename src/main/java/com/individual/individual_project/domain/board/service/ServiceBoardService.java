@@ -24,4 +24,7 @@ public interface ServiceBoardService {
 
    ServiceBoardDetailEditDto findServiceBoardEditById(Long id, HttpServletRequest request);
 
+
+   ServiceBoardDetailEditDto updateServiceBoardEdit(Long id, String title, String category, String  content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail,Long userId);
+
 }

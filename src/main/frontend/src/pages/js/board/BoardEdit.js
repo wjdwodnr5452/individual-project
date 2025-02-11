@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../../css/board/BoardWrite.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 const BoardEdit = () => {
-
+    const navigate = useNavigate();
     const { id } = useParams();
 
     console.log("id : " , id);
@@ -20,6 +20,7 @@ const BoardEdit = () => {
     const [thumbnail, setThumbnail] = useState(null);
     const [serviceTime, setServiceTime] = useState("");
 
+    const [changeThumnail, setChangeThumnail] = useState(false);
 
     // 게시글 데이터를 가져오는 함수 (예시: API 호출)
     useEffect(() => {
@@ -33,9 +34,9 @@ const BoardEdit = () => {
                 setCategory(responseData.data.cateGoryId);
                 setContent(responseData.data.serviceContent);
                 setRecruitCount(responseData.data.recruitCount);
-                setDeadline(responseData.data.deadline);
-                setServiceDate(responseData.data.serviceDate);
-                setThumbnail(responseData.data.thumbnail);
+                setDeadline(new Date(responseData.data.deadline));
+                setServiceDate(new Date(responseData.data.serviceDate));
+                setThumbnail(responseData.data.thumbnailImage);
                 setServiceTime(responseData.data.serviceTime);
             } catch (err) {
                 console.log("err : " , err);
@@ -47,23 +48,53 @@ const BoardEdit = () => {
     const handleThumbnailChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setThumbnail(URL.createObjectURL(file));
+            setThumbnail(file);
+            setChangeThumnail(true);
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // 게시글 수정 처리 로직 (예시로 콘솔 출력)
-        console.log({
-            title,
-            category,
-            content,
-            recruitCount,
-            deadline,
-            serviceDate,
-            thumbnail,
-        });
-        alert("게시글이 수정되었습니다!");
+
+        const offset = new Date().getTimezoneOffset() * 60000;
+        const deadlineFormDate = new Date(deadline - offset);
+        const serviceDateFormDate = new Date(serviceDate - offset);
+
+        // FormData 객체 생성
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("category", category);
+        formData.append("content", content);
+        formData.append("recruitCount", recruitCount);
+        formData.append("deadline", deadlineFormDate.toISOString()); // ISO 형식으로 변환
+        formData.append("serviceDate", serviceDateFormDate.toISOString()); // ISO 형식으로 변환
+        formData.append("serviceTime", serviceTime);
+
+        // 기존 썸네일이 변경되었는지 확인
+        if (thumbnail && setChangeThumnail) {
+            // 새로 업로드된 이미지 파일인 경우 Multipart로 전달
+            formData.append("thumbnail", thumbnail);
+        }
+        try {
+            // API 요청
+            const response = await fetch(`/api/service/boards/${id}/edit`, {
+                method: "PUT",
+                body: formData,
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                alert(responseData.msg);
+            }else{
+                alert("글이 성공적으로 작성되었습니다!");
+                navigate("/boards/"+responseData.data.id);
+            }
+
+        } catch (error) {
+            console.error("글 작성 중 에러 발생:", error);
+            alert("글 작성 중 에러가 발생했습니다. 다시 시도해주세요.");
+        }
     };
 
     return (
@@ -127,14 +158,14 @@ const BoardEdit = () => {
 
                     {/* 마감일 */}
                     <div className="borad-write-form-group">
-                        <label htmlFor="writeDeadline">마감일</label>
+                        <label htmlFor="writeDeadline">마감날짜시간</label>
                         <DatePicker
                             selected={deadline}
                             onChange={(date) => setDeadline(date)}
                             dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
                             showTimeSelect // 시간 선택 활성화
                             timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
-                            timeIntervals={15} // 시간 간격 (15분 단위)
+                            timeIntervals={30} // 시간 간격 (15분 단위)
                             timeCaption="시간" // 시간 섹션의 캡션
                             placeholderText="마감일과 시간을 선택하세요"
                             id="writeDeadline"
@@ -144,13 +175,13 @@ const BoardEdit = () => {
 
                     {/* 봉사 시작일 */}
                     <div className="borad-write-form-group">
-                        <label htmlFor="writeServiceDate">봉사일</label>
+                        <label htmlFor="writeServiceDate">봉사날짜시간</label>
                         <DatePicker
                             selected={serviceDate}
                             dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
                             showTimeSelect // 시간 선택 활성화
                             timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
-                            timeIntervals={15} // 시간 간격 (15분 단위)
+                            timeIntervals={30} // 시간 간격 (15분 단위)
                             timeCaption="시간" // 시간 섹션의 캡션
                             placeholderText="봉사일과 시간을 선택하세요"
                             id="writeServiceDate"
@@ -180,9 +211,15 @@ const BoardEdit = () => {
                             onChange={handleThumbnailChange}
                         />
                         {thumbnail && (
+                            changeThumnail ? (
+                                <div className="thumbnail-preview">
+                                    <img src={URL.createObjectURL(thumbnail)} alt="썸네일 미리보기"/>
+                                </div>
+                            ) : (
                             <div className="thumbnail-preview">
                                 <img src={thumbnail} alt="썸네일 미리보기" />
                             </div>
+                            )
                         )}
                     </div>
 

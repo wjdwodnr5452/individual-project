@@ -8,13 +8,12 @@ import com.individual.individual_project.domain.board.QServiceBoard;
 import com.individual.individual_project.domain.board.QStatus;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
-import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
+import com.individual.individual_project.domain.board.service.QThumbnailImge;
 import com.individual.individual_project.domain.user.QUser;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.BooleanTemplate;
-import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -41,6 +40,7 @@ public class ServiceBoardRepository {
     private static final QStatus serviceStatus = new QStatus("serviceStatus");
     private static final QStatus recruitStatus = new QStatus("recruitStatus");
     private static final QApplicant applicant = QApplicant.applicant;
+    private static final QThumbnailImge thumbnailImage = QThumbnailImge.thumbnailImge;
 
     public ServiceBoardRepository(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
@@ -119,7 +119,10 @@ public class ServiceBoardRepository {
                                 serviceBoard.serviceDate,
                                 serviceBoard.serviceTime,
                                 serviceBoard.deadline,
-                                serviceBoard.thumbnailImage.storedFilename,
+                                new CaseBuilder()
+                                        .when(thumbnailImage.isNotNull())
+                                        .then(thumbnailImage.storedFilename)
+                                        .otherwise((String) null),
                                 serviceBoard.user.name,
                                 category.categoryName,
                                 serviceBoard.serviceContent,
@@ -134,6 +137,7 @@ public class ServiceBoardRepository {
                 .join(serviceBoard.recruitStat, recruitStatus)
                 .join(serviceBoard.serviceStat, serviceStatus)
                 .leftJoin(applicant).on(applicant.serviceBoard.eq(serviceBoard))
+                .leftJoin(thumbnailImage).on(thumbnailImage.id.eq(serviceBoard.thumbnailImage.id))
                 .where(serviceBoard.id.eq(id))
                 .groupBy(serviceBoard.id)
                 .fetchOne(); // 단일 결과 조회

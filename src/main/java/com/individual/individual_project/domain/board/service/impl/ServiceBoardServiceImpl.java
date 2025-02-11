@@ -53,10 +53,11 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     @Value("${file.dir}")
     private String fileDir;
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
     @Override
     public ServiceBoard createServiceBoard(String title, String category, String content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail, Long userId) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
 
         Category categoryEntity = categoryRepository.findById(Long.valueOf(category)).orElseThrow(() -> new BaseException(ResponseCode.CATEGORY_NOT_FOUND));
         Status recruitStatEntity = statusRepository.findById(1L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
@@ -112,7 +113,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         // DTO 변환 및 복호화 처리
         return serviceBoardPage.map(serviceBoard -> {
             String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
-            String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
+          //  String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
+
+            String thumbnailImgPath = tumbnailImgUrlPath(serviceBoard.getThumbnailImage());
 
             return new ServiceBoardsDto(
                     serviceBoard.getId(),
@@ -157,6 +160,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
             isWriterCheck = equals;
         }
 
+
         String thumbnailImgPath = (serviceBoardDetailDto.getThumbnailImage() != null) ? "/api/images/" + serviceBoardDetailDto.getThumbnailImage() : null;
 
         serviceBoardDetailDto.setWriter(encryptionService.decryptAes(serviceBoardDetailDto.getWriter()));
@@ -188,47 +192,83 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         return serviceBoardDetailEditDto;
     }
 
- /*   @Override
-    public ServiceBoardDetailDto findServiceBoardById(String id, HttpServletRequest request) {
+    @Override
+    public ServiceBoardDetailEditDto updateServiceBoardEdit(Long id, String title, String category, String content, String recruitCount, String serviceTime, String deadline, String serviceDate, MultipartFile thumbnail, Long userId) {
 
 
-        Long longId = (id != null) ? Long.valueOf(id) : null;
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(id).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
 
-        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(longId).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
-
-        HttpSession session = request.getSession(false);
-
-        Boolean isWriterCheck = false;
-
-        if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
-            User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
-
-            isWriterCheck = (serviceBoard.getUser().getId().equals(user.getId()) ? true : false);
-
-            log.info("isWriterCheck : {}", isWriterCheck);
+        // 변경된 값만 체크하여 업데이트
+        if (title != null && !title.equals(serviceBoard.getServiceTitle())) {
+            serviceBoard.setServiceTitle(title);
         }
 
+        if (category != null && !category.equals(serviceBoard.getCategory())) {
+            Category updateCategory = categoryRepository.findById(Long.valueOf(category)).orElseThrow(() -> new BaseException(ResponseCode.CATEGORY_NOT_FOUND));
+            serviceBoard.setCategory(updateCategory);
+        }
 
-        String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
-        String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
+        if (content != null && !content.equals(serviceBoard.getServiceContent())) {
+            serviceBoard.setServiceContent(content);
+        }
 
-        return new ServiceBoardDetailDto(
-                serviceBoard.getId(),
-                serviceBoard.getServiceTitle(),
-                serviceBoard.getRecruitCount(),
-                serviceBoard.getServiceDate(),
-                serviceBoard.getServiceTime(),
-                serviceBoard.getDeadline(),
-                thumbnailImgPath,
-                decryptedUserName,
-                serviceBoard.getCategory().getCategoryName(),
-                serviceBoard.getServiceContent(),
-                serviceBoard.getServiceStat().getStatusName(),
-                serviceBoard.getRecruitStat().getStatusName(),
-                serviceBoard.getRegDate(),
-                serviceBoard.getServiceStat().getId(),
-                serviceBoard.getRecruitStat().getId(),
-                isWriterCheck
+        if (recruitCount != null && !recruitCount.equals(serviceBoard.getRecruitCount())) {
+            serviceBoard.setRecruitCount(Integer.parseInt(recruitCount));
+        }
+
+        if (serviceTime != null && !serviceTime.equals(serviceBoard.getServiceTime())) {
+            serviceBoard.setServiceTime(Integer.valueOf(serviceTime));
+        }
+
+        if (deadline != null && !deadline.equals(serviceBoard.getDeadline().toString())) {
+            serviceBoard.setDeadline( LocalDateTime.parse(deadline, formatter));
+        }
+
+        if (serviceDate != null && !serviceDate.equals(serviceBoard.getServiceDate().toString())) {
+            serviceBoard.setServiceDate(LocalDateTime.parse(serviceDate, formatter));
+        }
+
+        if (thumbnail != null && !thumbnail.isEmpty()) {
+            UploadFileDto uploadFileDto = fileUploadService.storeFile(thumbnail);
+
+            ThumbnailImge thumbnailImge = new ThumbnailImge();
+            thumbnailImge.setStoredFilename(uploadFileDto.getStoreFileName());
+            thumbnailImge.setOriginalFilename(uploadFileDto.getUploadFileName());
+
+            ThumbnailImge thumbnailImgeSave = thumbnailImageRepository.save(thumbnailImge);
+
+            serviceBoard.setThumbnailImage(thumbnailImgeSave);
+        }
+
+        ServiceBoard saveServiceBoard = serviceBoardDataJpa.save(serviceBoard);
+
+        String decryptedUserName = encryptionService.decryptAes(saveServiceBoard.getUser().getName());
+        String tumbnailImgUrl= tumbnailImgUrlPath(saveServiceBoard.getThumbnailImage());
+
+
+        ServiceBoardDetailEditDto serviceBoardDetailEditDto = new ServiceBoardDetailEditDto(
+                saveServiceBoard.getId(),
+                saveServiceBoard.getServiceTitle(),
+                saveServiceBoard.getCategory().getId(),
+                saveServiceBoard.getRecruitCount(),
+                saveServiceBoard.getServiceTime(),
+                saveServiceBoard.getDeadline(),
+                saveServiceBoard.getServiceDate(),
+                saveServiceBoard.getServiceContent(),
+                tumbnailImgUrl
         );
-    }*/
+
+        
+        return serviceBoardDetailEditDto;
+    }
+
+    private String tumbnailImgUrlPath(ThumbnailImge tumbnailImg) {
+
+        String thumbnailImgPath = (tumbnailImg != null) ? "/api/images/" + tumbnailImg.getStoredFilename() : null;
+
+        return thumbnailImgPath;
+    }
+
+
+
 }

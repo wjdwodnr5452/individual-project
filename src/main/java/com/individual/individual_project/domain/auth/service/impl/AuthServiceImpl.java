@@ -1,10 +1,10 @@
-package com.individual.individual_project.domain.login.service.impl;
+package com.individual.individual_project.domain.auth.service.impl;
 
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.web.exception.BaseException;
-import com.individual.individual_project.domain.login.dto.LoginDto;
-import com.individual.individual_project.domain.login.repository.LoginRepository;
-import com.individual.individual_project.domain.login.service.LoginService;
+import com.individual.individual_project.domain.auth.dto.LoginDto;
+import com.individual.individual_project.domain.auth.repository.AuthRepository;
+import com.individual.individual_project.domain.auth.service.AuthService;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LoginServiceImpl implements LoginService {
+public class AuthServiceImpl implements AuthService {
 
-    private final LoginRepository loginRepository;
+    private final AuthRepository authRepository;
     private final EncryptionService encrypt;
 
     @Override
     public User login(LoginDto loginDto) {
 
-        User user = loginRepository.findByLoginId(loginDto)
+        User user = authRepository.findByLoginId(loginDto)
                 .orElseThrow(() -> new BaseException(ResponseCode.USER_NOT_FOUND_EMAIL));
 
         String encryptedPassword = encrypt.encryptSha256(loginDto.getPassword());

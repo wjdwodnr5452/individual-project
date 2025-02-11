@@ -1,4 +1,4 @@
-package com.individual.individual_project.domain.login.dto;
+package com.individual.individual_project.domain.auth.dto;
 
 import lombok.Data;
 

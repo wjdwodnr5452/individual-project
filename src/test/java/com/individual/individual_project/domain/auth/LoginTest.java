@@ -1,10 +1,10 @@
-package com.individual.individual_project.domain.login;
+package com.individual.individual_project.domain.auth;
 
 
 import com.individual.individual_project.comm.encrypt.Encrypt;
-import com.individual.individual_project.domain.login.dto.LoginDto;
-import com.individual.individual_project.domain.login.repository.LoginRepository;
-import com.individual.individual_project.domain.login.service.LoginService;
+import com.individual.individual_project.domain.auth.dto.LoginDto;
+import com.individual.individual_project.domain.auth.repository.AuthRepository;
+import com.individual.individual_project.domain.auth.service.AuthService;
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +24,10 @@ class LoginTest {
     UserRepository userRepository;
 
     @Autowired
-    LoginRepository loginRepository;
+    AuthRepository authRepository;
 
     @Autowired
-    LoginService loginService;
+    AuthService loginService;
 
     @Autowired
     Encrypt encrypt;
@@ -39,7 +39,7 @@ class LoginTest {
         userRepository.saveUser(user);
 
         LoginDto loginDto = new LoginDto("test@test.com", "Qw123123123!");
-        Optional<User> byLoginId = loginRepository.findByLoginId(loginDto);
+        Optional<User> byLoginId = authRepository.findByLoginId(loginDto);
 
         // 해당 사용자가 있는지 확인
         Assertions.assertThat(byLoginId.isPresent()).isTrue();

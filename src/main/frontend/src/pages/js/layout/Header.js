@@ -17,7 +17,7 @@ function Header() {
 
     const logout = async () => {
         // 로그아웃 처리
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/logout`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

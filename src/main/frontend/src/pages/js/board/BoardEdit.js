@@ -9,8 +9,6 @@ const BoardEdit = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    console.log("id : " , id);
-
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("tech");
     const [content, setContent] = useState("");

@@ -1,6 +1,6 @@
 export const checkLoginStatus = async () => {
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login/status`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/status`, {
             method: "GET",
             credentials: "include", // 쿠키를 포함하여 요청
             headers: {

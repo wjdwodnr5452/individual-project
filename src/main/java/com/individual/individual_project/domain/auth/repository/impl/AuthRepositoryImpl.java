@@ -1,7 +1,7 @@
-package com.individual.individual_project.domain.login.repository.impl;
+package com.individual.individual_project.domain.auth.repository.impl;
 
-import com.individual.individual_project.domain.login.dto.LoginDto;
-import com.individual.individual_project.domain.login.repository.LoginRepository;
+import com.individual.individual_project.domain.auth.dto.LoginDto;
+import com.individual.individual_project.domain.auth.repository.AuthRepository;
 import com.individual.individual_project.domain.user.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class LoginRepositoryImpl implements LoginRepository {
+public class AuthRepositoryImpl implements AuthRepository {
 
     private final EntityManager em;
 

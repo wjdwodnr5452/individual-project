@@ -22,6 +22,7 @@ public class ApplicantController {
 
     private final ApplicantService applicantService;
 
+    // 봉사 신청
     @PostMapping("/applicants/{serviceBoardId}")
     public ApiResponse<ApplicantServiceBordsResponseDto> createApplicant(@PathVariable Long serviceBoardId, HttpServletRequest request) {
 
@@ -33,6 +34,7 @@ public class ApplicantController {
     }
 
 
+    // 봉사 신청 상태 변경
     @PutMapping("/applicants/{id}")
     public ApiResponse<ApplicantServiceBordsResponseDto> updateApplicantStat(@PathVariable Long id, @RequestBody Long statusId){
 
@@ -41,6 +43,7 @@ public class ApplicantController {
         return ApiResponse.success(applicant, ResponseCode.APPLICANT_UPDATE_SUCCESS);
     }
 
+    // 봉사 신청 조회
     @GetMapping("/applicants/{userId}/{serviceBoardId}")
     public ApiResponse<ApplicantServiceBordsResponseDto> findApplicant(@PathVariable Long userId, @PathVariable Long serviceBoardId, HttpServletRequest request) {
 

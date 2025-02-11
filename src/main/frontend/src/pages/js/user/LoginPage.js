@@ -17,7 +17,7 @@ const LoginPage = () => {
 
         try{
             // 서버요청
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`,{
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`,{
                 method : "POST",
                 headers : {
                     "Content-Type" : "application/json"

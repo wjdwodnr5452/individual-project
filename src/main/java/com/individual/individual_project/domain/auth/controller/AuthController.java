@@ -1,9 +1,9 @@
-package com.individual.individual_project.domain.login.controller;
+package com.individual.individual_project.domain.auth.controller;
 
 import com.individual.individual_project.SessionConst;
-import com.individual.individual_project.domain.login.dto.LoginDto;
-import com.individual.individual_project.domain.login.dto.LoginStatusDto;
-import com.individual.individual_project.domain.login.service.LoginService;
+import com.individual.individual_project.domain.auth.dto.LoginDto;
+import com.individual.individual_project.domain.auth.dto.LoginStatusDto;
+import com.individual.individual_project.domain.auth.service.AuthService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
-public class LoginController {
+@RequestMapping("/api/auth")
+public class AuthController {
 
-    private final LoginService loginService;
+    private final AuthService loginService;
 
     @PostMapping("/login")
     public ApiResponse<LoginStatusDto> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
@@ -55,7 +55,7 @@ public class LoginController {
     }
 
 
-   @GetMapping("/login/status")
+   @GetMapping("/status")
     public ApiResponse<LoginStatusDto> getLoginStatus(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);

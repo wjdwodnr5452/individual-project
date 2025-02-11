@@ -28,8 +28,9 @@
 
 
 ### :memo: API url 정보
-- **POST** &nbsp;&nbsp; /api/login : 유저 로그인
-- **POST** &nbsp;&nbsp; /api/logout : 유저 로그아웃
+- **POST** &nbsp;&nbsp; /api/auth/login :  로그인
+- **POST** &nbsp;&nbsp; /api/auth/logout : 로그아웃
+- **GET**  &nbsp;&nbsp; /api/auth/status : 상태 체크
 - **POST** &nbsp;&nbsp; /api/users : 회원 가입
 - **GET**  &nbsp;&nbsp; /api/users/{id} : 유저 상세보기
 - **GET**  &nbsp;&nbsp; /api/service/boards : 봉사 게시글 목록 조회

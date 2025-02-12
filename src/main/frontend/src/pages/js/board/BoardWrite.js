@@ -61,7 +61,7 @@ const BoardWrite = () => {
 
         try {
             // API 요청
-            const response = await fetch("/api/service/boards", {
+            const response = await fetch("/api/service-boards", {
                 method: "POST",
                 body: formData,
             });

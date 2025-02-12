@@ -75,7 +75,7 @@ public class ServiceBoardController {
 
 
     // 글등록
-    @PostMapping("/service/boards")
+    @PostMapping("/service-boards")
     public ApiResponse<ServiceBoard> createServiceBoard(
             @RequestParam String title,
             @RequestParam String category,
@@ -100,7 +100,7 @@ public class ServiceBoardController {
     }
 
     // 게시글 조회
-    @GetMapping("/service/boards")
+    @GetMapping("/service-boards")
     public ApiResponse<Page<ServiceBoardsDto>> getServiceBoard(
             @RequestParam(required = false) String serviceStatId,
             @RequestParam(required = false) String recruitStatId,
@@ -128,7 +128,7 @@ public class ServiceBoardController {
 
 
     // 글 상세 조회
-    @GetMapping("/service/boards/{id}")
+    @GetMapping("/service-boards/{id}")
     public ApiResponse<ServiceBoardDetailDto> findServiceBoard(@PathVariable String id, HttpServletRequest request) {
 
         ServiceBoardDetailDto serviceBoardById = serviceBoardService.findServiceBoardById(id, request);
@@ -139,7 +139,7 @@ public class ServiceBoardController {
     }
 
     // 글 상세 수정 조회
-    @GetMapping("/service/boards/{id}/edit")
+    @GetMapping("/service-boards/{id}/edit")
     public ApiResponse<ServiceBoardDetailEditDto> findServiceBoardEdit(@PathVariable Long id, HttpServletRequest request) {
 
         ServiceBoardDetailEditDto serviceBoardById = serviceBoardService.findServiceBoardEditById(id, request);
@@ -151,7 +151,7 @@ public class ServiceBoardController {
     }
 
     // 글 상세 수정
-    @PutMapping("/service/boards/{id}/edit")
+    @PutMapping("/service-boards/{id}/edit")
     public ApiResponse<ServiceBoardDetailEditDto> serviceBoardEdit(
             @PathVariable Long id,
             @RequestParam String title,

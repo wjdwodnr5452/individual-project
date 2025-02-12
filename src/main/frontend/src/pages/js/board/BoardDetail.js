@@ -29,7 +29,7 @@ const BoardDetail = () => {
         // 서버에서 게시글 데이터 가져오기
         const fetchBoardDetail = async () => {
             try {
-                const response = await fetch(`/api/service/boards/${id}`);
+                const response = await fetch(`/api/service-boards/${id}`);
                 const responseData = await response.json();
 
                 if(responseData.header.code == 200) {
@@ -45,7 +45,7 @@ const BoardDetail = () => {
 
 
         // 신청자 수 가져오기
-        const fetchApplicantCount = async () => {
+ /*       const fetchApplicantCount = async () => {
             try {
                 const response = await fetch(`/api/service/boards/${id}`);
                 const responseData = await response.json();
@@ -59,7 +59,7 @@ const BoardDetail = () => {
             } catch (err) {
                 console.log("err : " , err);
             }
-        };
+        };*/
 
         fetchBoardDetail();
     }, [id]); // 게시글 ID가 변경될 때마다 호출
@@ -156,8 +156,8 @@ const BoardDetail = () => {
 
         try {
             const apiUrl = "/api/applicants";
-            const requestUrl = hasApplied ? `${apiUrl}/${userApplicantId}`:  `${apiUrl}/${id}` ;
-            const method = hasApplied ? "PUT" : "POST";
+            const requestUrl = hasApplied ? `${apiUrl}/${userApplicantId}/status`:  `/api/service-boards/${id}/applicants` ;
+            const method = hasApplied ? "PATCH" : "POST";
 
             const response = await fetch(requestUrl, {
                 method,

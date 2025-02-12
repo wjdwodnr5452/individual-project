@@ -19,7 +19,7 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     @Modifying
     @Query("UPDATE Applicant a " +
             "SET a.applicantStat = :updateApplicantStat " +
-            "WHERE a.serviceBoard IN (" +
+            "WHERE a.serviceBoard.id IN (" +
             " SELECT s.id FROM ServiceBoard s " +
             " WHERE s.serviceStat = : serviceStatId" +
             ")"+

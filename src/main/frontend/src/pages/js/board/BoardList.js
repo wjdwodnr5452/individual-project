@@ -44,7 +44,7 @@ const BoardList = () => {
             params.append("size", pageSize);
             params.append("page", page); // 페이지 파라미터 추가
 
-            const response = await fetch(`/api/service/boards?${params.toString()}`);
+            const response = await fetch(`/api/service-boards?${params.toString()}`);
 
             const responseData = await response.json();
             setPosts(responseData.data.content);

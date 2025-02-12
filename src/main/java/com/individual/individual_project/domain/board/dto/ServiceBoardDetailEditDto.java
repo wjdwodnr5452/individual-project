@@ -16,11 +16,13 @@ public class ServiceBoardDetailEditDto {
     private LocalDateTime serviceDate;
     private String serviceContent;
     private String thumbnailImage;
+    private Long serviceStatId;
+    private Long recruitStatId;
 
 
     public ServiceBoardDetailEditDto() {}
 
-    public ServiceBoardDetailEditDto(Long id, String serviceTitle, Long cateGoryId, Integer recruitCount, Integer serviceTime, LocalDateTime deadline, LocalDateTime serviceDate, String serviceContent, String thumbnailImage) {
+    public ServiceBoardDetailEditDto(Long id, String serviceTitle, Long cateGoryId, Integer recruitCount, Integer serviceTime, LocalDateTime deadline, LocalDateTime serviceDate, String serviceContent, String thumbnailImage, Long serviceStatId, Long recruitStatId) {
         this.id = id;
         this.serviceTitle = serviceTitle;
         this.cateGoryId = cateGoryId;
@@ -30,5 +32,7 @@ public class ServiceBoardDetailEditDto {
         this.serviceDate = serviceDate;
         this.serviceContent = serviceContent;
         this.thumbnailImage = thumbnailImage;
+        this.serviceStatId = serviceStatId;
+        this.recruitStatId = recruitStatId;
     }
 }

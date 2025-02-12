@@ -17,8 +17,8 @@ const BoardEdit = () => {
     const [serviceDate, setServiceDate] = useState(new Date());
     const [thumbnail, setThumbnail] = useState(null);
     const [serviceTime, setServiceTime] = useState("");
-
     const [changeThumnail, setChangeThumnail] = useState(false);
+    const [serviceStatId, setStatServiceId] = useState(4);
 
     // 게시글 데이터를 가져오는 함수 (예시: API 호출)
     useEffect(() => {
@@ -28,6 +28,13 @@ const BoardEdit = () => {
                 const response = await fetch(`/api/service/boards/${id}/edit`);
                 const responseData = await response.json();
 
+                console.log("responseData : " , responseData);
+
+                if(responseData.header.code != 200){
+                    alert(responseData.msg);
+                    navigate("/boards/"+id);
+                }
+
                 setTitle(responseData.data.serviceTitle);
                 setCategory(responseData.data.cateGoryId);
                 setContent(responseData.data.serviceContent);
@@ -36,6 +43,7 @@ const BoardEdit = () => {
                 setServiceDate(new Date(responseData.data.serviceDate));
                 setThumbnail(responseData.data.thumbnailImage);
                 setServiceTime(responseData.data.serviceTime);
+                setStatServiceId(responseData.data.serviceStatId);
             } catch (err) {
                 console.log("err : " , err);
             }
@@ -153,39 +161,45 @@ const BoardEdit = () => {
                         />
                     </div>
 
+                    {serviceStatId === 3 && (
+                        <div className="borad-write-form-group">
+                            <label htmlFor="writeDeadline">마감날짜시간</label>
+                            <DatePicker
+                                selected={deadline}
+                                onChange={(date) => setDeadline(date)}
+                                dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
+                                showTimeSelect // 시간 선택 활성화
+                                timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
+                                timeIntervals={30} // 시간 간격 (15분 단위)
+                                timeCaption="시간" // 시간 섹션의 캡션
+                                placeholderText="마감일과 시간을 선택하세요"
+                                id="writeDeadline"
+                                required
+                            />
+                        </div>
+                    )}
 
-                    {/* 마감일 */}
-                    <div className="borad-write-form-group">
-                        <label htmlFor="writeDeadline">마감날짜시간</label>
-                        <DatePicker
-                            selected={deadline}
-                            onChange={(date) => setDeadline(date)}
-                            dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
-                            showTimeSelect // 시간 선택 활성화
-                            timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
-                            timeIntervals={30} // 시간 간격 (15분 단위)
-                            timeCaption="시간" // 시간 섹션의 캡션
-                            placeholderText="마감일과 시간을 선택하세요"
-                            id="writeDeadline"
-                            required
-                        />
-                    </div>
+                    {serviceStatId === 3 && (
 
-                    {/* 봉사 시작일 */}
-                    <div className="borad-write-form-group">
-                        <label htmlFor="writeServiceDate">봉사날짜시간</label>
-                        <DatePicker
-                            selected={serviceDate}
-                            dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
-                            showTimeSelect // 시간 선택 활성화
-                            timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
-                            timeIntervals={30} // 시간 간격 (15분 단위)
-                            timeCaption="시간" // 시간 섹션의 캡션
-                            placeholderText="봉사일과 시간을 선택하세요"
-                            id="writeServiceDate"
-                            required
-                        />
-                    </div>
+                        <div className="borad-write-form-group">
+                            <label htmlFor="writeServiceDate">봉사날짜시간</label>
+                            <DatePicker
+                                selected={serviceDate}
+                                onChange={(date) => setServiceDate(date)}
+                                dateFormat="yyyy-MM-dd HH:mm" // 날짜와 시간 형식
+                                showTimeSelect // 시간 선택 활성화
+                                timeFormat="HH:mm" // 시간 형식 설정 (24시간 기준)
+                                timeIntervals={30} // 시간 간격 (15분 단위)
+                                timeCaption="시간" // 시간 섹션의 캡션
+                                placeholderText="봉사일과 시간을 선택하세요"
+                                id="writeServiceDate"
+                                required
+                            />
+                        </div>
+
+
+                    )}
+
 
                     {/* 내용 */}
                     <div className="borad-write-form-group">
@@ -214,9 +228,9 @@ const BoardEdit = () => {
                                     <img src={URL.createObjectURL(thumbnail)} alt="썸네일 미리보기"/>
                                 </div>
                             ) : (
-                            <div className="thumbnail-preview">
-                                <img src={thumbnail} alt="썸네일 미리보기" />
-                            </div>
+                                <div className="thumbnail-preview">
+                                    <img src={thumbnail} alt="썸네일 미리보기"/>
+                                </div>
                             )
                         )}
                     </div>

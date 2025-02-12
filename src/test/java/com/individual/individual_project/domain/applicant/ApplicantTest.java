@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.applicant;
 
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
+import com.individual.individual_project.domain.applicant.service.serviceImpl.ApplicantServiceImpl;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -50,6 +51,9 @@ public class ApplicantTest {
     @Autowired
     private ServiceBoardDataJpa serviceBoardDataJpa;
 
+    @Autowired
+    ApplicantServiceImpl applicantService;
+
 
     @BeforeEach
     void createServiceBoard() {
@@ -93,5 +97,6 @@ public class ApplicantTest {
         Applicant save = applicantRepository.save(applicant);
 
     }
+
 
 }

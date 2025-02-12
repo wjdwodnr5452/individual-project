@@ -4,6 +4,7 @@ import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.comm.file.UploadFileDto;
+import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -49,6 +50,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private final FileUploadService fileUploadService;
 
     private final ThumbnailImageRepository thumbnailImageRepository;
+    private final ApplicantRepository applicantRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -96,6 +98,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         Status updateServiceStat = statusRepository.findById(4L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         serviceBoardDataJpa.updateServiceStat(currentTime, updateServiceStat, 3L);
 
+        // 봉사 진행중 일 시 신청자 상태 승인으로 변경
+        Status updateApplicantStat = statusRepository.findById(7L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+        applicantRepository.updateApplicantStat(updateApplicantStat, updateServiceStat, 6L);
     }
 
     @Override
@@ -113,8 +118,6 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         // DTO 변환 및 복호화 처리
         return serviceBoardPage.map(serviceBoard -> {
             String decryptedUserName = encryptionService.decryptAes(serviceBoard.getUser().getName());
-          //  String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
-
             String thumbnailImgPath = tumbnailImgUrlPath(serviceBoard.getThumbnailImage());
 
             return new ServiceBoardsDto(
@@ -173,7 +176,18 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     @Override
     public ServiceBoardDetailEditDto findServiceBoardEditById(Long id, HttpServletRequest request) {
 
+        HttpSession session = request.getSession(false);
+
+
         ServiceBoard serviceBoard = serviceBoardDataJpa.findById(id).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
+
+        if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
+            User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+           if(!user.getId().equals(serviceBoard.getUser().getId())){
+               throw new BaseException(ResponseCode.FORBIDDEN);
+           }
+        }
 
         String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
 
@@ -186,7 +200,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                 serviceBoard.getDeadline(),
                 serviceBoard.getServiceDate(),
                 serviceBoard.getServiceContent(),
-                thumbnailImgPath
+                thumbnailImgPath,
+                serviceBoard.getServiceStat().getId(),
+                serviceBoard.getRecruitStat().getId()
         );
 
         return serviceBoardDetailEditDto;
@@ -241,8 +257,6 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         }
 
         ServiceBoard saveServiceBoard = serviceBoardDataJpa.save(serviceBoard);
-
-        String decryptedUserName = encryptionService.decryptAes(saveServiceBoard.getUser().getName());
         String tumbnailImgUrl= tumbnailImgUrlPath(saveServiceBoard.getThumbnailImage());
 
 
@@ -255,7 +269,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                 saveServiceBoard.getDeadline(),
                 saveServiceBoard.getServiceDate(),
                 saveServiceBoard.getServiceContent(),
-                tumbnailImgUrl
+                tumbnailImgUrl,
+                saveServiceBoard.getServiceStat().getId(),
+                serviceBoard.getRecruitStat().getId()
         );
 
         

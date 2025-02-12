@@ -8,9 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Slf4j
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
+    private static final Pattern EDIT_PATTERN = Pattern.compile("^/api/service/boards/\\d+/edit$");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,12 +46,25 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             return true;
 
         }else{
-       /*     if ("/api/service/boards".equals(request.getRequestURI())) {
+            Matcher matcher = EDIT_PATTERN.matcher(requestURI);
+            if (matcher.matches()) {
+                if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
 
-            }*/
+                    // JSON 응답 반환
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+
+                    // 응답 코드 만들기
+                    String jsonResponse = sessionNullResponseString(requestURI);
+
+                    response.getWriter().write(jsonResponse);
+                    log.info("미인증 사용자 요청");
+                    return false;
+                }
+            }
             return true;
         }
-
     }
 
     private String sessionNullResponseString(String requestURI) {

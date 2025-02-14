@@ -29,10 +29,10 @@
 - **GET**  &nbsp;&nbsp; /api/auth/status : 상태 체크
 - **POST** &nbsp;&nbsp; /api/users : 회원 가입
 - **GET**  &nbsp;&nbsp; /api/users/{id} : 유저 상세보기
-- **GET**  &nbsp;&nbsp; /api/service/boards : 봉사 게시글 목록 조회
-- **POST** &nbsp;&nbsp; /api/service/boards : 봉사 게시글 작성
-- **GET**  &nbsp;&nbsp; /api/service/boards/{id} : 봉사 게시글 상세 조회
-- **PUT**  &nbsp;&nbsp; /api/service/boards/{id} : 봉사 게시글 상세 수정
+- **GET**  &nbsp;&nbsp; /api/service-boards : 봉사 게시글 목록 조회
+- **POST** &nbsp;&nbsp; /api/service-boards : 봉사 게시글 작성
+- **GET**  &nbsp;&nbsp; /api/service-boards/{id} : 봉사 게시글 상세 조회
+- **PUT**  &nbsp;&nbsp; /api/service-boards/{id} : 봉사 게시글 상세 수정
 - **GET** &nbsp;&nbsp; /api/status/service : 봉사 상태 조회
 - **GET** &nbsp;&nbsp; /api/status/recruitment : 봉사 모집 상태 조회
 - **GET** &nbsp;&nbsp; /api/categorys : 카테고리 조회

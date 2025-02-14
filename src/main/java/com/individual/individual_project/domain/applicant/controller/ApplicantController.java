@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * 신청자
@@ -36,11 +38,13 @@ public class ApplicantController {
 
     // 봉사 신청 리스트 조회
     @GetMapping("/service-boards/{serviceBoardId}/applicants")
-    public ApiResponse<ApplicantServiceBordsResponseDto> findApplicants(@PathVariable Long serviceBoardId) {
+    public ApiResponse<List<ApplicantServiceBordsResponseDto>> findApplicants(@PathVariable Long serviceBoardId) {
 
+        List<ApplicantServiceBordsResponseDto> byServiceBoardId = applicantService.findByServiceBoardId(serviceBoardId);
 
+        log.info("봉사 신청 리스트 조회 성공 : {}", byServiceBoardId);
 
-        return null;
+        return ApiResponse.success(byServiceBoardId, ResponseCode.APPLICANT_READ_SUCCESS);
     }
 
     // 봉사 신청 상태 변경

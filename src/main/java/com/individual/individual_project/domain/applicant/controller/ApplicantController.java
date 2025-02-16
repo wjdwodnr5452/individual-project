@@ -1,8 +1,10 @@
 package com.individual.individual_project.domain.applicant.controller;
 
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.ApplicantTime;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
+import com.individual.individual_project.domain.applicant.dto.SaveApplicantServiceTimeDto;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
@@ -66,6 +68,14 @@ public class ApplicantController {
         log.info("봉사 신청 조회 성공 : {}", applicant);
 
         return ApiResponse.success(applicant, ResponseCode.APPLICANT_READ_SUCCESS);
+    }
+
+    @PostMapping("/applicants/service-times")
+    public ApiResponse<ApplicantServiceBoardsDto> saveServiceTimes(@RequestBody List<ApplicantTime> saveApplicantServiceTimeDtos) {
+
+        ApplicantServiceBoardsDto applicantServiceBoardsDto = applicantService.saveServiceTimes(saveApplicantServiceTimeDtos);
+
+        return  ApiResponse.success(applicantServiceBoardsDto, ResponseCode.APPLICANT_CREATE_SUCCESS);
     }
 
 

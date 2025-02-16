@@ -24,7 +24,7 @@ public interface ServiceBoardDataJpa extends JpaRepository<ServiceBoard, Long> {
 
 
     @Modifying
-    @Query("UPDATE ServiceBoard e SET e.recruitStat = :updateRecruitStat WHERE e.serviceDate <= :currentTime AND e.serviceStat.id = :currentStatusId")
+    @Query("UPDATE ServiceBoard e SET e.recruitStat = :updateRecruitStat WHERE e.deadline <= :currentTime AND e.serviceStat.id = :currentStatusId")
     void updateRecruitStatId(@Param("currentTime") LocalDateTime currentTime,
                            @Param("updateRecruitStat") Status updateRecruitStat,
                            @Param("currentStatusId") Long currentStatusId);

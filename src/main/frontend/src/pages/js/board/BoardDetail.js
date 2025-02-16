@@ -22,6 +22,8 @@ const BoardDetail = () => {
 
     const { id } = useParams();
 
+
+
     useEffect(() => {
         // 서버에서 게시글 데이터 가져오기
         const fetchBoardDetail = async () => {
@@ -90,34 +92,81 @@ const BoardDetail = () => {
 
 
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-
+    const [isFinishModalOpen, setIsFinishModalOpen] = useState(false); // 모달 상태 관리
 
     // 게시글 수정 페이지로 이동
     const boardDetailEditPage = (id) => {
         navigate("/boards/"+id+"/edit")
     }
 
+    const [volunteerTimes, setVolunteerTimes] = useState({});
+
+    const handleServiceTimeInputChange = (applicantId, value) => {
+        setVolunteerTimes((prev) => ({
+            ...prev,
+            [applicantId]: value
+        }));
+    };
+
+
     // 진행 상태 변경
-    const boardStatBtn = (stat) => {
-       // setServiceStat(stat);
-        alert(stat);
+    const finishServiceBoardBtn = async(id) => {
+
+        const response = await fetch(`/api/service-boards/${id}/applicants`);
+        const responseData = await response.json();
+
+        setApplicants(responseData.data);
+        setIsFinishModalOpen(true);
+
+        responseData.data.map((applicant, index) => (
+            setVolunteerTimes((prev) => ({
+                ...prev,
+                [applicant.id]: boardDetail.serviceTime
+            }))
+        ));
     }
+
+    const handleSaveServiceTime = async () => {
+
+        const requestBody = Object.entries(volunteerTimes).map(([applicantId, serviceTime]) => ({
+            applicantId: Number(applicantId),
+            serviceTime
+        }));
+
+        try {
+            const response = await fetch("/api/applicants/service-times", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody),
+            });
+
+
+        } catch (error) {
+            console.error("Error saving volunteer times:", error);
+            alert("오류가 발생했습니다.");
+        }
+    };
 
     const showServicePeople = async (id) => {
 
         const response = await fetch(`/api/service-boards/${id}/applicants`);
         const responseData = await response.json();
 
-        console.log("responseData.data  : " , responseData.data);
-
         setApplicants(responseData.data);
-
         setIsModalOpen(true); // 모달 열기
     };
 
     const closeModal = () => {
         setIsModalOpen(false); // 모달 닫기
     };
+
+
+    const closeFinishModal = () => {
+        setIsFinishModalOpen(false); //모달 닫기
+    }
+
+
+
 
     const formatDateTime = (dateString) => {
         const date = new Date(dateString);
@@ -139,8 +188,7 @@ const BoardDetail = () => {
         }
 
         try {
-            const apiUrl = "/api/applicants";
-            const requestUrl = hasApplied ? `${apiUrl}/${userApplicantId}/status`:  `/api/service-boards/${id}/applicants` ;
+            const requestUrl = hasApplied ? `/api/applicants/${userApplicantId}/status`:  `/api/service-boards/${id}/applicants` ;
             const method = hasApplied ? "PATCH" : "POST";
 
             const response = await fetch(requestUrl, {
@@ -166,6 +214,51 @@ const BoardDetail = () => {
             alert("오류가 발생했습니다.");
         }
     };
+
+
+    const handleApplicantReject = async (applicantId,status) => {
+
+        if (!isLoggedIn) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const requestUrl = `/api/applicants/${applicantId}/status` ;
+            const method = "PATCH" ;
+
+            const response = await fetch(requestUrl, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(status),
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+
+                const applicantId = responseData.data.applicantId;
+                const applicantStatId = responseData.data.applicantStatId;
+
+                // 상태 변경
+                setApplicants((prevApplicants) =>
+                    prevApplicants.map((applicant) =>
+                        applicant.id === applicantId
+                            ? { ...applicant, applicantStat: applicantStatId }  // 상태 변경
+                            : applicant
+                    )
+                );
+
+            } else {
+                alert(responseData.msg);
+            }
+        } catch (error) {
+            console.error("Error during application:", error);
+            alert("오류가 발생했습니다.");
+        }
+
+
+    }
 
     return (
         <div>
@@ -255,7 +348,7 @@ const BoardDetail = () => {
                         )}
 
                         {boardDetail.writerCheck && (
-                            boardDetail.serviceStatId === 4 ? (
+                    /*        boardDetail.serviceStatId === 4 ? (
                                 <div className="board-stat-div">
                                     <button className="board-stat-button" onClick={() => boardStatBtn("종료")}>
                                         종료
@@ -265,6 +358,14 @@ const BoardDetail = () => {
                                 <div className="board-stat-div">
                                     <button className="board-stat-button" onClick={() => boardStatBtn("진행중")}>
                                         진행
+                                    </button>
+                                </div>
+                            ) : null*/
+
+                            boardDetail.serviceStatId === 4 ? (
+                                <div className="board-stat-div">
+                                    <button className="board-stat-button" onClick={() => finishServiceBoardBtn(id)}>
+                                        종료
                                     </button>
                                 </div>
                             ) : null
@@ -285,11 +386,18 @@ const BoardDetail = () => {
                                             <p><strong>이름:</strong> {applicant.userName}</p>
                                             <p><strong>전화번호:</strong> {applicant.phoneNumber}</p>
                                             <p><strong>지원날짜:</strong> {applicant.applicantDate}</p>
-                                            {/* 거절 버튼 추가 */}
-                                            <button
-                                                className="reject-button">
-                                                거절
-                                            </button>
+                                            {/* applicantStatId가 6일 때 거절 버튼 */}
+                                            {applicant.applicantStat === 6 ? (
+                                                <button className="reject-button"
+                                                        onClick={() => handleApplicantReject(applicant.id, 9)}>
+                                                    거절
+                                                </button>
+                                            ) : applicant.applicantStat === 9 ? (  // applicantStatId가 9일 때 승인 버튼
+                                                <button className="apply-button"
+                                                        onClick={() => handleApplicantReject(applicant.id, 6)}>
+                                                    승인
+                                                </button>
+                                            ) : null}
                                         </div>
                                     ))}
                                 </div>
@@ -297,6 +405,37 @@ const BoardDetail = () => {
                             </div>
                         </div>
                     )}
+
+
+                    {isFinishModalOpen && (
+                        <div className="modal-overlay">
+                            <div className="modal-content">
+                                <h2>봉사시간 부여</h2>
+                                <div className="applicant-list">
+                                    {applicants.map((applicant) => (
+                                        <div key={applicant.id} className="applicant-row">
+                                            <p><strong>이름:</strong> {applicant.userName}</p>
+                                            <p><strong>전화번호:</strong> {applicant.phoneNumber}</p>
+                                            <p><strong>지원날짜:</strong> {applicant.applicantDate}</p>
+
+                                            {/* 봉사시간 입력 */}
+                                            <div className="volunteer-time">
+                                                <label htmlFor={`volunteer-time-${applicant.id}`}>봉사시간:</label>
+                                                <input id={`volunteer-time-${applicant.id}`}
+                                                       type="text" placeholder="봉사 시간을 입력하세요"   value={volunteerTimes[applicant.id] || ""}
+                                                       onChange={(e) => handleServiceTimeInputChange(applicant.id, e.target.value)}
+                                                />
+                                            </div>
+
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="save-modal" onClick={handleSaveServiceTime}>저장</button>
+                                <button className="close-modal" onClick={closeFinishModal}>닫기</button>
+                            </div>
+                        </div>
+                    )}
+
                 </div>
             ) : (
                 <p>데이터 로딩 중입니다...</p>

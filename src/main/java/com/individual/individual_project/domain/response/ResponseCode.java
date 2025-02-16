@@ -96,6 +96,7 @@ public enum ResponseCode {
 
     // 401 에러
     APPLICANT_COUNT_FULL(HttpStatus.UNAUTHORIZED, true, "모집인원이 꽉찼습니다."),
+    APPLICANT_DEADLINE_PASSED(HttpStatus.UNAUTHORIZED, true, "모집일이 종료 되었습니다."),
 
     // 404 찾을 수 없음
     APPLICANT_NOT_FOUND(HttpStatus.NOT_FOUND, false, "신청자를 찾을 수 없습니다.");

@@ -44,14 +44,19 @@ const BoardWrite = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+
+        const offset = new Date().getTimezoneOffset() * 60000;
+        const deadlineFormDate = new Date(deadline - offset);
+        const serviceDateFormDate = new Date(serviceDate - offset);
+
         // FormData 객체 생성
         const formData = new FormData();
         formData.append("title", title);
         formData.append("category", category);
         formData.append("content", content);
         formData.append("recruitCount", recruitCount);
-        formData.append("deadline", deadline.toISOString()); // ISO 형식으로 변환
-        formData.append("serviceDate", serviceDate.toISOString()); // ISO 형식으로 변환
+        formData.append("deadline", deadlineFormDate.toISOString()); // ISO 형식으로 변환
+        formData.append("serviceDate", serviceDateFormDate.toISOString()); // ISO 형식으로 변환
         formData.append("serviceTime", serviceTime);
 
 

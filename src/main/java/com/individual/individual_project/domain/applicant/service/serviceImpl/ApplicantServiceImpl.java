@@ -3,9 +3,12 @@ package com.individual.individual_project.domain.applicant.service.serviceImpl;
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.ApplicantTime;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
+import com.individual.individual_project.domain.applicant.dto.SaveApplicantServiceTimeDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
+import com.individual.individual_project.domain.applicant.repository.ApplicantTimeRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -36,6 +39,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final EncryptionService encryptionService;
+    private final ApplicantTimeRepository applicantTimeRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -47,6 +51,10 @@ public class ApplicantServiceImpl implements ApplicantService {
 
 
         boolean serviceBoardApplicantChk = countByServiceBoardId(serviceBoardId, serviceBoard.getRecruitCount()); // 모집인원이 다 꽉찼는지 확인
+
+        if (serviceBoard.getRecruitStat().getId() == 2){
+            throw new BaseException(ResponseCode.APPLICANT_DEADLINE_PASSED);
+        }
 
         if(!serviceBoardApplicantChk) {
             throw new BaseException(ResponseCode.APPLICANT_COUNT_FULL); // 모집인원 꽉참
@@ -109,6 +117,10 @@ public class ApplicantServiceImpl implements ApplicantService {
 
             boolean serviceBoardApplicantChk = countByServiceBoardId(applicant.getServiceBoard().getId(), applicant.getServiceBoard().getRecruitCount());
 
+            if (applicant.getServiceBoard().getRecruitStat().getId() == 2){
+                throw new BaseException(ResponseCode.APPLICANT_DEADLINE_PASSED);
+            }
+
             if(!serviceBoardApplicantChk) {
                 throw new BaseException(ResponseCode.APPLICANT_COUNT_FULL); // 모집인원 꽉참
             }
@@ -137,6 +149,14 @@ public class ApplicantServiceImpl implements ApplicantService {
         }
 
         return byServiceBoardId;
+    }
+
+    @Override
+    public ApplicantServiceBoardsDto saveServiceTimes(List<ApplicantTime> saveApplicantServiceTimeDtos) {
+
+        List<ApplicantTime> applicantTimes = applicantTimeRepository.saveAll(saveApplicantServiceTimeDtos);
+
+        return null;
     }
 
 

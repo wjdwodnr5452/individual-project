@@ -1,6 +1,7 @@
 package com.individual.individual_project.domain.applicant.controller;
 
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.response.ApiResponse;
@@ -38,9 +39,9 @@ public class ApplicantController {
 
     // 봉사 신청 리스트 조회
     @GetMapping("/service-boards/{serviceBoardId}/applicants")
-    public ApiResponse<List<ApplicantServiceBordsResponseDto>> findApplicants(@PathVariable Long serviceBoardId) {
+    public ApiResponse<List<ApplicantServiceBoardsDto>> findApplicants(@PathVariable Long serviceBoardId) {
 
-        List<ApplicantServiceBordsResponseDto> byServiceBoardId = applicantService.findByServiceBoardId(serviceBoardId);
+        List<ApplicantServiceBoardsDto> byServiceBoardId = applicantService.findByServiceBoardId(serviceBoardId);
 
         log.info("봉사 신청 리스트 조회 성공 : {}", byServiceBoardId);
 

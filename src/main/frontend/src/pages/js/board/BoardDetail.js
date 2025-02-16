@@ -12,16 +12,13 @@ const BoardDetail = () => {
 
 
 // 가상 지원자 명단 예시
-    const applicants = [
-        { id: 1, name: "홍길동", phone: "010-1234-5678", date: "2025-01-10" },
-        { id: 2, name: "김철수", phone: "010-2345-6789", date: "2025-01-12" },
-        { id: 3, name: "박영희", phone: "010-3456-7890", date: "2025-01-15" },
-    ];
+    const [applicants,setApplicants] = useState([]);
 
 
     const [hasApplied, setHasApplied] = useState(false);
     const [userApplicantStat, setUserApplicantStat] = useState(7);
     const [userApplicantId, setUserApplicantId] = useState();
+
 
     const { id } = useParams();
 
@@ -106,7 +103,15 @@ const BoardDetail = () => {
         alert(stat);
     }
 
-    const showServicePeople = () => {
+    const showServicePeople = async (id) => {
+
+        const response = await fetch(`/api/service-boards/${id}/applicants`);
+        const responseData = await response.json();
+
+        console.log("responseData.data  : " , responseData.data);
+
+        setApplicants(responseData.data);
+
         setIsModalOpen(true); // 모달 열기
     };
 
@@ -126,27 +131,6 @@ const BoardDetail = () => {
             second: "2-digit",
         }).format(date);
     };
-
-/*    const  boardApplicantBtn = async (id) => {
-
-        if(!isLoggedIn){
-            navigate("/login");
-        }
-
-        try {
-            const response = await fetch("/api/applicant/"+id, {
-                method: isApplied ? "PUT" : "POST", // 지원 또는 지원 취소 요청
-            });
-
-            const responseData = await response.json();
-
-            alert(responseData.msg);
-
-        } catch (error) {
-
-        }
-    };*/
-
 
     const boardApplicantBtn = async (id,status) => {
         if (!isLoggedIn) {
@@ -192,7 +176,7 @@ const BoardDetail = () => {
 
                         {isLoggedIn && boardDetail.writerCheck && (
                             <div className="board-service-people">
-                                <button className="board-service-people-button" onClick={showServicePeople}>
+                                <button className="board-service-people-button" onClick={() => showServicePeople(id)}>
                                     지원자 명단
                                 </button>
                             </div>
@@ -298,9 +282,14 @@ const BoardDetail = () => {
                                 <div className="applicant-list">
                                     {applicants.map((applicant) => (
                                         <div key={applicant.id} className="applicant-row">
-                                            <p><strong>이름:</strong> {applicant.name}</p>
-                                            <p><strong>전화번호:</strong> {applicant.phone}</p>
-                                            <p><strong>지원날짜:</strong> {applicant.date}</p>
+                                            <p><strong>이름:</strong> {applicant.userName}</p>
+                                            <p><strong>전화번호:</strong> {applicant.phoneNumber}</p>
+                                            <p><strong>지원날짜:</strong> {applicant.applicantDate}</p>
+                                            {/* 거절 버튼 추가 */}
+                                            <button
+                                                className="reject-button">
+                                                거절
+                                            </button>
                                         </div>
                                     ))}
                                 </div>

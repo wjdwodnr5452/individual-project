@@ -1,5 +1,6 @@
 package com.individual.individual_project.domain.applicant.service;
 
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -13,5 +14,5 @@ public interface ApplicantService {
 
     ApplicantServiceBordsResponseDto updateApplicantStat(Long id, Long statusId);
 
-    List<ApplicantServiceBordsResponseDto> findByServiceBoardId(Long serviceBoardId);
+    List<ApplicantServiceBoardsDto> findByServiceBoardId(Long serviceBoardId);
 }

@@ -92,9 +92,11 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     @Override
     public void updateServiceBoardStat(LocalDateTime currentTime) {
 
+        // 모집마감
         Status updateRecruitStat = statusRepository.findById(2L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         serviceBoardDataJpa.updateRecruitStatId(currentTime, updateRecruitStat, 1L);
 
+        // 봉사 진행중
         Status updateServiceStat = statusRepository.findById(4L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         serviceBoardDataJpa.updateServiceStat(currentTime, updateServiceStat, 3L);
 

@@ -1,7 +1,9 @@
 package com.individual.individual_project.domain.applicant.service.serviceImpl;
 
 import com.individual.individual_project.SessionConst;
+import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
@@ -16,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,10 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final ApplicantRepository applicantRepository;
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
+    private final EncryptionService encryptionService;
+
+    @Value("${file.dir}")
+    private String fileDir;
 
     @Override
     public ApplicantServiceBordsResponseDto save(Long serviceBoardId, HttpServletRequest request) {
@@ -118,10 +125,16 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public List<ApplicantServiceBordsResponseDto> findByServiceBoardId(Long serviceBoardId) {
+    public List<ApplicantServiceBoardsDto> findByServiceBoardId(Long serviceBoardId) {
 
+        List<ApplicantServiceBoardsDto> byServiceBoardId = applicantRepository.findByServiceBoardId(serviceBoardId);
 
-        List<ApplicantServiceBordsResponseDto> byServiceBoardId = applicantRepository.findByServiceBoardId(serviceBoardId);
+        if (byServiceBoardId.size() > 0) {
+            for (int i =0; i<byServiceBoardId.size(); i++) {
+                byServiceBoardId.get(i).setUserName(encryptionService.decryptAes(byServiceBoardId.get(i).getUserName()));
+                byServiceBoardId.get(i).setPhoneNumber(encryptionService.decryptAes(byServiceBoardId.get(i).getPhoneNumber()));
+            }
+        }
 
         return byServiceBoardId;
     }

@@ -145,6 +145,16 @@ const BoardDetail = () => {
                 });
 
                 const responseData = await response.json();
+
+                if(responseData != null) {
+                    setBoardDetail(prevState => ({
+                        ...prevState,          // 기존의 모든 속성을 복사
+                        serviceStatId: responseData.data.id  // serviceStat만 업데이트
+                    }));
+
+                    setIsFinishModalOpen(false);
+                }
+
                 console.log("responseData : " , responseData);
 
             } catch (error) {

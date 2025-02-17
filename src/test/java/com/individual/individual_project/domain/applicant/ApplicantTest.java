@@ -1,5 +1,6 @@
 package com.individual.individual_project.domain.applicant;
 
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
 import com.individual.individual_project.domain.applicant.service.serviceImpl.ApplicantServiceImpl;
 import com.individual.individual_project.domain.board.Category;
@@ -8,12 +9,14 @@ import com.individual.individual_project.domain.board.Status;
 import com.individual.individual_project.domain.board.repository.CategoryRepository;
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
-import com.individual.individual_project.domain.response.ResponseCode;
+
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
-import com.individual.individual_project.web.exception.BaseException;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 @SpringBootTest
@@ -82,7 +85,7 @@ public class ApplicantTest {
     }
 
     @Test
-    void save() {
+    void save() { // 신청자 생성
         Applicant applicant = new Applicant();
 
         Status status = statusRepository.findById(6L).orElseThrow(() -> new RuntimeException("status not found"));
@@ -95,6 +98,62 @@ public class ApplicantTest {
         applicant.setApplicantStat(status);
 
         Applicant save = applicantRepository.save(applicant);
+
+        Assertions.assertThat(save.getServiceBoard().getId()).isEqualTo(serviceBoard.getId());
+    }
+
+
+    @Test
+    void findApplicant() {
+
+        Applicant applicant1 = new Applicant();
+
+        Status status = statusRepository.findById(6L).orElseThrow(() -> new RuntimeException("status not found"));
+        User user = userRepositorySpringData.findById(1L).orElseThrow(() -> new RuntimeException("user not found"));
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(1L).orElseThrow(() -> new RuntimeException("service board not found"));
+
+        applicant1.setApplicantDate(LocalDate.now());
+        applicant1.setUser(user);
+        applicant1.setServiceBoard(serviceBoard);
+        applicant1.setApplicantStat(status);
+
+        applicantRepository.save(applicant1);
+
+        Applicant byUserIdAndServiceBoardId = applicantRepository.findByUserIdAndServiceBoardId(user.getId(), serviceBoard.getId()).orElseThrow(() -> new RuntimeException("applicant not found"));
+
+        Assertions.assertThat(byUserIdAndServiceBoardId.getUser().getId()).isEqualTo(user.getId());
+    }
+
+
+
+
+    @Test
+    void findByApplicantId() { // 봉사 게시판에 신청목록
+
+        Applicant applicant1 = new Applicant();
+        Applicant applicant2 = new Applicant();
+
+        Status status = statusRepository.findById(6L).orElseThrow(() -> new RuntimeException("status not found"));
+        User user1 = userRepositorySpringData.findById(2L).orElseThrow(() -> new RuntimeException("user not found"));
+        User user2 = userRepositorySpringData.findById(2L).orElseThrow(() -> new RuntimeException("user not found"));
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(1L).orElseThrow(() -> new RuntimeException("service board not found"));
+
+        applicant1.setApplicantDate(LocalDate.now());
+        applicant1.setUser(user1);
+        applicant1.setServiceBoard(serviceBoard);
+        applicant1.setApplicantStat(status);
+
+        applicant2.setApplicantDate(LocalDate.now());
+        applicant2.setUser(user2);
+        applicant2.setServiceBoard(serviceBoard);
+        applicant2.setApplicantStat(status);
+
+        Applicant save = applicantRepository.save(applicant1);
+        Applicant save2 = applicantRepository.save(applicant2);
+
+        List<ApplicantServiceBoardsDto> byServiceBoardId = applicantRepository.findByServiceBoardId(1L);
+
+        Assertions.assertThat(byServiceBoardId.size()).isEqualTo(2);
 
     }
 

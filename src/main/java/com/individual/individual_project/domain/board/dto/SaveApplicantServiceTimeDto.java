@@ -1,4 +1,4 @@
-package com.individual.individual_project.domain.applicant.dto;
+package com.individual.individual_project.domain.board.dto;
 
 import lombok.Data;
 

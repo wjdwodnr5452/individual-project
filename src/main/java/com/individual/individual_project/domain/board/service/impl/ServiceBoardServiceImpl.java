@@ -4,10 +4,14 @@ import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.comm.file.UploadFileDto;
+import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.ApplicantTime;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
+import com.individual.individual_project.domain.applicant.repository.ApplicantTimeRepository;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
+import com.individual.individual_project.domain.board.dto.SaveApplicantServiceTimeDto;
 import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
 import com.individual.individual_project.domain.board.dto.ServiceBoardDetailEditDto;
 import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
@@ -32,7 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -43,6 +49,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private final ServiceBoardRepository serviceBoardRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final CategoryRepository categoryRepository;
+
     private final StatusRepository statusRepository;
     private final UserRepositorySpringData userRepository;
 
@@ -51,6 +58,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
 
     private final ThumbnailImageRepository thumbnailImageRepository;
     private final ApplicantRepository applicantRepository;
+
+    private final ApplicantTimeRepository applicantTimeRepository;
+
 
     @Value("${file.dir}")
     private String fileDir;
@@ -280,6 +290,24 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         return serviceBoardDetailEditDto;
     }
 
+    @Override
+    public Status saveServiceTimeAndComplete(Long id, List<SaveApplicantServiceTimeDto> saveApplicantServiceTimeDto) {
+
+        List<ApplicantTime> applicantTimes = saveApplicantServiceTimeDto.stream()
+                .map(dto -> new ApplicantTime(findApplicantByApplicantId(dto.getApplicantId()), dto.getServiceTime()))
+                .collect(Collectors.toList());
+
+        applicantTimeRepository.saveAll(applicantTimes);
+
+        ServiceBoard serviceBoard = serviceBoardDataJpa.findById(id).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
+
+        Status status = statusRepository.findById(5L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
+        serviceBoard.setServiceStat(status);
+
+        return status;
+    }
+
+
     private String tumbnailImgUrlPath(ThumbnailImge tumbnailImg) {
 
         String thumbnailImgPath = (tumbnailImg != null) ? "/api/images/" + tumbnailImg.getStoredFilename() : null;
@@ -287,6 +315,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         return thumbnailImgPath;
     }
 
-
+    private Applicant findApplicantByApplicantId(Long applicantId) {
+        Applicant findApplicant = applicantRepository.findById(applicantId).orElseThrow(()-> new BaseException(ResponseCode.APPLICANT_NOT_FOUND));
+        return findApplicant;
+    }
 
 }

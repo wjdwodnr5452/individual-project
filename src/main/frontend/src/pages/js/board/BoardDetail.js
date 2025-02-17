@@ -126,25 +126,36 @@ const BoardDetail = () => {
         ));
     }
 
-    const handleSaveServiceTime = async () => {
+    const handleSaveServiceTime = async (id) => {
 
-        const requestBody = Object.entries(volunteerTimes).map(([applicantId, serviceTime]) => ({
-            applicantId: Number(applicantId),
-            serviceTime
-        }));
-
-        try {
-            const response = await fetch("/api/applicants/service-times", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestBody),
-            });
+        const isConfirmed = window.confirm("저장하시겠습니까?(봉사시간 부여 후 봉사 종료가 됩니다.)");
 
 
-        } catch (error) {
-            console.error("Error saving volunteer times:", error);
-            alert("오류가 발생했습니다.");
+        if (isConfirmed) {
+            const requestBody = Object.entries(volunteerTimes).map(([applicantId, serviceTime]) => ({
+                applicantId: Number(applicantId),
+                serviceTime
+            }));
+
+            try {
+                const response = await fetch(`/api/service-boards/${id}/assign-time-and-complete`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestBody),
+                });
+
+                const responseData = await response.json();
+                console.log("responseData : " , responseData);
+
+            } catch (error) {
+                console.error("Error saving volunteer times:", error);
+                alert("오류가 발생했습니다.");
+            }
+        } else {
+            console.log("저장 취소");
         }
+
+
     };
 
     const showServicePeople = async (id) => {
@@ -430,7 +441,7 @@ const BoardDetail = () => {
                                         </div>
                                     ))}
                                 </div>
-                                <button className="save-modal" onClick={handleSaveServiceTime}>저장</button>
+                                <button className="save-modal" onClick={() =>handleSaveServiceTime(boardDetail.id)}>저장</button>
                                 <button className="close-modal" onClick={closeFinishModal}>닫기</button>
                             </div>
                         </div>

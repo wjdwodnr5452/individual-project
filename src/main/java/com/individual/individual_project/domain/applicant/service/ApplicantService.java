@@ -1,9 +1,7 @@
 package com.individual.individual_project.domain.applicant.service;
 
-import com.individual.individual_project.domain.applicant.ApplicantTime;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
-import com.individual.individual_project.domain.applicant.dto.SaveApplicantServiceTimeDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
@@ -18,5 +16,4 @@ public interface ApplicantService {
 
     List<ApplicantServiceBoardsDto> findByServiceBoardId(Long serviceBoardId);
 
-    ApplicantServiceBoardsDto saveServiceTimes(List<ApplicantTime> saveApplicantServiceTimeDtos);
 }

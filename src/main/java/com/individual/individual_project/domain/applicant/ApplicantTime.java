@@ -34,6 +34,11 @@ public class ApplicantTime {
 
     public ApplicantTime() {}
 
+    public ApplicantTime(Applicant applicant, Integer serviceTime) {
+        this.applicant = applicant;
+        this.serviceTime = serviceTime;
+    }
+
     public ApplicantTime(Applicant applicant, Integer serviceTime, LocalDateTime regDate, LocalDateTime updateDate) {
         this.applicant = applicant;
         this.serviceTime = serviceTime;

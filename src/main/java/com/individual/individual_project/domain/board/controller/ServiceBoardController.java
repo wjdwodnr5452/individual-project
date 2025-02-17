@@ -2,6 +2,8 @@ package com.individual.individual_project.domain.board.controller;
 
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.file.FileUploadService;
+import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
+import com.individual.individual_project.domain.board.dto.SaveApplicantServiceTimeDto;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -173,6 +175,15 @@ public class ServiceBoardController {
         ServiceBoardDetailEditDto serviceBoardDetailEditDto = serviceBoardService.updateServiceBoardEdit(id,title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());
 
         return ApiResponse.success(serviceBoardDetailEditDto, ResponseCode.BORD_CREATE_SUCCESS);
+    }
+
+    // 봉사 시간 부여
+    @PostMapping("/service-boards/{id}/assign-time-and-complete")
+    public ApiResponse<Status> assigntimeAndComplete(@PathVariable Long id, @RequestBody List<SaveApplicantServiceTimeDto> saveApplicantServiceTimeDtos) {
+
+        Status status = serviceBoardService.saveServiceTimeAndComplete(id, saveApplicantServiceTimeDtos);
+
+        return  ApiResponse.success(status, ResponseCode.BORD_STAT_UPDATE_SUCCESS);
     }
 
 

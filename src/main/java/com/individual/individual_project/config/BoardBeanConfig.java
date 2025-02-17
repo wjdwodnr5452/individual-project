@@ -3,6 +3,7 @@ package com.individual.individual_project.config;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
+import com.individual.individual_project.domain.applicant.repository.ApplicantTimeRepository;
 import com.individual.individual_project.domain.board.repository.*;
 
 import com.individual.individual_project.domain.board.service.CategoryService;
@@ -29,6 +30,7 @@ public class BoardBeanConfig {
     private final FileUploadService fileUploadService;
     private final ThumbnailImageRepository thumbnailImageRepository;
     private final ApplicantRepository applicantRepository;
+    private final ApplicantTimeRepository applicantTimeRepository;
 
 
     private final EntityManager em;
@@ -45,7 +47,7 @@ public class BoardBeanConfig {
 
     @Bean
     public ServiceBoardService serviceBoardService() {
-        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository, encryptionService, fileUploadService, thumbnailImageRepository, applicantRepository);
+        return new ServiceBoardServiceImpl(serviceBoardRepository(), serviceBoardDataJpa,categoryRepository,statusRepository, userRepository, encryptionService, fileUploadService, thumbnailImageRepository, applicantRepository, applicantTimeRepository);
     }
 
     @Bean

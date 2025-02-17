@@ -3,12 +3,9 @@ package com.individual.individual_project.domain.applicant.service.serviceImpl;
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.applicant.Applicant;
-import com.individual.individual_project.domain.applicant.ApplicantTime;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
-import com.individual.individual_project.domain.applicant.dto.SaveApplicantServiceTimeDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
-import com.individual.individual_project.domain.applicant.repository.ApplicantTimeRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
@@ -39,7 +36,6 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final EncryptionService encryptionService;
-    private final ApplicantTimeRepository applicantTimeRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -151,13 +147,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         return byServiceBoardId;
     }
 
-    @Override
-    public ApplicantServiceBoardsDto saveServiceTimes(List<ApplicantTime> saveApplicantServiceTimeDtos) {
 
-        List<ApplicantTime> applicantTimes = applicantTimeRepository.saveAll(saveApplicantServiceTimeDtos);
-
-        return null;
-    }
 
 
     private boolean countByServiceBoardId(Long serviceBoardId, Integer recuritCount) {
@@ -170,6 +160,11 @@ public class ApplicantServiceImpl implements ApplicantService {
             return false;
         }
 
+    }
+
+    private Applicant findApplicantByApplicantId(Long applicantId) {
+       Applicant findApplicant = applicantRepository.findById(applicantId).orElseThrow(()-> new BaseException(ResponseCode.APPLICANT_NOT_FOUND));
+       return findApplicant;
     }
 
 }

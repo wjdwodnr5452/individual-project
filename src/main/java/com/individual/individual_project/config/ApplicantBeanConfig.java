@@ -20,11 +20,10 @@ public class ApplicantBeanConfig {
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final EncryptionService encryptionService;
-    private final ApplicantTimeRepository applicantTimeRepository;
 
     @Bean
     public ApplicantService applicantService() {
-        return new ApplicantServiceImpl(applicantRepository,statusRepository,serviceBoardDataJpa, encryptionService, applicantTimeRepository);
+        return new ApplicantServiceImpl(applicantRepository,statusRepository,serviceBoardDataJpa, encryptionService);
     }
 
 }

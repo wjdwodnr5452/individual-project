@@ -29,16 +29,16 @@ class UserServiceTest {
     @Test
     void saveUser() {
         User user = new User("test@test.com", "123456", "홍길동", "01012341234");
-        userRepository.saveUser(user);
-        User findUser = userRepository.findUserById(user.getId()).get();
+        userRepository.save(user);
+        User findUser = userRepository.findById(user.getId()).get();
         assertThat(findUser).isEqualTo(user);
     }
 
     @Test
     void findUserByEmail() {
         User user = new User("test@test.com", "Snsteset123!", "홍길동", "01012341234");
-        userRepository.saveUser(user);
-        Optional<User> userByEmail = userRepository.findUserByEmail(user.getEmail());
+        userRepository.save(user);
+        Optional<User> userByEmail = userRepository.findByEmail(user.getEmail());
         assertThat(userByEmail.isPresent()).isTrue(); // 값이 있는지 존재 확인
         assertThat(userByEmail.get().getEmail()).isEqualTo(user.getEmail()); // 값이 동일하는지 비교
     }

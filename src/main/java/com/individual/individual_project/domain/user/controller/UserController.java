@@ -3,6 +3,7 @@ package com.individual.individual_project.domain.user.controller;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
+import com.individual.individual_project.domain.user.dto.UserDetailDto;
 import com.individual.individual_project.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +25,11 @@ public class UserController {
 
     private final UserService userService;
 
-
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUsers(@PathVariable Long id) {
-
-        User user = userService.findUserById(id).get();
-
-        if(user == null){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(user);
+    public ApiResponse<UserDetailDto> getUsers(@PathVariable String id) {
+        Long userId = Long.valueOf(id);
+        UserDetailDto user = userService.findUserById(userId);
+        return ApiResponse.success(user, ResponseCode.USER_READ_SUCCESS);
     }
 
     @PostMapping("/users")

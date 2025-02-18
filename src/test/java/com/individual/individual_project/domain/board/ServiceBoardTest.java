@@ -6,7 +6,6 @@ import com.individual.individual_project.domain.board.repository.ServiceBoardDat
 import com.individual.individual_project.domain.board.repository.ServiceBoardRepository;
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.user.User;
-import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +39,8 @@ public class ServiceBoardTest {
     private ServiceBoardDataJpa serviceBoardDataJpa;
 
     @Autowired
-    private UserRepositorySpringData userRepositorySpringData;
+    private UserRepository userRepositorySpringData;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ServiceBoardRepository serviceBoardRepository;
@@ -54,7 +50,7 @@ public class ServiceBoardTest {
     @BeforeEach
     void setUp() {
         testUser = new User("test@test.com", "123456", "홍길동", "01012341234");
-        userRepository.saveUser(testUser);
+        userRepositorySpringData.save(testUser);
     }
 
     //@Sql(scripts = {"/test_sql/board_sql.sql"})

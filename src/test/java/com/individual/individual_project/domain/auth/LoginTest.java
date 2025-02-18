@@ -36,7 +36,7 @@ class LoginTest {
     void login() {
 
         User user = new User("test@test.com", "Qw123123123!", "홍길동", "01012341234");
-        userRepository.saveUser(user);
+        userRepository.save(user);
 
         LoginDto loginDto = new LoginDto("test@test.com", "Qw123123123!");
         Optional<User> byLoginId = authRepository.findByLoginId(loginDto);

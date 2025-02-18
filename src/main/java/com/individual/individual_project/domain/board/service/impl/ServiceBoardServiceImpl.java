@@ -20,7 +20,7 @@ import com.individual.individual_project.domain.board.service.ServiceBoardServic
 import com.individual.individual_project.domain.board.service.ThumbnailImge;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
-import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
+import com.individual.individual_project.domain.user.repository.UserRepository;
 import com.individual.individual_project.web.exception.BaseException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -33,11 +33,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,14 +49,13 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
     private final CategoryRepository categoryRepository;
 
     private final StatusRepository statusRepository;
-    private final UserRepositorySpringData userRepository;
+    private final UserRepository userRepository;
 
     private final EncryptionService encryptionService;
     private final FileUploadService fileUploadService;
 
     private final ThumbnailImageRepository thumbnailImageRepository;
     private final ApplicantRepository applicantRepository;
-
     private final ApplicantTimeRepository applicantTimeRepository;
 
 

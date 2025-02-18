@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/user/UserProfile.css";
-import Header from "../layout/Header";
-import Footer from "../layout/Footer";
+import {useAuth} from "../../../components/AuthProvider";
+import {useParams} from "react-router-dom";
 
 const UserProfile = () => {
-    const [user, setUser] = useState({
-        name: "홍길동",
-        email: "hong@example.com",
-        phone: "010-1234-5678",
-        serviceTime: "30",
-    });
+
+    const { isLoggedIn, user1 } = useAuth();
+
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchUserDetail = async () => {
+            try {
+                const response = await fetch(`/api/users/${id}`);
+                const responseData = await response.json();
+                alert(responseData.msg);
+                setUser(responseData.data);
+            } catch (err) {
+                console.log("err : " , err);
+            }
+        }
+        fetchUserDetail();
+    }, [id]); // 게시글 ID가 변경될 때마다 호출
+
+
+    const [user, setUser] = useState({});
 
     const applications = [
         { id: 1, title: "환경 보호 봉사활동", date: "2025-01-10" },
@@ -41,7 +56,6 @@ const UserProfile = () => {
 
     return (
         <div>
-            <Header />
             <div className="user-profile-container">
                 <h2 className="profile-title">회원 정보</h2>
 
@@ -58,15 +72,13 @@ const UserProfile = () => {
 
                     <div className="profile-item">
                         <label>전화번호:</label>
-                        <span>{user.phone}</span>
+                        <span>{user.phoneNumber}</span>
                     </div>
 
                     <div className="profile-item">
                         <label>봉사시간:</label>
-                        <span>{user.serviceTime}</span>
+                        <span>{user.totalServiceTime}</span>
                     </div>
-
-                    <button className="edit-btn" onClick={handleEdit}>정보 수정</button>
 
                     {/* 지원목록 버튼 */}
                     <button className="applications-btn" onClick={toggleApplications}>
@@ -114,7 +126,6 @@ const UserProfile = () => {
                 )}
 
             </div>
-            <Footer />
         </div>
     );
 };

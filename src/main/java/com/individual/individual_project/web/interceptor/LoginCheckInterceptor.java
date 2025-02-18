@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
-    private static final Pattern EDIT_PATTERN = Pattern.compile("^/api/service/boards/\\d+/edit$");
+    private static final Pattern EDIT_PATTERN = Pattern.compile("^/api/service-boards/\\d+/edit$");
+    private static final Pattern USER_PATTERN = Pattern.compile("^/api/users/\\d+");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -46,8 +47,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             return true;
 
         }else{
-            Matcher matcher = EDIT_PATTERN.matcher(requestURI);
-            if (matcher.matches()) {
+            Matcher editMatcher = EDIT_PATTERN.matcher(requestURI);
+            Matcher userMatcher = USER_PATTERN.matcher(requestURI);
+            if (editMatcher.matches() || userMatcher.matches()) {
                 if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
 
                     // JSON 응답 반환

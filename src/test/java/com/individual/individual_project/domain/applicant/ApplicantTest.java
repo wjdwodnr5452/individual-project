@@ -12,7 +12,6 @@ import com.individual.individual_project.domain.board.repository.StatusRepositor
 
 import com.individual.individual_project.domain.user.User;
 import com.individual.individual_project.domain.user.repository.UserRepository;
-import com.individual.individual_project.domain.user.repository.UserRepositorySpringData;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +46,7 @@ public class ApplicantTest {
 
 
     @Autowired
-    private UserRepositorySpringData userRepositorySpringData;
+    private UserRepository userRepositorySpringData;
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -62,11 +61,11 @@ public class ApplicantTest {
     void createServiceBoard() {
 
         User testUser = new User("test@test.com", "123456", "홍길동", "01012341234");
-        userRepository.saveUser(testUser);
+        userRepository.save(testUser);
 
 
         User testUser1 = new User("test123@test.com", "123456", "김철수", "01012341234");
-        userRepository.saveUser(testUser1);
+        userRepository.save(testUser1);
 
 
         User user = userRepositorySpringData.findById(1L).orElseThrow(() -> new RuntimeException("user not found"));

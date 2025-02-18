@@ -12,7 +12,7 @@ function Header() {
     };
 
     const myPageMove = () => {
-        navigate("/mypage");
+        navigate(`/users/${user.id}`);
     };
 
     const logout = async () => {

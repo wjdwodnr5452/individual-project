@@ -112,8 +112,8 @@
     background-color: #0056b3;
 }
 
-/* 지원목록 버튼 */
-.applications-btn {
+
+.user-profile-btn {
     margin-top: 10px;
     padding: 10px 20px;
     font-size: 16px;
@@ -126,9 +126,17 @@
     align-self: center;
 }
 
-.applications-btn:hover {
+.user-profile-btn:hover {
     background-color: #218838;
 }
+
+.profile-btn {
+    display: flex;
+    justify-content: center; /* 가로 방향 가운데 정렬 */
+    align-items: center; /* 세로 방향 가운데 정렬 (필요한 경우) */
+    gap: 10px; /* 버튼 사이 간격 */
+}
+
 
 .applications-list {
     margin-top: 20px;

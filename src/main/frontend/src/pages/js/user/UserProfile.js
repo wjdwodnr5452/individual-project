@@ -5,17 +5,23 @@ import {useParams} from "react-router-dom";
 
 const UserProfile = () => {
 
-    const { isLoggedIn, user1 } = useAuth();
-
+    const { isLoggedIn, loginUser } = useAuth();
     const { id } = useParams();
+    const [userApplicants, setUserApplicants] = useState([]);
 
     useEffect(() => {
         const fetchUserDetail = async () => {
             try {
                 const response = await fetch(`/api/users/${id}`);
                 const responseData = await response.json();
-                alert(responseData.msg);
-                setUser(responseData.data);
+
+                if(responseData.header.code != 200){
+                    alert(responseData.msg);
+                }else{
+                    setUser(responseData.data);
+                }
+
+
             } catch (err) {
                 console.log("err : " , err);
             }
@@ -41,11 +47,24 @@ const UserProfile = () => {
     const [showApplications, setShowApplications] = useState(false); // 지원목록 표시 여부
     const [showMyPostsModal, setShowMyPostsModal] = useState(false); // 내가 쓴 게시글 모달 표시 여부
 
-    const handleEdit = () => {
-        alert("회원정보 수정 페이지로 이동합니다.");
-    };
 
-    const toggleApplications = () => {
+    const toggleApplications = async (id) => {
+
+      if(!showApplications && userApplicants.length == 0){
+          try{
+              const response = await fetch(`/api/users/${id}/applicants`);
+              const responseData = await response.json();
+
+              if(responseData.header.code == 200) {
+                  setUserApplicants(responseData.data);
+              }else{
+                  alert(responseData.msg);
+              }
+          }catch (error){
+              alert(error);
+          }
+      }
+
         setShowApplications(!showApplications); // 지원목록 토글
     };
 
@@ -80,15 +99,19 @@ const UserProfile = () => {
                         <span>{user.totalServiceTime}</span>
                     </div>
 
-                    {/* 지원목록 버튼 */}
-                    <button className="applications-btn" onClick={toggleApplications}>
-                        {showApplications ? "지원목록 숨기기" : "지원목록 보기"}
-                    </button>
+                    <div class="profile-btn">
+                        {/* 지원목록 버튼 */}
+                        <button className="user-profile-btn" onClick={() => toggleApplications(id)}>
+                            {showApplications ? "지원목록 숨기기" : "지원목록 보기"}
+                        </button>
 
-                    {/* 내가 쓴 게시글 버튼 */}
-                    <button className="my-posts-btn" onClick={toggleMyPostsModal}>
-                        내가 쓴 게시글 보기
-                    </button>
+                        {/* 내가 쓴 게시글 버튼 */}
+                        <button className="user-profile-btn" onClick={() => toggleMyPostsModal(id)}>
+                            내가 쓴 게시글 보기
+                        </button>
+
+                    </div>
+
 
                 </div>
 
@@ -97,10 +120,12 @@ const UserProfile = () => {
                     <div className="applications-list">
                         <h3>지원한 게시글 목록</h3>
                         <ul>
-                            {applications.map((app) => (
+                            {userApplicants.map((app) => (
                                 <li key={app.id} className="application-item">
-                                    <span>{app.title}</span>
-                                    <span>({app.date})</span>
+                                    <span>{app.serviceBoardTitle}</span>
+                                    <span>({app.applicantStatusName})</span>
+                                    <span>({app.userServiceTime} 시간 부여)</span>
+                                    {/*   <span>({app.date})</span>*/}
                                 </li>
                             ))}
                         </ul>

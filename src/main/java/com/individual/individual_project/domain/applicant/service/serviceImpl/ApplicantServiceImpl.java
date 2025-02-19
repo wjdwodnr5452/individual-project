@@ -5,6 +5,7 @@ import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.applicant.Applicant;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
+import com.individual.individual_project.domain.applicant.dto.ApplicantUserDto;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.board.ServiceBoard;
@@ -147,7 +148,15 @@ public class ApplicantServiceImpl implements ApplicantService {
         return byServiceBoardId;
     }
 
+    @Override
+    public List<ApplicantUserDto> findByUsers(Long id, HttpServletRequest request) {
 
+        List<ApplicantUserDto> applicantUser = applicantRepository.findByUserId(id);
+
+        log.info("applicantUser = {}" , applicantUser);
+
+        return applicantUser;
+    }
 
 
     private boolean countByServiceBoardId(Long serviceBoardId, Integer recuritCount) {

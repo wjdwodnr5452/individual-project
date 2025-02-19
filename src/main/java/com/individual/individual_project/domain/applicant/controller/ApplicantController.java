@@ -2,6 +2,7 @@ package com.individual.individual_project.domain.applicant.controller;
 
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
+import com.individual.individual_project.domain.applicant.dto.ApplicantUserDto;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.response.ApiResponse;
 import com.individual.individual_project.domain.response.ResponseCode;
@@ -66,6 +67,15 @@ public class ApplicantController {
         return ApiResponse.success(applicant, ResponseCode.APPLICANT_READ_SUCCESS);
     }
 
+
+    // 유저 봉사 조회
+    @GetMapping("/users/{userId}/applicants")
+    public ApiResponse<List<ApplicantUserDto>> findUserApplicants(@PathVariable Long userId, HttpServletRequest request) {
+
+        List<ApplicantUserDto> applicantUser = applicantService.findByUsers(userId, request);
+
+        return ApiResponse.success(applicantUser, ResponseCode.APPLICANT_READ_SUCCESS);
+    }
 
 
 

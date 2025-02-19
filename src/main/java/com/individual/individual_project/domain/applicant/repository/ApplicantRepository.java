@@ -3,6 +3,7 @@ package com.individual.individual_project.domain.applicant.repository;
 import com.individual.individual_project.domain.applicant.Applicant;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
+import com.individual.individual_project.domain.applicant.dto.ApplicantUserDto;
 import com.individual.individual_project.domain.board.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     Optional<Applicant> findByUserIdAndServiceBoardId(Long userId, Long serviceBoardId);
     Long countByServiceBoardIdAndApplicantStatId(Long serviceBoardId, Long applicantStatId);
+
 
     @Query("SELECT new com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto(" +
             "a.id, u.name, u.phoneNumber, a.applicantDate, a.applicantStat.id, a.applicantStat.statusName) " +
@@ -37,5 +39,19 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     void updateApplicantStat(@Param("updateApplicantStat") Status updateApplicantStat,
                              @Param("updateServiceStat") Status updateServiceStat,
                              @Param("currentStatId") Long currentStatId);
+
+
+    @Query("SELECT new com.individual.individual_project.domain.applicant.dto.ApplicantUserDto " +
+            "(a.id, st.statusName, s.serviceTitle, at.serviceTime) " +
+            " FROM Applicant a " +
+            "LEFT JOIN  User u ON u.id = a.user.id " +
+            "JOIN ServiceBoard s ON s.id = a.serviceBoard.id " +
+            "JOIN Status st ON st.id = a.applicantStat.id " +
+            "LEFT JOIN ApplicantTime at ON at.applicant.id = a.id " +
+            "WHERE a.user.id = :userId ")
+    List<ApplicantUserDto> findByUserId(Long userId);
+
+
+
 
 }

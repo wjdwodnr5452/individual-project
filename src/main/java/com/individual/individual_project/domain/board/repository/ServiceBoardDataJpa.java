@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public interface ServiceBoardDataJpa extends JpaRepository<ServiceBoard, Long> {
@@ -15,6 +16,9 @@ public interface ServiceBoardDataJpa extends JpaRepository<ServiceBoard, Long> {
  /*   @Modifying
     @Query("update ServiceBoard e set e.serviceStatId = 4 where e.serviceDate <= :currentTime and e.serviceStatId = 3")
     void updateServiceStat(LocalDateTime currentTime);*/
+
+
+    List<ServiceBoard> findAllByUserId(Long userId);
 
     @Modifying
     @Query("UPDATE ServiceBoard e SET e.serviceStat = :updateServiceStat WHERE e.serviceDate <= :currentTime AND e.serviceStat.id = :currentStatusId")

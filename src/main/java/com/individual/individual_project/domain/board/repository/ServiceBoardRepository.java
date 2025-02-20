@@ -8,6 +8,7 @@ import com.individual.individual_project.domain.board.QServiceBoard;
 import com.individual.individual_project.domain.board.QStatus;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
+import com.individual.individual_project.domain.board.dto.UserWriteServiceBoardDto;
 import com.individual.individual_project.domain.board.service.QThumbnailImge;
 import com.individual.individual_project.domain.user.QUser;
 import com.querydsl.core.BooleanBuilder;
@@ -141,6 +142,18 @@ public class ServiceBoardRepository {
                 .where(serviceBoard.id.eq(id))
                 .groupBy(serviceBoard.id)
                 .fetchOne(); // 단일 결과 조회
+    }
+
+
+    public List<UserWriteServiceBoardDto> findAllByUserId(Long userId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(UserWriteServiceBoardDto.class,
+                        serviceBoard.id,
+                        serviceBoard.serviceTitle
+                ))
+                .from(serviceBoard)
+                .where(serviceBoard.user.id.eq(userId)) // 수정: userId 필드와 비교
+                .fetch(); // fetchAll() → fetch() 변경
     }
 
 

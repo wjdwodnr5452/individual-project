@@ -3,13 +3,10 @@ package com.individual.individual_project.domain.board.controller;
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
-import com.individual.individual_project.domain.board.dto.SaveApplicantServiceTimeDto;
+import com.individual.individual_project.domain.board.dto.*;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
-import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
-import com.individual.individual_project.domain.board.dto.ServiceBoardDetailEditDto;
-import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
 import com.individual.individual_project.domain.board.service.CategoryService;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.StatusService;
@@ -184,6 +181,17 @@ public class ServiceBoardController {
         Status status = serviceBoardService.saveServiceTimeAndComplete(id, saveApplicantServiceTimeDtos);
 
         return  ApiResponse.success(status, ResponseCode.BORD_STAT_UPDATE_SUCCESS);
+    }
+
+
+    @GetMapping("/users/{userId}/service-boards")
+    public ApiResponse<List<UserWriteServiceBoardDto>> findUserServiceBoards(@PathVariable Long userId, HttpServletRequest request) {
+
+        List<UserWriteServiceBoardDto> serviceBoardByUserId = serviceBoardService.findServiceBoardByUserId(userId, request);
+
+
+        return ApiResponse.success(serviceBoardByUserId, ResponseCode.BORD_READ_SUCCESS);
+
     }
 
 

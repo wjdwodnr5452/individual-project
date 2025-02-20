@@ -11,10 +11,7 @@ import com.individual.individual_project.domain.applicant.repository.ApplicantTi
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
 import com.individual.individual_project.domain.board.Status;
-import com.individual.individual_project.domain.board.dto.SaveApplicantServiceTimeDto;
-import com.individual.individual_project.domain.board.dto.ServiceBoardDetailDto;
-import com.individual.individual_project.domain.board.dto.ServiceBoardDetailEditDto;
-import com.individual.individual_project.domain.board.dto.ServiceBoardsDto;
+import com.individual.individual_project.domain.board.dto.*;
 import com.individual.individual_project.domain.board.repository.*;
 import com.individual.individual_project.domain.board.service.ServiceBoardService;
 import com.individual.individual_project.domain.board.service.ThumbnailImge;
@@ -302,6 +299,16 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         serviceBoard.setServiceStat(status);
 
         return status;
+    }
+
+    @Override
+    public List<UserWriteServiceBoardDto> findServiceBoardByUserId(Long userId, HttpServletRequest request) {
+
+
+        List<UserWriteServiceBoardDto> allByUserId = serviceBoardRepository.findAllByUserId(userId);
+
+        log.info("allByUserId : {}", allByUserId);
+        return allByUserId;
     }
 
 

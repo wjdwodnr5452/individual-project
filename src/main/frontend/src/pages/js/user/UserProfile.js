@@ -8,6 +8,7 @@ const UserProfile = () => {
     const { isLoggedIn, loginUser } = useAuth();
     const { id } = useParams();
     const [userApplicants, setUserApplicants] = useState([]);
+    const [userServiceBoards, setUserServiceBoards] = useState([]);
 
     useEffect(() => {
         const fetchUserDetail = async () => {
@@ -69,7 +70,26 @@ const UserProfile = () => {
     };
 
 
-    const toggleMyPostsModal = () => {
+    const toggleMyPostsModal = async(id) => {
+
+        if(!showMyPostsModal){
+
+            try{
+                const response = await fetch(`/api//users/${id}/service-boards`);
+                const responseData = await response.json();
+
+                if(responseData.header.code == 200) {
+                    setUserServiceBoards(responseData.data);
+                }else{
+                    alert(responseData.msg);
+                }
+            }catch (error){
+                alert(error);
+            }
+
+        }
+
+
         setShowMyPostsModal(!showMyPostsModal); // 내가 쓴 게시글 목록 모달 토글
     };
 
@@ -139,10 +159,10 @@ const UserProfile = () => {
                             <span className="close-btn" onClick={toggleMyPostsModal}>&times;</span>
                             <h3>내가 쓴 게시글 목록</h3>
                             <ul className="posts-list">
-                                {posts.map((post) => (
+                                {userServiceBoards.map((post) => (
                                     <li key={post.id} className="post-item">
-                                        <span>{post.title}</span>
-                                        <span>({post.date})</span>
+                                        <span>{post.serviceTitle}</span>
+                                      {/*  <span>({post.date})</span>*/}
                                     </li>
                                 ))}
                             </ul>

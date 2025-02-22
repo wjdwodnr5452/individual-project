@@ -10,6 +10,19 @@ const UserProfile = () => {
     const [userApplicants, setUserApplicants] = useState([]);
     const [userServiceBoards, setUserServiceBoards] = useState([]);
 
+    const formatDateTime = (dateString) => {
+        const date = new Date(dateString);
+
+        return new Intl.DateTimeFormat("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        }).format(date);
+    };
+
     useEffect(() => {
         const fetchUserDetail = async () => {
             try {
@@ -72,7 +85,7 @@ const UserProfile = () => {
 
     const toggleMyPostsModal = async(id) => {
 
-        if(!showMyPostsModal){
+        if(!showMyPostsModal && userServiceBoards){
 
             try{
                 const response = await fetch(`/api//users/${id}/service-boards`);
@@ -137,7 +150,26 @@ const UserProfile = () => {
 
                 {/* 지원목록 표시 */}
                 {showApplications && (
-                    <div className="applications-list">
+                    <div className="modal">
+                        <div className="modal-content">
+                            <span className="close-btn" onClick={toggleApplications}>&times;</span>
+                            <h3>내가 쓴 게시글 목록</h3>
+                            <ul className="applicants-list">
+                                {userApplicants.map((app) => (
+                                    <li key={app.id} className="applicants-item">
+                                        <span>{app.serviceBoardTitle}</span>
+                                        <span>({app.applicantStatusName})</span>
+                                        <span>({app.userServiceTime} 시간 부여)</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+
+             /*       <div className="applications-list">
                         <h3>지원한 게시글 목록</h3>
                         <ul>
                             {userApplicants.map((app) => (
@@ -145,11 +177,11 @@ const UserProfile = () => {
                                     <span>{app.serviceBoardTitle}</span>
                                     <span>({app.applicantStatusName})</span>
                                     <span>({app.userServiceTime} 시간 부여)</span>
-                                    {/*   <span>({app.date})</span>*/}
+                                    {/!*   <span>({app.date})</span>*!/}
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </div>*/
                 )}
 
                 {/* 내가 쓴 게시글 모달 */}
@@ -159,10 +191,10 @@ const UserProfile = () => {
                             <span className="close-btn" onClick={toggleMyPostsModal}>&times;</span>
                             <h3>내가 쓴 게시글 목록</h3>
                             <ul className="posts-list">
-                                {userServiceBoards.map((post) => (
-                                    <li key={post.id} className="post-item">
-                                        <span>{post.serviceTitle}</span>
-                                      {/*  <span>({post.date})</span>*/}
+                                {userServiceBoards.map((serviceBoard) => (
+                                    <li key={serviceBoard.id} className="post-item">
+                                        <span>{serviceBoard.serviceTitle}</span>
+                                        <span>({formatDateTime(serviceBoard.regDate)})</span>
                                     </li>
                                 ))}
                             </ul>

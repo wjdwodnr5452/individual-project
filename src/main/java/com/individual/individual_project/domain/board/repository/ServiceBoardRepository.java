@@ -149,11 +149,12 @@ public class ServiceBoardRepository {
         return jpaQueryFactory
                 .select(Projections.constructor(UserWriteServiceBoardDto.class,
                         serviceBoard.id,
-                        serviceBoard.serviceTitle
+                        serviceBoard.serviceTitle,
+                        serviceBoard.regDate
                 ))
                 .from(serviceBoard)
                 .where(serviceBoard.user.id.eq(userId)) // 수정: userId 필드와 비교
-                .fetch(); // fetchAll() → fetch() 변경
+                .fetch(); //
     }
 
 

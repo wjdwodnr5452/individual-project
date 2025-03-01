@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: individual-project
+  profiles:
+    active: local  # 기본적으로 local 프로파일 활성화 (EC2에서는 prod로 변경)
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+
+encryption:
+  key: ABCdefg123456plm
+
+file:
+  dir: D:/DevRoot/project/imgs/
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

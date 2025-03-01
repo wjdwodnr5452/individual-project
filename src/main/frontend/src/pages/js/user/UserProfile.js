@@ -26,7 +26,7 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchUserDetail = async () => {
             try {
-                const response = await fetch(`/api/users/${id}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}`);
                 const responseData = await response.json();
 
                 if(responseData.header.code != 200){
@@ -66,7 +66,7 @@ const UserProfile = () => {
 
       if(!showApplications && userApplicants.length == 0){
           try{
-              const response = await fetch(`/api/users/${id}/applicants`);
+              const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/applicants`);
               const responseData = await response.json();
 
               if(responseData.header.code == 200) {
@@ -88,7 +88,7 @@ const UserProfile = () => {
         if(!showMyPostsModal && userServiceBoards){
 
             try{
-                const response = await fetch(`/api//users/${id}/service-boards`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/service-boards`);
                 const responseData = await response.json();
 
                 if(responseData.header.code == 200) {

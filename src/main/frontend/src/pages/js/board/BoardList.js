@@ -44,7 +44,7 @@ const BoardList = () => {
             params.append("size", pageSize);
             params.append("page", page); // 페이지 파라미터 추가
 
-            const response = await fetch(`/api/service-boards?${params.toString()}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards?${params.toString()}`);
 
             const responseData = await response.json();
             setPosts(responseData.data.content);
@@ -59,7 +59,7 @@ const BoardList = () => {
         // 카테고리 데이터를 API로부터 받아오는 요청
         const fetchCategories = async () => {
             try {
-                const response = await fetch("/api/categorys"); // API 요청 URL
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/categorys`); // API 요청 URL
                 if (!response.ok) {
                     throw new Error("카테고리 데이터를 가져오는데 실패했습니다.");
                 }
@@ -73,7 +73,7 @@ const BoardList = () => {
         // 서비스상태 데이터 가져오기
         const fetchStatService = async () => {
             try {
-                const response = await fetch("/api/status/service"); // API 요청 URL
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/status/service`); // API 요청 URL
                 if (!response.ok) {
                     throw new Error("서비스 상태 데이터를 가져오는데 실패했습니다.");
                 }
@@ -87,7 +87,7 @@ const BoardList = () => {
         // 모집 상태 데이터 가져오기
         const fetchStatRecruitment = async () => {
             try {
-                const response = await fetch("/api/status/recruitment"); // API 요청 URL
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/status/recruitment`); // API 요청 URL
                 if (!response.ok) {
                     throw new Error("모집 상태 데이터를 가져오는데 실패했습니다.");
                 }

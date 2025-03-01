@@ -25,7 +25,7 @@ const BoardEdit = () => {
         // 여기에 실제 API 호출 코드 추가 (예시로 static 데이터 사용)
         const fetchBoardDetailEdit = async () => {
             try {
-                const response = await fetch(`/api/service-boards/${id}/edit`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/edit`);
                 const responseData = await response.json();
 
                 console.log("responseData : " , responseData);
@@ -83,7 +83,7 @@ const BoardEdit = () => {
         }
         try {
             // API 요청
-            const response = await fetch(`/api/service-boards/${id}/edit`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/edit`, {
                 method: "PUT",
                 body: formData,
             });

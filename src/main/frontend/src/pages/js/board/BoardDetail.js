@@ -28,7 +28,7 @@ const BoardDetail = () => {
         // 서버에서 게시글 데이터 가져오기
         const fetchBoardDetail = async () => {
             try {
-                const response = await fetch(`/api/service-boards/${id}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}`);
                 const responseData = await response.json();
 
                 if(responseData.header.code == 200) {
@@ -69,7 +69,7 @@ const BoardDetail = () => {
                 if (isLoggedIn && user) {
 
                     // 여기서 API 요청하여 지원 상태 확인
-                    const response = await fetch(`/api/applicants/${user.id}/${id}`);
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/applicants/${user.id}/${id}`);
                     const responseData = await response.json();
 
                     if(responseData.data != null){
@@ -112,7 +112,7 @@ const BoardDetail = () => {
     // 진행 상태 변경
     const finishServiceBoardBtn = async(id) => {
 
-        const response = await fetch(`/api/service-boards/${id}/applicants`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/applicants`);
         const responseData = await response.json();
 
         setApplicants(responseData.data);
@@ -138,7 +138,7 @@ const BoardDetail = () => {
             }));
 
             try {
-                const response = await fetch(`/api/service-boards/${id}/assign-time-and-complete`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/assign-time-and-complete`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(requestBody),
@@ -170,7 +170,7 @@ const BoardDetail = () => {
 
     const showServicePeople = async (id) => {
 
-        const response = await fetch(`/api/service-boards/${id}/applicants`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/applicants`);
         const responseData = await response.json();
 
         setApplicants(responseData.data);
@@ -209,7 +209,7 @@ const BoardDetail = () => {
         }
 
         try {
-            const requestUrl = hasApplied ? `/api/applicants/${userApplicantId}/status`:  `/api/service-boards/${id}/applicants` ;
+            const requestUrl = hasApplied ? `${process.env.REACT_APP_API_URL}/api/applicants/${userApplicantId}/status`:  `/api/service-boards/${id}/applicants` ;
             const method = hasApplied ? "PATCH" : "POST";
 
             const response = await fetch(requestUrl, {
@@ -245,7 +245,7 @@ const BoardDetail = () => {
         }
 
         try {
-            const requestUrl = `/api/applicants/${applicantId}/status` ;
+            const requestUrl = `${process.env.REACT_APP_API_URL}/api/applicants/${applicantId}/status` ;
             const method = "PATCH" ;
 
             const response = await fetch(requestUrl, {

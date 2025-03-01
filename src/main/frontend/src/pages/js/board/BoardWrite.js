@@ -27,7 +27,7 @@ const BoardWrite = () => {
         // 카테고리 데이터를 API로부터 받아오는 요청
         const fetchCategories = async () => {
             try {
-                const response = await fetch("/api/categorys"); // API 요청 URL
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/categorys`); // API 요청 URL
                 if (!response.ok) {
                     throw new Error("카테고리 데이터를 가져오는데 실패했습니다.");
                 }
@@ -66,7 +66,7 @@ const BoardWrite = () => {
 
         try {
             // API 요청
-            const response = await fetch("/api/service-boards", {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards`, {
                 method: "POST",
                 body: formData,
             });

@@ -28,7 +28,10 @@ const BoardDetail = () => {
         // 서버에서 게시글 데이터 가져오기
         const fetchBoardDetail = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}`,{
+                    method: "GET",
+                    credentials: "include"
+                });
                 const responseData = await response.json();
 
                 if(responseData.header.code == 200) {
@@ -69,7 +72,10 @@ const BoardDetail = () => {
                 if (isLoggedIn && user) {
 
                     // 여기서 API 요청하여 지원 상태 확인
-                    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/applicants/${user.id}/${id}`);
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/applicants/${user.id}/${id}`,{
+                        method: "GET",
+                        credentials: "include"
+                    });
                     const responseData = await response.json();
 
                     if(responseData.data != null){
@@ -140,6 +146,7 @@ const BoardDetail = () => {
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/assign-time-and-complete`, {
                     method: "POST",
+                    credentials: "include",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(requestBody),
                 });
@@ -170,7 +177,10 @@ const BoardDetail = () => {
 
     const showServicePeople = async (id) => {
 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/applicants`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards/${id}/applicants`,{
+            method: "GET",
+            credentials: "include"
+        });
         const responseData = await response.json();
 
         setApplicants(responseData.data);
@@ -215,6 +225,7 @@ const BoardDetail = () => {
             const response = await fetch(requestUrl, {
                 method,
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(status),
             });
 
@@ -251,6 +262,7 @@ const BoardDetail = () => {
             const response = await fetch(requestUrl, {
                 method,
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(status),
             });
 

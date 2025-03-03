@@ -68,6 +68,7 @@ const BoardWrite = () => {
             // API 요청
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/service-boards`, {
                 method: "POST",
+                credentials: "include",
                 body: formData,
             });
 

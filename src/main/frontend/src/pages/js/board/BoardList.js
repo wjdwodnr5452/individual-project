@@ -236,7 +236,7 @@ const BoardList = () => {
                     posts.map((post) => (
                         <div key={post.id} className="boards-card">
                             <img
-                                src={post.thumbnailImage || '/images/thumbnail.png'}
+                                src={post.thumbnailImage ? `${process.env.REACT_APP_API_URL}${post.thumbnailImage}` : '/images/thumbnail.png'}
                                 alt={`${post.title} 썸네일`}
                                 className="boards-thumbnail"
                             />

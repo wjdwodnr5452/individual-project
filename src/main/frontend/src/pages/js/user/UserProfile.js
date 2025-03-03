@@ -26,7 +26,10 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchUserDetail = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}`,{
+                    method: "GET",
+                    credentials: "include"
+                });
                 const responseData = await response.json();
 
                 if(responseData.header.code != 200){
@@ -41,7 +44,7 @@ const UserProfile = () => {
             }
         }
         fetchUserDetail();
-    }, [id]); // 게시글 ID가 변경될 때마다 호출
+    }, [id]);
 
 
     const [user, setUser] = useState({});
@@ -66,7 +69,13 @@ const UserProfile = () => {
 
       if(!showApplications && userApplicants.length == 0){
           try{
-              const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/applicants`);
+              const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/applicants`,{
+                  method: "GET",
+                  credentials: "include",
+                  headers: {
+                      "Content-Type": "application/json",
+                  }
+              });
               const responseData = await response.json();
 
               if(responseData.header.code == 200) {
@@ -88,7 +97,13 @@ const UserProfile = () => {
         if(!showMyPostsModal && userServiceBoards){
 
             try{
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/service-boards`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/service-boards`,{
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
                 const responseData = await response.json();
 
                 if(responseData.header.code == 200) {
@@ -132,7 +147,7 @@ const UserProfile = () => {
                         <span>{user.totalServiceTime}</span>
                     </div>
 
-                    <div class="profile-btn">
+                    <div className="profile-btn">
                         {/* 지원목록 버튼 */}
                         <button className="user-profile-btn" onClick={() => toggleApplications(id)}>
                             {showApplications ? "지원목록 숨기기" : "지원목록 보기"}
@@ -166,22 +181,6 @@ const UserProfile = () => {
                         </div>
                     </div>
 
-
-
-
-             /*       <div className="applications-list">
-                        <h3>지원한 게시글 목록</h3>
-                        <ul>
-                            {userApplicants.map((app) => (
-                                <li key={app.id} className="application-item">
-                                    <span>{app.serviceBoardTitle}</span>
-                                    <span>({app.applicantStatusName})</span>
-                                    <span>({app.userServiceTime} 시간 부여)</span>
-                                    {/!*   <span>({app.date})</span>*!/}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>*/
                 )}
 
                 {/* 내가 쓴 게시글 모달 */}

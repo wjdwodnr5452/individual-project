@@ -12,8 +12,6 @@ server:
 encryption:
   key: ABCdefg123456plm
 
-file:
-  dir: D:/DevRoot/project/imgs/
 
 logging:
   level:

@@ -1,0 +1,66 @@
+name : Deploy To EC2
+
+on :
+  push :
+    branches:
+      - main
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name : Github Repositorty
+        uses: actions/checkout@v4
+
+      - name : Test
+        run: |
+          ls
+          pwd
+
+      - name : JDK 17 install
+        uses : actions/setup-java@v4
+        with:
+          distribution : temurin
+          java-version : 17
+
+      - name: application.yml 생성
+        run : |
+          echo "${{secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
+          echo "${{secrets.APPLICATION_PROPERTIES_PROD }}" > ./src/main/resources/application-prod.yml
+
+      - name : 테스트 및 빌드하기
+        run : |
+          chmod +x ./gradlew
+          ./gradlew clean build
+
+      - name : 빌드된 파일 이름 변경
+        run : mv ./build/libs/*SNAPSHOT.jar ./together.jar
+
+      - name : SCP로 EC2에 빌드된 파일 전송
+        uses : appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: together.jar
+          target: /home/ubuntu/app/tobe
+
+      - name : SSH로 EC2에 접속하기
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          APPLICATION_PROPERTIES : ${{ secrets.APPLICATION_PROPERTIES }}
+          APPLICATION_PROPERTIES_PROD : ${{ secrets.APPLICATION_PROPERTIES_PROD }}
+        with :
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            rm -rf /home/ubuntu/app/current
+            mkdir /home/ubuntu/app/current
+            mv /home/ubuntu/app/tobe/together.jar /home/ubuntu/app/current/together.jar
+            cd /home/ubuntu/app/current
+            sudo fuser -k -n tcp 8080 || true
+            nohup java -jar together.jar > ./output.log 2>&1 &
+            rm -rf /home/ubuntu/app/tobe
+

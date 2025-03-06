@@ -85,8 +85,7 @@ public class ApplicantTest {
     }
 
 
-
-/*    @Test
+    @Test
     void save() { // 신청자 생성
         Applicant applicant = new Applicant();
 
@@ -102,7 +101,7 @@ public class ApplicantTest {
         Applicant save = applicantRepository.save(applicant);
 
         Assertions.assertThat(save.getServiceBoard().getId()).isEqualTo(serviceBoard.getId());
-    }*/
+    }
 
 
     @Test
@@ -129,7 +128,7 @@ public class ApplicantTest {
 
 
 
-/*    @Test
+    @Test
     void findByApplicantId() { // 봉사 게시판에 신청목록
 
         Applicant applicant1 = new Applicant();
@@ -157,7 +156,7 @@ public class ApplicantTest {
 
         Assertions.assertThat(byServiceBoardId.size()).isEqualTo(2);
 
-    }*/
+    }
 
 
 }

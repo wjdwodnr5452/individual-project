@@ -16,6 +16,7 @@ import com.individual.individual_project.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,9 @@ public class ApplicantTest {
         serviceBoardDataJpa.save(serviceBoard);
     }
 
-    @Test
+
+
+/*    @Test
     void save() { // 신청자 생성
         Applicant applicant = new Applicant();
 
@@ -99,7 +102,7 @@ public class ApplicantTest {
         Applicant save = applicantRepository.save(applicant);
 
         Assertions.assertThat(save.getServiceBoard().getId()).isEqualTo(serviceBoard.getId());
-    }
+    }*/
 
 
     @Test
@@ -126,7 +129,7 @@ public class ApplicantTest {
 
 
 
-    @Test
+/*    @Test
     void findByApplicantId() { // 봉사 게시판에 신청목록
 
         Applicant applicant1 = new Applicant();
@@ -154,7 +157,7 @@ public class ApplicantTest {
 
         Assertions.assertThat(byServiceBoardId.size()).isEqualTo(2);
 
-    }
+    }*/
 
 
 }

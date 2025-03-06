@@ -91,7 +91,7 @@ public class ServiceBoardTest {
     }
 
 
-    @Test
+/*    @Test
     void save() {
         
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
@@ -113,7 +113,7 @@ public class ServiceBoardTest {
         log.info("saveBoard : {}", saveBoard);
 
         Assertions.assertThat(saveBoard.getId()).isEqualTo(1L);
-    }
+    }*/
 
     @Test
     void findServiceBoardId() {

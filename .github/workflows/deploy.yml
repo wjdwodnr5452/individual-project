@@ -61,6 +61,6 @@ jobs:
             mv /home/ubuntu/app/tobe/together.jar /home/ubuntu/app/current/together.jar
             cd /home/ubuntu/app/current
             sudo fuser -k -n tcp 8080 || true
-            nohup java -jar together.jar > ./output.log 2>&1 &
+            nohup java -jar -Dspring.profiles.active=prod together.jar > ./output.log 2>&1 &
             rm -rf /home/ubuntu/app/tobe
 

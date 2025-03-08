@@ -13,8 +13,8 @@
 - Java 17
 - Spring Boot
 - mysql
-- redis
-- AWS EC2
+- AWS
+- Git Action
 - JPA
 - SpringData JPA
 - Querydsl

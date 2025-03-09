@@ -2,14 +2,15 @@
 다같이는 나눔을 실천하고, 함께 성장하며, 더 나은 세상을 만들어가는 사람들을 위한 공간입니다. 봉사활동을 원하는 누구나 손쉽게 활동에 참여하고, 활동 완료 후에는 공인된 봉사시간을 간편하게 확인할 수 있습니다.
 *****
 
-## :books: 목차
+### :books: 목차
 1. [기술 스택](#-기술-스택)
 2. 페이지 url 정보
 3. API url 정보 
 4. ERD 설계
+5. 아키텍처
 
 *****
-# :heavy_check_mark: 기술 스택
+### :one: 기술 스택
 - Java 17
 - Spring Boot
 - mysql
@@ -22,7 +23,7 @@
 
 *****
 
-### :memo: 페이지 url 정보
+### :two: 페이지 url 정보
 - /      : 메인 페이지
 - /login : 로그인 페이지
 - /signup : 회원가입 페이지
@@ -34,7 +35,7 @@
 *****
 
 
-### :memo: API url 정보
+### :three: API url 정보
 - **POST** &nbsp;&nbsp; /api/auth/login :  로그인
 - **POST** &nbsp;&nbsp; /api/auth/logout : 로그아웃
 - **GET**  &nbsp;&nbsp; /api/auth/status : 상태 체크
@@ -50,14 +51,24 @@
 
 *****
 
-### 🔧 ERD 설계
+### :four: ERD 설계
 - url : https://www.erdcloud.com/d/8Tba5NQqfBJtvEhuD
 
 ![image](https://github.com/user-attachments/assets/28795093-6408-42a4-9ea4-40dd9f5eb66a)
 
 *****
 
-### 아키텍처
+### :five: 아키텍처
+![아키텍처 drawio](https://github.com/user-attachments/assets/dda46cb0-ef95-4894-9be8-8e0b5c7d2f48)
+
+*****
+
+### :six: 프로젝트 기능
+|기능|설명|비고|
+|------|------------|---|
+|메인페이지|봉사활동 게시글 리스트 표출|페이징, 검색 필터 구현|
+|테스트1|테스트2|테스트3|
+|테스트1|테스트2|테스트3|
 
 
 

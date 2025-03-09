@@ -18,7 +18,9 @@
 - JPA
 - SpringData JPA
 - Querydsl
+- React
 
+*****
 
 ### :memo: 페이지 url 정보
 - /      : 메인 페이지
@@ -27,7 +29,9 @@
 - /boards/write : 게시판 작성페이지
 - /boards/:id : 게시판 상세 페이지
 - /boards/:id/edit : 게시판 상세 수정 페이지
-- /users/:id : 회원정보 페이지 
+- /users/:id : 회원정보 페이지
+
+*****
 
 
 ### :memo: API url 정보
@@ -44,10 +48,18 @@
 - **GET** &nbsp;&nbsp; /api/status/recruitment : 봉사 모집 상태 조회
 - **GET** &nbsp;&nbsp; /api/categorys : 카테고리 조회
 
+*****
+
 ### 🔧 ERD 설계
 - url : https://www.erdcloud.com/d/8Tba5NQqfBJtvEhuD
 
 ![image](https://github.com/user-attachments/assets/28795093-6408-42a4-9ea4-40dd9f5eb66a)
+
+*****
+
+### 아키텍처
+
+
 
 
 

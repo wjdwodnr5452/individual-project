@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-public interface ServiceBoardDataJpa extends JpaRepository<ServiceBoard, Long> {
+public interface ServiceBoardDataJpa extends JpaRepository<ServiceBoard, Long>{
 
  /*   @Modifying
     @Query("update ServiceBoard e set e.serviceStatId = 4 where e.serviceDate <= :currentTime and e.serviceStatId = 3")

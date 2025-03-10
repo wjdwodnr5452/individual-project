@@ -3,7 +3,6 @@ package com.individual.individual_project.config;
 
 import com.individual.individual_project.comm.encrypt.EncryptionService;
 import com.individual.individual_project.domain.applicant.repository.ApplicantRepository;
-import com.individual.individual_project.domain.applicant.repository.ApplicantTimeRepository;
 import com.individual.individual_project.domain.applicant.service.ApplicantService;
 import com.individual.individual_project.domain.applicant.service.serviceImpl.ApplicantServiceImpl;
 import com.individual.individual_project.domain.board.repository.ServiceBoardDataJpa;

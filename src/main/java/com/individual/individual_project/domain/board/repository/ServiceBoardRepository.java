@@ -72,42 +72,42 @@ public class ServiceBoardRepository {
                 .fetch();*/
 
 
-     public Page<ServiceBoard> findAll(Long serviceStatId, Long recruitStatId, Long categoryId, String serviceBoardSearchName, Pageable pageable) {
+    public Page<ServiceBoard> findAll(Long serviceStatId, Long recruitStatId, Long categoryId, String serviceBoardSearchName, Pageable pageable) {
 
 
-         JPQLQuery<ServiceBoard> query = jpaQueryFactory
-                 .selectFrom(serviceBoard)
-                 .join(serviceBoard.user, user).fetchJoin()
-                 .join(serviceBoard.category, category).fetchJoin()
-                 .join(serviceBoard.serviceStat, serviceStatus).fetchJoin()
-                 .join(serviceBoard.recruitStat, recruitStatus).fetchJoin()
-                 .where(
-                         buildConditions(serviceStatId,recruitStatId,categoryId,serviceBoardSearchName)
-                 );
+        JPQLQuery<ServiceBoard> query = jpaQueryFactory
+                .selectFrom(serviceBoard)
+                .join(serviceBoard.user, user).fetchJoin()
+                .join(serviceBoard.category, category).fetchJoin()
+                .join(serviceBoard.serviceStat, serviceStatus).fetchJoin()
+                .join(serviceBoard.recruitStat, recruitStatus).fetchJoin()
+                .where(
+                        buildConditions(serviceStatId,recruitStatId,categoryId,serviceBoardSearchName)
+                );
 
-         // 등록일 내림차순 정렬 추가
-         query.orderBy(serviceBoard.regDate.desc());
+        // 등록일 내림차순 정렬 추가
+        query.orderBy(serviceBoard.regDate.desc());
 
-         // 페이징 처리
-         query.offset(pageable.getOffset()) // 페이지의 시작 시점
-                 .limit(pageable.getPageSize());
+        // 페이징 처리
+        query.offset(pageable.getOffset()) // 페이지의 시작 시점
+                .limit(pageable.getPageSize());
 
-         List<ServiceBoard> result = query.fetch();
+        List<ServiceBoard> result = query.fetch();
 
-         // 총 데이터 개수 구하기
-         JPQLQuery<Long> countQuery = jpaQueryFactory
-                 .select(serviceBoard.count())
-                 .from(serviceBoard)
-                 .join(serviceBoard.user, user)
-                 .join(serviceBoard.category, category)
-                 .join(serviceBoard.serviceStat, serviceStatus)
-                 .join(serviceBoard.recruitStat, recruitStatus)
-                 .where(buildConditions(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName));
+        // 총 데이터 개수 구하기
+        JPQLQuery<Long> countQuery = jpaQueryFactory
+                .select(serviceBoard.count())
+                .from(serviceBoard)
+                .join(serviceBoard.user, user)
+                .join(serviceBoard.category, category)
+                .join(serviceBoard.serviceStat, serviceStatus)
+                .join(serviceBoard.recruitStat, recruitStatus)
+                .where(buildConditions(serviceStatId, recruitStatId, categoryId, serviceBoardSearchName));
 
-         long totalCount = countQuery.fetchCount();
+        long totalCount = countQuery.fetchCount();
 
-         return new PageImpl<>(result, pageable, totalCount);
-     }
+        return new PageImpl<>(result, pageable, totalCount);
+    }
 
 
     public ServiceBoardDetailDto findById(Long id) {
@@ -160,17 +160,17 @@ public class ServiceBoardRepository {
 
     public Long findBoardWriter(Long id) {
 
-         return  jpaQueryFactory.select(
-                 serviceBoard.user.id
-         )
-                 .from(serviceBoard)
-                 .where(serviceBoard.id.eq(id))
-                 .fetchOne();
+        return  jpaQueryFactory.select(
+                        serviceBoard.user.id
+                )
+                .from(serviceBoard)
+                .where(serviceBoard.id.eq(id))
+                .fetchOne();
     }
 
     private BooleanExpression eqUserId(Long userId) {
         if (userId == null) {
-           return null;
+            return null;
         }
         return serviceBoard.user.id.eq(userId);
     }

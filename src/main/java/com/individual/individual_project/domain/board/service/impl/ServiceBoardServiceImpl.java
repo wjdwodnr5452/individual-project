@@ -190,9 +190,9 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
             User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-           if(!user.getId().equals(serviceBoard.getUser().getId())){
-               throw new BaseException(ResponseCode.FORBIDDEN);
-           }
+            if(!user.getId().equals(serviceBoard.getUser().getId())){
+                throw new BaseException(ResponseCode.FORBIDDEN);
+            }
         }
 
         String thumbnailImgPath = (serviceBoard.getThumbnailImage() != null) ? "/api/images/" + serviceBoard.getThumbnailImage().getStoredFilename() : null;
@@ -280,7 +280,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
                 serviceBoard.getRecruitStat().getId()
         );
 
-        
+
         return serviceBoardDetailEditDto;
     }
 

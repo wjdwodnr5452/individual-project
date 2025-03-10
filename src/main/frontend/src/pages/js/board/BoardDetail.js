@@ -349,9 +349,9 @@ const BoardDetail = () => {
                         </div>
                     </div>
 
-                    <div className="board-thumbnail-container">
+                {/*    <div className="board-thumbnail-container">
                         <img src={boardDetail.thumbnailImage} alt={`${boardDetail.serviceTitle} 썸네일`} className="board-thumbnail" />
-                    </div>
+                    </div>*/}
 
                     <div className="board-content">
                         <p>{boardDetail.serviceContent}</p>

@@ -3,7 +3,7 @@
 *****
 
 ### :books: 목차
-1. [기술 스택](#-기술-스택)
+1. 기술 스택
 2. 페이지 url 정보
 3. API url 정보 
 4. ERD 설계
@@ -62,13 +62,8 @@
 ![아키텍처 drawio](https://github.com/user-attachments/assets/dda46cb0-ef95-4894-9be8-8e0b5c7d2f48)
 
 *****
-
-### :six: 프로젝트 기능
-|기능|설명|비고|
-|------|------------|---|
-|메인페이지|봉사활동 게시글 리스트 표출|페이징, 검색 필터 구현|
-|테스트1|테스트2|테스트3|
-|테스트1|테스트2|테스트3|
+### :six: 결과
+https://web.together-communication.com/
 
 
 

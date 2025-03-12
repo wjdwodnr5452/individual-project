@@ -219,7 +219,7 @@ const BoardDetail = () => {
         }
 
         try {
-            const requestUrl = hasApplied ? `${process.env.REACT_APP_API_URL}/api/applicants/${userApplicantId}/status`:  `/api/service-boards/${id}/applicants` ;
+            const requestUrl = hasApplied ? `${process.env.REACT_APP_API_URL}/api/applicants/${userApplicantId}/status`:  `${process.env.REACT_APP_API_URL}/api/service-boards/${id}/applicants` ;
             const method = hasApplied ? "PATCH" : "POST";
 
             const response = await fetch(requestUrl, {

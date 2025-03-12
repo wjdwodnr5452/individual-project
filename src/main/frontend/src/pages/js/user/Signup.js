@@ -74,7 +74,7 @@ const Signup = () => {
                 // 서버 응답이 실패한 경우 에러 처리
                 const errorData = await response.json();
                 setError(errorData.msg || "회원가입에 실패했습니다.");
-                alert(setError);
+                alert(errorData.msg);
             }
 
         }catch (err){
@@ -101,7 +101,7 @@ const Signup = () => {
                 <div className="form-group">
                     <label htmlFor="password">비밀번호</label>
                     <input type="password" id="password" name="password" value={formData.password}
-                           onChange={handleChange} required/>
+                           onChange={handleChange} placeholder="대소문자,특수문자 하나씩 포함한 비밀번호 최소 길이는 8자 이상입니다." required/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="confirmPassword">비밀번호 확인</label>

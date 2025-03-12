@@ -1,8 +1,0 @@
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 10
-    url: jdbc:mysql://your-rds-endpoint:3306/together?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-    username: rds_user
-    password: rds_password

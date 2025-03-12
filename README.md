@@ -24,31 +24,42 @@
 *****
 
 ### :two: 페이지 url 정보
-- /      : 메인 페이지
-- /login : 로그인 페이지
-- /signup : 회원가입 페이지
-- /boards/write : 게시판 작성페이지
-- /boards/:id : 게시판 상세 페이지
-- /boards/:id/edit : 게시판 상세 수정 페이지
-- /users/:id : 회원정보 페이지
+|url |설명|
+|------|---|
+|/|메인|
+|/login|로그인 |
+|/signup|회원가입|
+|/boards/write|게시판 작성|
+|/boards/:id|게시판 상세|
+|/boards/:id/edit|게시판 상세 수정|
+|users/:id|회원정보|
 
 *****
 
 
 ### :three: API url 정보
-- **POST** &nbsp;&nbsp; /api/auth/login :  로그인
-- **POST** &nbsp;&nbsp; /api/auth/logout : 로그아웃
-- **GET**  &nbsp;&nbsp; /api/auth/status : 상태 체크
-- **POST** &nbsp;&nbsp; /api/users : 회원 가입
-- **GET**  &nbsp;&nbsp; /api/users/{id} : 유저 상세보기
-- **GET**  &nbsp;&nbsp; /api/service-boards : 봉사 게시글 목록 조회
-- **POST** &nbsp;&nbsp; /api/service-boards : 봉사 게시글 작성
-- **GET**  &nbsp;&nbsp; /api/service-boards/{id} : 봉사 게시글 상세 조회
-- **PUT**  &nbsp;&nbsp; /api/service-boards/{id} : 봉사 게시글 상세 수정
-- **GET** &nbsp;&nbsp; /api/status/service : 봉사 상태 조회
-- **GET** &nbsp;&nbsp; /api/status/recruitment : 봉사 모집 상태 조회
-- **GET** &nbsp;&nbsp; /api/categorys : 카테고리 조회
 
+|메소드|url|설명|
+|------|---|---|
+|POST|/api/auth/login|로그인|
+|POST|/api/auth/logout|로그아웃|
+|GET|/api/auth/status|상태 체크|
+|POST|/api/users|회원 가입|
+|GET|/api/users/{userId}|유저 상세보기|
+|GET|/api/service-boards|봉사 게시글 목록 조회|
+|POST|/api/service-boards|봉사 게시글 작성|
+|GET|/api/service-boards/{serviceBoardId}|봉사 게시글 상세 조회|
+|PUT|/api/service-boards/{serviceBoardId}|봉사 게시글 상세 수정|
+|POST|/api/service-boards/{serviceBoardId}/assign-time-and-complete|봉사 시간 부여|
+|GET|/api/users/{userId}/service-boards|유저가 작성한 봉사게시물 리스트|
+|GET|/api/status/service|봉사 상태 조회|
+|GET|/api/status/recruitment|봉사 모집 상태 조회|
+|GET|/api/categorys|카테고리 조회|
+|POST|/api/service-boards/{serviceBoardId}/applicants|봉사 신청|
+|GET|/api/service-boards/{serviceBoardId}/applicants|봉사 신청 리스트 조회|
+|PATCH|/api/applicants/{id}/status|봉사 신청 상태 변경 (신청, 취소)|
+|GET|/api/applicants/{userId}/{serviceBoardId}|봉사 신청 조회|
+|GET|/api/users/{userId}/applicants|유저가 봉사신청 한 리스트|
 *****
 
 ### :four: ERD 설계
@@ -62,12 +73,18 @@
 ![아키텍처 drawio](https://github.com/user-attachments/assets/dda46cb0-ef95-4894-9be8-8e0b5c7d2f48)
 
 *****
-### :six: 결과
-https://web.together-communication.com/
+### :six: 프로젝트 기능
 
-
-
-
+|제목|설명|비고|
+|------|------|---|
+|회원가입|사용자 회원가입|이메일 중복 확인, 비밀번호 검증 확인|
+|로그인|사용자 로그인|회원가입 된 이메일 체크, 비밀번호 체크|
+|메인페이지|사용들이 작성한 봉사게시물 리스트 조회|검색 필터 및 페이징|
+|게시물작성|사용자 봉사 게시물 작성|봉사게시물에 필요한 제목, 카테고리, 모집인원 등 필수 체크|
+|게시물상세|봉사 게시물 상세 내용 조회 하는 페이지 이다. <br>  작성자는 게시물 수정 버튼 표출, 봉사 종료 버튼, 봉사 신청자 조회, 봉사 신청자 봉사 시간 부여가 가능하다. <br> 작성자 이외에 일반 사용자는 봉사 신청/취소가 가능하다.|작성자 : 게시물 수정, 신청자 목록 조회 <br> 일반사용자: 봉사 신청/취소|
+|게시물수정|봉사 게시물 수정|봉사게시물에 필요한 제목, 카테고리, 모집인원 등 필수 체크|
+|회원정보|회원 정보 조회하는 페이지이다. 회원이 부여 받은 봉사시간과 봉사 신청 리스트를 조회 할 수 있으며 작성한 게시물 목록도 조회 가능하다.||
+|스케줄러|봉사 마감일이 지나면 모집 상태 값이 마감으로 변경, 봉사 진행일이 지나면 진행 상태가 진행중으로 변경|30분 마다 스케줄러 작동해서 모집 상태와 진행 상태 값을 변경|
 
 
 

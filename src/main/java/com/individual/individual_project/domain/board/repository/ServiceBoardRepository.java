@@ -47,7 +47,6 @@ public class ServiceBoardRepository {
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
 
-
     /*         QServiceBoard serviceBoard = QServiceBoard.serviceBoard;
          QUser user = QUser.user;
          QCategory category = QCategory.category;

@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -93,6 +94,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         return save;
     }
 
+
     @Override
     public void updateServiceBoardStat(LocalDateTime currentTime) {
 
@@ -108,6 +110,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         Status updateApplicantStat = statusRepository.findById(7L).orElseThrow(() -> new BaseException(ResponseCode.STATUS_NOT_FOUND));
         applicantRepository.updateApplicantStat(updateApplicantStat, updateServiceStat, 6L);
     }
+
 
     @Override
     public Page<ServiceBoardsDto> findAll(String serviceStatId, String recruitStatId, String categoryId, String serviceBoardSearchName, Pageable pageable) {
@@ -144,6 +147,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         });
     }
 
+    @Cacheable(cacheNames = "findServiceBoardById", key = "'serviceBoard:'+#id", cacheManager = "cacheManager")
     @Override
     public ServiceBoardDetailDto findServiceBoardById(String id, HttpServletRequest request) {
 

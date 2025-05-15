@@ -56,6 +56,12 @@ dependencies {
 	// aws health 체크
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	// redis 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// LocalDateTime 직렬화 하기 위해서
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 }
 
 

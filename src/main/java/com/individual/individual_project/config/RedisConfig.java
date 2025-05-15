@@ -22,4 +22,5 @@ public class RedisConfig {
         return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port));
     }
 
+
 }

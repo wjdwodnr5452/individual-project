@@ -15,7 +15,6 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
         // Lettuce라는 라이브러리를 활용해 Redis 연결을 관리하는 객체를 생성하고

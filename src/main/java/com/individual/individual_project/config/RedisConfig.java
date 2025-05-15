@@ -21,5 +21,4 @@ public class RedisConfig {
         // Redis 서버에 대한 정보(Host, Port)를 설정함
         return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port));
     }
-
 }

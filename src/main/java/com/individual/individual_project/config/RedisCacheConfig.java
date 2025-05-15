@@ -48,6 +48,7 @@ public class RedisCacheConfig {
         objectMapper.registerModule(new JavaTimeModule()); // Java 8 날짜 타입 지원
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // ISO 형식
 
+
         // 2. GenericJackson2JsonRedisSerializer 사용
         GenericJackson2JsonRedisSerializer jsonRedisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 

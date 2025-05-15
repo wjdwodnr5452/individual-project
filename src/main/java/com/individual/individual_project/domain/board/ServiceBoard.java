@@ -46,7 +46,6 @@ public class ServiceBoard {
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
-
     @ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "id")
     @NotNull(message ="BORD_NOT_CATEGORY_ID")

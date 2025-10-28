@@ -62,6 +62,9 @@ dependencies {
 	// LocalDateTime 직렬화 하기 위해서
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+	// kafka 추가
+	implementation 'org.springframework.kafka:spring-kafka'
+
 }
 
 

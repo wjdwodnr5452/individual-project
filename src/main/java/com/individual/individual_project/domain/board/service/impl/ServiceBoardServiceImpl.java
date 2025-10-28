@@ -147,7 +147,7 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         });
     }
 
-    @Cacheable(cacheNames = "findServiceBoardById", key = "'serviceBoard:'+#id", cacheManager = "cacheManager")
+   // @Cacheable(cacheNames = "findServiceBoardById", key = "'serviceBoard:'+#id", cacheManager = "cacheManager")
     @Override
     public ServiceBoardDetailDto findServiceBoardById(String id, HttpServletRequest request) {
 

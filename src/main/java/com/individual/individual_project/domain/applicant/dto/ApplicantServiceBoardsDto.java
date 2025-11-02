@@ -25,4 +25,7 @@ public class ApplicantServiceBoardsDto {
         this.applicantStat = applicantStat;
         this.applicantStatName = applicantStatName;
     }
+
+
+
 }

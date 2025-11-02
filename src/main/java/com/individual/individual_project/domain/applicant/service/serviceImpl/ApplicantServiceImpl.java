@@ -2,7 +2,9 @@ package com.individual.individual_project.domain.applicant.service.serviceImpl;
 
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.encrypt.EncryptionService;
+import com.individual.individual_project.comm.string.JsonString;
 import com.individual.individual_project.domain.applicant.Applicant;
+import com.individual.individual_project.domain.applicant.dto.ApplicantKafkaMessage;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBordsResponseDto;
 import com.individual.individual_project.domain.applicant.dto.ApplicantUserDto;
@@ -20,6 +22,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +40,13 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final StatusRepository statusRepository;
     private final ServiceBoardDataJpa serviceBoardDataJpa;
     private final EncryptionService encryptionService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final JsonString jsonString;
 
     @Value("${file.dir}")
     private String fileDir;
+
+
 
     @Override
     public ApplicantServiceBordsResponseDto save(Long serviceBoardId, HttpServletRequest request) {
@@ -80,6 +87,16 @@ public class ApplicantServiceImpl implements ApplicantService {
 
         if(save != null){
             ApplicantServiceBordsResponseDto findDto = new ApplicantServiceBordsResponseDto(save.getId(), save.getApplicantStat().getId(), save.getApplicantStat().getStatusName());
+
+            ApplicantKafkaMessage applicantKafkaMessage = new ApplicantKafkaMessage(
+                    save.getServiceBoard().getId(),
+                    save.getUser().getId(),
+                    save.getApplicantStat().getId()
+            );
+
+
+            this.kafkaTemplate.send("applicant.send", jsonString.toJsonString(applicantKafkaMessage));
+
             return findDto;
         }else{
             throw new BaseException(ResponseCode.BAD_REQUEST);
@@ -129,6 +146,16 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setApplicantStat(status);
 
         ApplicantServiceBordsResponseDto responseApplicantDto = new ApplicantServiceBordsResponseDto(applicant.getId(), applicant.getApplicantStat().getId(), status.getStatusName());
+
+        ApplicantKafkaMessage applicantKafkaMessage = new ApplicantKafkaMessage(
+                applicant.getServiceBoard().getId(),
+                applicant.getUser().getId(),
+                applicant.getApplicantStat().getId()
+        );
+
+
+        this.kafkaTemplate.send("applicant.send", jsonString.toJsonString(applicantKafkaMessage));
+
 
         return responseApplicantDto;
     }

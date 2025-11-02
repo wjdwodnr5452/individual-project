@@ -10,7 +10,7 @@ import BoardEdit from "./pages/js/board/BoardEdit";
 import UserProfile from "./pages/js/user/UserProfile";
 import Header from "./pages/js/layout/Header";
 import Footer from "./pages/js/layout/Footer";
-
+import Notifications from "./components/Notifications";
 
 function App() {
     return (
@@ -18,6 +18,7 @@ function App() {
             <Router>
                 <div>
                     <Header/>
+                    <Notifications enabled={true} />
                         <Routes>
                                 <Route path="/" element={<HomePage />} />  {/* 메인페이지 */}
                                 <Route path="/boards/write" element={<BoardWrite />} /> {/* 게시판 작성페이지 */}

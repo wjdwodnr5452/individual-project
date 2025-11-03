@@ -21,3 +21,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<UserDetailDto> findUserDetail(@Param("id") Long id);
 
 }
+

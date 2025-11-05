@@ -16,6 +16,7 @@ import com.individual.individual_project.domain.board.repository.ServiceBoardDat
 import com.individual.individual_project.domain.board.repository.StatusRepository;
 import com.individual.individual_project.domain.response.ResponseCode;
 import com.individual.individual_project.domain.user.User;
+import com.individual.individual_project.domain.user.repository.UserRepository;
 import com.individual.individual_project.web.exception.BaseException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -42,6 +44,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final EncryptionService encryptionService;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final JsonString jsonString;
+    private final UserRepository userRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -72,7 +75,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setApplicantDate(localDate);
 
         if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
-            User user = (User)  session.getAttribute(SessionConst.LOGIN_MEMBER);
+            //User user = (User)  session.getAttribute(SessionConst.LOGIN_MEMBER);
+            Map<String, Object> userMap = (Map<String, Object>) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            User user = userRepository.findById((Long) userMap.get("id"))
+                    .orElse(null);
+
             applicant.setUser(user);
         }else{
             throw new BaseException(ResponseCode.USER_NOT_FOUND);

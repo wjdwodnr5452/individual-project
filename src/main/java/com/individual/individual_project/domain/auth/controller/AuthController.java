@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Login(로그인, 로그아웃)
  * 로그인시 세션 생성
@@ -27,18 +30,24 @@ public class AuthController {
     private final AuthService loginService;
 
     @PostMapping("/login")
-    public ApiResponse<LoginStatusDto> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+    public ApiResponse<Map> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         log.info("loginDto: {}", loginDto);
         User user = loginService.login(loginDto);
         log.info("user: {}", user);
 
         // 세션 생성
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, user);
 
-        LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+        //LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
 
-        return ApiResponse.success(loginStatusDto, ResponseCode.USER_LOGIN_SUCCESS);
+        // 세션 클러스터링으로 인해 Map으로 교체
+        Map<String, Object> loginInfo = new LinkedHashMap<>();
+        loginInfo.put("id" , user.getId());
+        loginInfo.put("name" , user.getName());
+
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginInfo);
+
+        return ApiResponse.success(loginInfo, ResponseCode.USER_LOGIN_SUCCESS);
         //return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_SUCCESS);
     }
 
@@ -56,7 +65,7 @@ public class AuthController {
 
 
    @GetMapping("/status")
-    public ApiResponse<LoginStatusDto> getLoginStatus(HttpServletRequest request) {
+    public ApiResponse<Map> getLoginStatus(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
@@ -64,11 +73,15 @@ public class AuthController {
             return ApiResponse.fail(ResponseCode.USER_LOGOUT_STATUS, null);
         }
 
-        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+      // LoginStatusDto loginStatusDto  = (LoginStatusDto) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-       return ApiResponse.success(loginStatusDto, ResponseCode.USER_LOGIN_STATUS);
+
+        Map<String, Object> loginInfo = (Map<String, Object>) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+       // LoginStatusDto loginStatusDto = new LoginStatusDto(user.getId(), user.getName());
+
+       return ApiResponse.success(loginInfo, ResponseCode.USER_LOGIN_STATUS);
        //return ApiResponse.success(user.getName(), ResponseCode.USER_LOGIN_STATUS);
     }
 

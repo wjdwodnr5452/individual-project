@@ -20,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "GROUP BY u.id, u.email, u.name, u.phoneNumber")
     Optional<UserDetailDto> findUserDetail(@Param("id") Long id);
 
+    Optional<User> findById(Long id);
+
 }
 

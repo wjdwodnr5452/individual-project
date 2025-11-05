@@ -34,6 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -165,11 +167,14 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
         boolean isWriterCheck = false;
 
         if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
-            User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+           // User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            Map<String, Object> user = (Map<String, Object>) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
 
             Long boardWriter = serviceBoardRepository.findBoardWriter(longId);
 
-            boolean equals = boardWriter.equals(user.getId());
+            boolean equals = boardWriter.equals((Long) user.get("id"));
             isWriterCheck = equals;
         }
 
@@ -188,11 +193,15 @@ public class ServiceBoardServiceImpl implements ServiceBoardService {
 
         HttpSession session = request.getSession(false);
 
-
         ServiceBoard serviceBoard = serviceBoardDataJpa.findById(id).orElseThrow(() -> new BaseException(ResponseCode.BORD_NOT_DETAIL));
 
         if (session != null && session.getAttribute(SessionConst.LOGIN_MEMBER) != null){
-            User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+            //User user  = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            Map<String, Object> userMap = (Map<String, Object>) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            User user = userRepository.findById((Long) userMap.get("id"))
+                    .orElse(null);
 
             if(!user.getId().equals(serviceBoard.getUser().getId())){
                 throw new BaseException(ResponseCode.FORBIDDEN);

@@ -19,6 +19,8 @@ export const checkLoginStatus = async () => {
         } else {
             return { isLoggedIn: false, user: null };
         }
+
+
     } catch (error) {
         console.error("Error checking login status:", error);
         return { isLoggedIn: false, user: null };

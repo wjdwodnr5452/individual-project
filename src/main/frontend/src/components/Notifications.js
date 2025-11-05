@@ -6,11 +6,11 @@ export default function Notifications() {
     const esRef = useRef(null);
 
     useEffect(() => {
-        // ✅ 백엔드 SSE 엔드포인트에 연결
-        const eventSource = new EventSource("http://localhost:8081/subscribe/applicant");
+        // 백엔드 SSE 엔드포인트에 연결
+        const eventSource = new EventSource("http://localhost:8081/subscribe/applicant", { withCredentials: true});
         esRef.current = eventSource;
 
-        // ✅ Kafka Consumer → SSE → React 로 전달된 메시지 수신
+        // Kafka Consumer → SSE → React 로 전달된 메시지 수신
         eventSource.addEventListener("applicant-message", (event) => {
             try {
                 const data = JSON.parse(event.data);
@@ -36,7 +36,7 @@ export default function Notifications() {
         };
     }, []);
 
-    // ✅ body에 포털 형태로 띄우기 (모든 페이지 위에 오버레이)
+    // body에 포털 형태로 띄우기 (모든 페이지 위에 오버레이)
     return createPortal(
         <div
             style={{

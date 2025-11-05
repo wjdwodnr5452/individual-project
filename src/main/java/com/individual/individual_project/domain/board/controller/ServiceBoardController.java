@@ -3,6 +3,7 @@ package com.individual.individual_project.domain.board.controller;
 import com.individual.individual_project.SessionConst;
 import com.individual.individual_project.comm.file.FileUploadService;
 import com.individual.individual_project.domain.applicant.dto.ApplicantServiceBoardsDto;
+import com.individual.individual_project.domain.auth.dto.LoginStatusDto;
 import com.individual.individual_project.domain.board.dto.*;
 import com.individual.individual_project.domain.board.Category;
 import com.individual.individual_project.domain.board.ServiceBoard;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -87,11 +89,14 @@ public class ServiceBoardController {
             HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        //LoginStatusDto user  = (LoginStatusDto) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        Map<String, Object> user = (Map<String, Object>) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
         MultipartFile thumbnailToSave = (thumbnail != null && !thumbnail.isEmpty()) ? thumbnail : null;
 
-        ServiceBoard saveBoard = serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());
+        ServiceBoard saveBoard = serviceBoardService.createServiceBoard(title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, (Long) user.get("id"));
 
         log.info("saveBoard : {}" ,saveBoard);
 
@@ -165,11 +170,14 @@ public class ServiceBoardController {
     ) {
 
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        Map<String, Object> user = (Map<String, Object>) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        //LoginStatusDto user  = (LoginStatusDto) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
         MultipartFile thumbnailToSave = (thumbnail != null && !thumbnail.isEmpty()) ? thumbnail : null;
 
-        ServiceBoardDetailEditDto serviceBoardDetailEditDto = serviceBoardService.updateServiceBoardEdit(id,title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, user.getId());
+        ServiceBoardDetailEditDto serviceBoardDetailEditDto = serviceBoardService.updateServiceBoardEdit(id,title, category, content, recruitCount, serviceTime, deadline, serviceDate, thumbnailToSave, (Long) user.get("id"));
 
         return ApiResponse.success(serviceBoardDetailEditDto, ResponseCode.BORD_CREATE_SUCCESS);
     }

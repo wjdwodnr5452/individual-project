@@ -16,10 +16,10 @@ export default function Notifications() {
                 const data = JSON.parse(event.data);
                 setToasts((prev) => [...prev, data]);
 
-                // 5초 후 자동으로 알림 제거
+                // 10초 후 자동으로 알림 제거
                 setTimeout(() => {
                     setToasts((prev) => prev.slice(1));
-                }, 5000);
+                }, 10000);
             } catch (err) {
                 console.error("알림 파싱 실패:", err);
             }
@@ -63,8 +63,8 @@ export default function Notifications() {
                 >
                     <strong>지원자 알림</strong>
                     <div style={{ marginTop: "6px", fontSize: "14px" }}>
-                        게시글 <b>{toast.serviceBoardId}</b>에
-                        지원자 <b>{toast.applicantId}</b>가 신청했습니다.
+                        게시글 <b>{toast.serviceBoardTitle}</b>에
+                        지원자 <b>{toast.applicantUserName}</b>가 {toast.statusName}했습니다.
                     </div>
                 </div>
             ))}

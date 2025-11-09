@@ -99,7 +99,8 @@ public class ApplicantServiceImpl implements ApplicantService {
             ApplicantKafkaMessage applicantKafkaMessage = new ApplicantKafkaMessage(
                     save.getServiceBoard().getId(),
                     save.getUser().getId(),
-                    save.getApplicantStat().getId()
+                    save.getApplicantStat().getId(),
+                    save.getServiceBoard().getUser().getId()
             );
 
 
@@ -158,7 +159,9 @@ public class ApplicantServiceImpl implements ApplicantService {
         ApplicantKafkaMessage applicantKafkaMessage = new ApplicantKafkaMessage(
                 applicant.getServiceBoard().getId(),
                 applicant.getUser().getId(),
-                applicant.getApplicantStat().getId()
+                applicant.getApplicantStat().getId(),
+                applicant.getServiceBoard().getUser().getId()
+
         );
 
 

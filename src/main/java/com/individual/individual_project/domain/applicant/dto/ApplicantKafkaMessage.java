@@ -7,12 +7,14 @@ public class ApplicantKafkaMessage {
     private Long serviceBoardId;
     private Long userId;
     private Long applicantId;
+    private Long serviceBoardWriterId;
 
 
-    public ApplicantKafkaMessage(Long serviceBoardId, Long userId, Long applicantId) {
+    public ApplicantKafkaMessage(Long serviceBoardId, Long userId, Long applicantId, Long serviceBoardWriterId) {
         this.serviceBoardId = serviceBoardId;
         this.userId = userId;
         this.applicantId = applicantId;
+        this.serviceBoardWriterId = serviceBoardWriterId;
     }
 
 
@@ -27,4 +29,9 @@ public class ApplicantKafkaMessage {
     public Long getApplicantId() {
         return applicantId;
     }
+
+    public Long getServiceBoardWriterId() {
+        return serviceBoardWriterId;
+    }
+
 }

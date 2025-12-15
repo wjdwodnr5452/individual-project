@@ -21,6 +21,8 @@
 - SpringData JPA
 - Querydsl
 - React
+- Kafka
+- Redis
 
 *****
 
@@ -33,7 +35,7 @@
 |/boards/write|게시판 작성|
 |/boards/:id|게시판 상세|
 |/boards/:id/edit|게시판 상세 수정|
-|users/:id|회원정보|
+|/users/:id|회원정보|
 
 *****
 
